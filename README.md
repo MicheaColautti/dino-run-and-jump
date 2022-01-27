@@ -13,9 +13,10 @@
 ## Descrizione
 
 #### Mandato:
-Da Inserire
+- [QdC](Documenti/QdC/QdC_Secondo Semestre - Dino Run and Jump.pdf/)
+
 #### Struttura:
-- [Codice](src/)
-- [Documentazione](Documentazione/)
-- [Gantt preventivo]()
+- [Codice](docs/)
+- [Documentazione](Documenti/Doc_Dino_Run_and_Jump.docx)
+- [Gantt preventivo](Documenti/Gantt/gantt_preventivo.png)
 - [Diari di lavoro](Diari/)
