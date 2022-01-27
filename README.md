@@ -13,7 +13,7 @@
 ## Descrizione
 
 #### Mandato:
-- [QdC](Documenti/QdC/QdC_Secondo Semestre - Dino Run and Jump.pdf/)
+- [QdC](Documenti/QdC/QdC_Secondo_Semestre-Dino_Run_and_Jump.pdf)
 
 #### Struttura:
 - [Codice](docs/)
