@@ -1,4 +1,4 @@
-# dino-run-and-jump
+# Dino-run-and-jump
 # Modulo 306
 ## Progetto
 |Titolo             |Autori             |Responsabile               |
