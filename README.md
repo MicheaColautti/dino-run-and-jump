@@ -18,5 +18,8 @@
 #### Struttura:
 - [Codice](docs/)
 - [Documentazione](Documenti/Doc_Dino_Run_and_Jump.docx)
-- [Gantt preventivo](Documenti/Gantt/gantt_preventivo.png)
 - [Diari di lavoro](Diari/)
+
+### Gantt preventivo 
+![Gantt preventivo](Documenti/Gantt/gantt_preventivo.png)
+
