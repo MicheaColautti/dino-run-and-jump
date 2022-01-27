@@ -29,7 +29,7 @@
     <!--<script src="/html/form2.html" id="login"></script>-->
 
     <script type="text/javascript">
-
+ var host = "/dino-run-and-jump/";
         //scena lobby
             var sceneLobby = {
                 key: 'sceneLobby',
@@ -96,8 +96,8 @@
         //scena lobby
             
             function preloadLobby(){
-                this.load.html('login', './html/form2.html');
-                this.load.spritesheet('dinoSprite', './img/dinoSprite.png', { frameWidth: 50, frameHeight: 52 });
+                this.load.html('login', host + 'html/form2.html');
+                this.load.spritesheet('dinoSprite', host + 'img/dinoSprite.png', { frameWidth: 50, frameHeight: 52 });
             }
 
             var graphics;
