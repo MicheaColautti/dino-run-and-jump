@@ -1,0 +1,45 @@
+@startjson
+{
+  "user" : {
+    "user_UID" : {
+      "dino_color" : "value"
+    }
+  },
+  "medaglia" : {
+    "user_UID_data" : {
+      "svg" : "value"
+    }
+  },
+  "partita" : {
+    "partita_ID" : {
+      "UID_1" : {
+          "is_jumping" : "true/false",
+          "punteggio" : "value",
+          "is_alive" : "true/false"
+      },
+     "UID_2" : {
+          "is_jumping" : "true/false",
+          "punteggio" : "value",
+          "is_alive" : "true/false"
+      },
+     "UID_3" : {
+          "is_jumping" : "true/false",
+          "punteggio" : "value",
+          "is_alive" : "true/false"
+      },
+     "UID_4" : {
+          "is_jumping" : "true/false",
+          "punteggio" : "value",
+          "is_alive" : "true/false"
+      }
+    }
+  },
+  "punteggio" : {
+    "UID_data" : {
+      "punteggio" : "value",
+      "posizione" : "value",
+      "punteggio" : "value"
+    }
+  }
+}
+@endjson
