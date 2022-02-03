@@ -107,25 +107,30 @@
     var graphics;
     var line1;
 
-    var inputHtmlDino1;
+    /*var inputHtmlDino1;
     var inputHtmlDino2;
     var inputHtmlDino3;
-    var inputHtmlDino4;
+    var inputHtmlDino4;*/
 
-    var realNumberDino1;
+    var inputHtmlDinos= new Array();
+
+    /*var realNumberDino1;
     var realNumberDino2;
     var realNumberDino3;
-    var realNumberDino4;
+    var realNumberDino4;*/
+    var dinosRealNumber=new Array();
 
-    var nameDino1;
+    /*var nameDino1;
     var nameDino2;
     var nameDino3;
-    var nameDino4;
-
+    var nameDino4;*/
+    var dinosName=new Array();
+    var colorDinos=new Array();
 
 
 
     function createLobby() {
+        var dinos=new Array();
         graphics = this.add.graphics({
             lineStyle: {
                 width: 4,
@@ -134,10 +139,14 @@
         });
         line1 = new Phaser.Geom.Line(0, 250, 700, 250);
         line2 = new Phaser.Geom.Line(350, 0, 350, 500);
-        dino1 = this.add.sprite(50, 100, 'dinoSprite').setOrigin(0, 0);
-        dino2 = this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0);
-        dino3 = this.add.sprite(400, 100, 'dinoSprite').setOrigin(0, 0);
-        dino4 = this.add.sprite(400, 350, 'dinoSprite').setOrigin(0, 0);
+        dinos.push(this.add.sprite(50, 100, 'dinoSprite').setOrigin(0, 0));
+        dinos.push(this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0));
+        dinos.push(this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0));
+        dinos.push(this.add.sprite(400, 350, 'dinoSprite').setOrigin(0, 0));
+        //dino1 = this.add.sprite(50, 100, 'dinoSprite').setOrigin(0, 0);
+        //dino2 = this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0);
+        //dino3 = this.add.sprite(400, 100, 'dinoSprite').setOrigin(0, 0);
+        //dino4 = this.add.sprite(400, 350, 'dinoSprite').setOrigin(0, 0);
 
         this.anims.create({
             key: 'run',
@@ -149,11 +158,43 @@
             repeat: -1
         });
         //dinosauri iniziano correndo
-        dino1.play("run");
-        dino2.play("run");
-        dino3.play("run");
-        dino4.play("run");
+        for(var i=0; i<dinos.lenght;i++){
+            dinos[i].play("run");
+        }
 
+       
+
+        for(var i=0;i<inputHtmlDinos.lenght;i++){
+            inputHtmlDinos[i]=this.add.dom(dinos[i].x + dinos[i].width + 10, dino[i].y).createFromCache('login').setOrigin(0, 0);
+            var style = {
+                font: " 20px Arial",
+                fill: "#000",
+                boundsAlignH: "center",
+                boundsAlignV: "middle"
+            };
+            this.add.text(dinos[i].x + dinos[i].width + 10, dinos[i].y - 30, "Input button 'space' ", style).setOrigin(0, 0);
+
+            //var text = this.add.text(200, 100, 'Hello World', style);
+            //console.log(text.text);
+
+            inputHtmlDinos[i].addListener('click');
+
+            inputHtmlDinos[i].on('click', function(event) {
+
+                if (event.target.name === 'confirm') {
+                    dinosName[i]=inputHtmlDinos[i].getChildByName('name');
+                    colorDinos[i]=inputHtmlDinos[i].getChildByName('color');
+                    //  Have they entered anything?
+                    if (dinosName[i] !== '' && colorDinos[i] !== '') {
+                        dinosRealNumber[i]=("0x");
+                        dinosRealNumber[i] += colorDinos[i].value.substring(1, 7);
+                        dinos[i].setTintFill(dinosRealNumber[i], dinosRealNumber[i], dinosRealNumber[i], dinosRealNumber[i]);
+                    }
+                }
+            });
+        }
+
+         /*Codice uguale per 4 dini
         var inputHtmlDino1 = this.add.dom(dino1.x + dino1.width + 10, dino1.y).createFromCache('login').setOrigin(0, 0);
         var style = {
             font: " 20px Arial",
@@ -237,7 +278,7 @@
                     dino4.setTintFill(realNumberDino4, realNumberDino4, realNumberDino4, realNumberDino4);
                 }
             }
-        });
+        });*/
 
         startButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Start game')
             .setOrigin(0.5)
@@ -259,15 +300,33 @@
 
     function startGame(game) {
         checkname();
-        if (nameDino1 != null && nameDino2 != null && nameDino3 != null && nameDino4 != null && realNumberDino1 != null && realNumberDino2 != null && realNumberDino3 != null && realNumberDino4 != null) {
+        var allValid=true;
+        for(var i=0;i<dinosName.lenght;i++){
+            if(dinosName[i]== null){
+                allValid=false;
+            }
+
+            
+        }
+        if(allValid){
             game.input.stopPropagation();
             game.scene.switch('sceneGame');
         }
+        /*if (dinosName[1] != null && nameDino2 != null && nameDino3 != null && nameDino4 != null && realNumberDino1 != null && realNumberDino2 != null && realNumberDino3 != null && realNumberDino4 != null) {
+            game.input.stopPropagation();
+            game.scene.switch('sceneGame');
+        }*/
 
     }
 
     function checkname() {
-        if (nameDino1.value == "") {
+        for(var i=1;i<=dinosName.lenght;i++){
+            if(dinosName[i].value==""){
+                dinosName[i].value="Player"+i;
+            }
+        }
+        
+        /*if (nameDino1.value == "") {
             nameDino1.value = "Player1";
         }
         if (nameDino2.value == "") {
@@ -278,7 +337,7 @@
         }
         if (nameDino4.value == "") {
             nameDino4.value = "Player4";
-        }
+        }*/
     }
 
     function updateLobby() {
@@ -301,20 +360,23 @@
 
     //collisioni
 
-    //dinosauro1
+
+    var secondDinos=new Array();
+    /*//dinosauro1
     var dino1;
     //dinosauro2
     var dino2;
     //dinosauro3
     var dino3;
     //dinosauro4
-    var dino4;
+    var dino4;*/
 
+    var cactusDinos=new Array();
     //cactus
-    var cactusDino1 = [5];
+    /* var cactusDino1 = [5];
     var cactusDino2 = [5];
     var cactusDino3 = [5];
-    var cactusDino4 = [5];
+    var cactusDino4 = [5];*/
 
 
     //input
@@ -373,32 +435,37 @@
         nuvola = this.add.image(1200, 255, 'nuvola').setOrigin(0, 0);
 
         //cactus
-        for (var i = 0; i < 5; i++) {
-            cactusDino1[i] = this.physics.add.image(700, 428, 'cactus').setOrigin(0, 0);
-            cactusDino2[i] = this.physics.add.image(720, 408, 'cactus').setOrigin(0, 0);
-            cactusDino3[i] = this.physics.add.image(740, 388, 'cactus').setOrigin(0, 0);
-            cactusDino4[i] = this.physics.add.image(760, 368, 'cactus').setOrigin(0, 0);
+        for (var i = 0; i < cactusDinos.lenght; i++) {
+            for(var j=0;j<cactusDinos[i].lenght;j++){
+                cactusDinos[i][j] = this.physics.add.image(700, 428, 'cactus').setOrigin(0, 0);
+            }
 
         }
 
         cactusPosition();
 
         //cactus fissi
-        for (var i = 0; i < 5; i++) {
-            cactusDino1[i].setImmovable(true);
-            cactusDino2[i].setImmovable(true);
-            cactusDino3[i].setImmovable(true);
-            cactusDino4[i].setImmovable(true);
+        for (var i = 0; i < cactusDinos.lenght; i++) {
+            for(var j=0;j<cactusDinos[i].lenght;j++){
+                cactusDino1[i][j].setImmovable(true);
+            }
         }
+
 
         //cactus senza gravita
-        for (var i = 0; i < 5; i++) {
-            cactusDino1[i].body.allowGravity = false;
-            cactusDino2[i].body.allowGravity = false;
-            cactusDino3[i].body.allowGravity = false;
-            cactusDino4[i].body.allowGravity = false;
+        for (var i = 0; i < cactusDinos.lenght; i++) {
+            for(var j=0;j<cactusDinos[i].lenght;j++){
+                cactusDino1[i][j].body.allowGravity = false;
+            }
         }
 
+        
+
+        for(var i=0;i<secondDinos.lenght;i++){
+
+
+
+        }
         //dinosauri
         //dino4
         dino4 = this.physics.add.sprite(160, 388, 'dinoSprite').setOrigin(0, 0);
@@ -477,10 +544,13 @@
         });
 
         //dinosauri iniziano correndo
-        dino1.play("run");
-        dino2.play("run");
-        dino3.play("run");
-        dino4.play("run");
+        for(var i=0;i<secondDinos.lenght;i++){
+            dino1.play("run");
+            dino2.play("run");
+            dino3.play("run");
+            dino4.play("run");
+        }
+        
 
 
 
@@ -766,8 +836,6 @@
         if (dino4.x < -50 && dino3.x < -50 && dino2.x < -50 && dino1.x < -50) {
             endOfTheGame(this);
         }
-
-
 
     }
 
