@@ -10,7 +10,7 @@ function createMedal(x, y, d){
     var xx = x+(d-len)/2;
     var yy = y+(d-len)/2;
 
-    medal.push('<rect x="'+xx+'" y="'+yy+'"width="'+len+'" height="'+len+'"/>');
+    medal.push('<rect x="'+xx+'" y="'+yy+' "width="'+len+'" height="'+len+'"/>');
     medal.push('<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+len/2+'" />');
 
     var x75 = xx+len/100*75;
@@ -40,12 +40,14 @@ function createMedal(x, y, d){
     medal.push('<polygon points="'+x80+','+yy+' '+(xx+len)+','+y20+' '+(xx+len)+','+yy+'" />');
     medal.push('<polygon points="'+xx+','+y80+' '+x20+','+(yy+len)+' '+xx+','+(yy+len)+'" />');
     medal.push('<polygon points="'+x80+','+(yy+len)+' '+(xx+len)+','+y80+' '+(xx+len)+','+(yy+len)+'" />');
-    drawMedal(medal);
+    fillMedal(medal);
 }
 
 function drawMedal(medal){
     result = "";
-    medal.forEach(element => result+= element);
+    result += setColor(medal[medal.length-1], "gold");
+    medal.splice(medal.length-1, medal.length-1); //rimuove l'ultimo elemento
+    medal.forEach(element => result += element);
     document.getElementById("svg").innerHTML = result;
 
 }
@@ -59,17 +61,46 @@ function getRandomColor(){
     return result;
 }
 
-function fillMedal(medal){
+function setColor(vMedal, color){
+    var array = vMedal.split('"');
+    var result = "";
+    for(var i = 0; i<array.length; i++){
+        if(i == array.length -1){
+            result += ' style="fill:'+color+'"';
+        }
+        result += array[i];
+        if(i != array.length -1){
+            result += '"';
+        }
 
-    var quantity = Math.floor(Math.random() * medal.length) + 1;
+    }
+    return result;
+    
+}
+
+function fillMedal(medal){
+    var result = [];
+    var quantity = Math.floor(Math.random() * (medal.length-1))+1 ;
     var selectedMedals = [];
-    var colors = [];
+    console.log(quantity);
     for(var i = 0; i<quantity; i++){
-        var num =  Math.floor(Math.random() * medal.length) + 1;
-        if(!num.includes(num)){
+        var num =  Math.floor(Math.random() * (medal.length-1)) + 1;
+        if(! selectedMedals.includes(num)){
             selectedMedals.push(num);
+            medal[num] = setColor(medal[num], getRandomColor());
+
+            if(medal[num].includes("rect")){
+                result.unshift(medal[num]);
+            }else{
+                result.push(medal[num]);
+            }
+           
+            
+        }else{
+            quantity++;
         }
     }
-
+    result.push(medal[0]);
+    drawMedal(result);
 
 }
