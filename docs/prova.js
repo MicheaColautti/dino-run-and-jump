@@ -8,7 +8,7 @@ try {
             // Branch to code for requesting permission.
         } else if (event.error.name === 'NotReadableError') {
             console.log('Cannot connect to the sensor.');
-            document.getElementById("x").value = "errore di connessione";
+            document.getElementById("x").innerHTML = "errore di connessione";
         }
     });
 
