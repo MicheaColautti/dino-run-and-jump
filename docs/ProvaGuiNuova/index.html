@@ -59,8 +59,8 @@
     //configurazione phaser
     var config = {
         type: Phaser.auto,
-        width: 1400,
-        height: 1000,
+        width: window.screen.width,
+        height: window.screen.height,
 
 
         scene: [sceneLobby, sceneGame, sceneLeaderboard],
@@ -99,8 +99,8 @@
     function preloadLobby() {
         this.load.html('login', host + 'html/form2.html');
         this.load.spritesheet('dinoSprite', host + 'img/dinoSprite.png', {
-            frameWidth: 50,
-            frameHeight: 52
+            frameWidth: window.screen.width,
+            frameHeight: window.screen.height,
         });
     }
 
@@ -137,8 +137,8 @@
                 color: 0xaa00aa
             }
         });
-        line1 = new Phaser.Geom.Line(0, 250, 700, 250);
-        line2 = new Phaser.Geom.Line(350, 0, 350, 500);
+        line1 = new Phaser.Geom.Line(0, window.screen.height/2, window.screen.width, window.screen.height/2);
+        line2 = new Phaser.Geom.Line(window.screen.width/2, 0, window.screen.width/2, window.screen.height);
         dinos.push(this.add.sprite(50, 100, 'dinoSprite').setOrigin(0, 0));
         dinos.push(this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0));
         dinos.push(this.add.sprite(50, 350, 'dinoSprite').setOrigin(0, 0));
