@@ -1,3 +1,4 @@
+document.getElementById("x").value = "ciao";
 let accelerometer = null;
 try {
     accelerometer = new Accelerometer({ referenceFrame: 'device' });
