@@ -3,7 +3,7 @@
 ## Progetto
 |Titolo             |Autori             |Responsabile               |
 |:------------------|:------------------|:--------------------------|
-|Drone 2.0    |<b>Michea Colautti,</b> <b>Nadia Fasani,</b>  <b>Thomas Sartini</b> |Geo Petrini|
+| Dino Run and Jump    |<b>Michea Colautti,</b> <b>Nadia Fasani,</b>  <b>Thomas Sartini</b> |Geo Petrini|
 
 ## Info
 **Inizio:** 27.01.2022
