@@ -1,4 +1,4 @@
-document.getElementById("x").value = "ciao";
+document.getElementById("x").innerHTML = "ciao";
 let accelerometer = null;
 try {
     accelerometer = new Accelerometer({ referenceFrame: 'device' });
@@ -18,9 +18,9 @@ try {
         console.log("Acceleration along the Z-axis " + accelerometer.z);
 
 
-        document.getElementById("x").value = accelerometer.x;
-        document.getElementById("y").value = accelerometer.y;
-        document.getElementById("z").value = accelerometer.z;
+        document.getElementById("x").innerHTML = accelerometer.x;
+        document.getElementById("y").innerHTML = accelerometer.y;
+        document.getElementById("z").innerHTML = accelerometer.z;
 
     });
 
