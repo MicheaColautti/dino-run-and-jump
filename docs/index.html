@@ -141,7 +141,7 @@
             }
         });
         line1 = new Phaser.Geom.Line(0, window.innerWidth/2,window.innerWidth, window.innerHeight/2);
-        line2 = new Phaser.Geom.Line(window.innerWidth/2, 0, window.screen.width/2, window.screen.height);
+        line2 = new Phaser.Geom.Line(window.innerWidth/2, 0, window.innerWidth/2, window.innerWidth);
         dino1 = this.add.sprite((window.innerWidth/4), (window.innerHeight/4), 'dinoSprite').setOrigin(0, 0);
         dino2 = this.add.sprite((window.innerWidth/4)*3, (window.innerHeight/4), 'dinoSprite').setOrigin(0, 0);
         dino3 = this.add.sprite((window.innerWidth/4), (window.innerHeight/4)*3, 'dinoSprite').setOrigin(0, 0);
