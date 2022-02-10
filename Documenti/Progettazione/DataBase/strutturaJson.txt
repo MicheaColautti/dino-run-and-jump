@@ -6,8 +6,9 @@
     }
   },
   "medaglia" : {
-    "user_UID_data" : {
-      "svg" : "value"
+    "user_UID" : {
+      "svg" : "value",
+      "svg_1" : "value"
     }
   },
   "partita" : {

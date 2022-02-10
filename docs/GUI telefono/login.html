@@ -33,9 +33,14 @@
                 <button type="button" class="btn btn-outline-primary w-100 p-2 mb-4"><span class="iconify" data-icon="bx:bx-link" data-width="50" data-height="50"></span>Connessione alla partita</button>
                 <button type="button " class="btn btn-outline-primary w-100 p-2 mb-4"><span class="iconify" data-icon="bx:bx-ghost" data-width="50 " data-height="50"></span>Guarda partita</button>
 
-                <button type="button" class="btn btn-outline-primary p-2 mb-4 border-0"><span class="iconify" data-icon="bx:bx-user-circle" data-width="50" data-height="50"></span>Profilo</button><br>
-                <button type="button" class="btn btn-primary p-2 mb-4"><span class="iconify" data-icon="bx:bx-log-out"></span>Logout</button>
-                <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="iconify" data-icon="bx:bx-log-in" ></span>Login</button>
+                <button type="button" class="btn btn-outline-primary p-2 mb-4 border-0 d-none" id="btn_account" onclick="openUserInformation()"><span class="iconify" data-icon="bx:bx-user-circle" data-width="50" data-height="50"></span></button><br>
+                <button type="button" class="btn btn-primary p-2 mb-4 d-none" id="btn_logout"><span class="iconify" data-icon="bx:bx-log-out"></span>Logout</button>
+                <button type="button" class="btn btn-primary" id="btn_login" data-bs-toggle="modal" data-bs-target="#logInModal"><span class="iconify" data-icon="bx:bx-log-in" ></span>Login</button>
+                <div id="div_signin">
+                    <p class="pt-2 text-primary fw-bold">or</p>
+                    <a class="link-primary" data-bs-toggle="modal" data-bs-target="#signInModal"></span>Sign in</a>
+                    <p class="pt-2 text-danger" id="singIn_error"></p>
+                </div>
             </div>
             <div class="col ">
             </div>
@@ -43,7 +48,7 @@
     </div>
 
     <!-- Modal Login-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,14 +57,37 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="form-floating pb-3">
-                        <input type="email " class="form-control" id="nickname" placeholder="nickname">
+                        <input type="email " class="form-control" id="nickname_logIn" placeholder="nickname">
                         <label for="email "><Nav>Nickname</Nav></label>
                     </div>
                     <div class="form-floating pb-5">
-                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <input type="password" class="form-control" id="password_logIn" placeholder="Password">
                         <label for="password">Password</label>
                     </div>
-                    <button class="btn btn-outline-primary" data-bs-dismiss="modal">Sign in</button><br>
+                    <button class="btn btn-outline-primary" data-bs-dismiss="modal" onclick="loginUser()">Sign in</button><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sign in-->
+    <div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="form-floating pb-3">
+                        <input type="email " class="form-control" id="nickname_signIn" placeholder="nickname">
+                        <label for="email "><Nav>Nickname</Nav></label>
+                    </div>
+                    <div class="form-floating pb-5">
+                        <input type="password" class="form-control" id="password_signIn" placeholder="Password">
+                        <label for="password">Password</label>
+                    </div>
+                    <button class="btn btn-outline-primary" data-bs-dismiss="modal" onclick="registerNewUser()">Sign in</button><br>
                 </div>
             </div>
         </div>

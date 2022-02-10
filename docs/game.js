@@ -24,8 +24,6 @@ try {
 
     });
 
-
-
     accelerometer.start();
 
 } catch (error) {

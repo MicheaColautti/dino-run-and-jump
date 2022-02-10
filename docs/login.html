@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Dino Run and Jump</title>
+    <meta cahrset="UTF-8">
+    <meta name="description" content="file base">
+    <meta name="keywords" contenent="Dino,ChromeDino, Dino Run and Jump">
+    <meta name="author" content="Nadia Fasani">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+
+    <script src="login.js"></script>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-9 pt-5 text-center">
+                <p class="text-center fs-1 fw-bold pb-5">Chrome Dino Run & Jump</p>
+                <button type="button" class="btn btn-outline-primary w-100 p-2 mb-4"><span class="iconify" data-icon="bx:bx-plus" data-width="50" data-height="50"></span>Crea partita</button>
+                <button type="button" class="btn btn-outline-primary w-100 p-2 mb-4"><span class="iconify" data-icon="bx:bx-link" data-width="50" data-height="50"></span>Connessione alla partita</button>
+                <button type="button " class="btn btn-outline-primary w-100 p-2 mb-4"><span class="iconify" data-icon="bx:bx-ghost" data-width="50 " data-height="50"></span>Guarda partita</button>
+
+                <button type="button" class="btn btn-outline-primary p-2 mb-4 border-0"><span class="iconify" data-icon="bx:bx-user-circle" data-width="50" data-height="50"></span>Profilo</button><br>
+                <button type="button" class="btn btn-primary p-2 mb-4"><span class="iconify" data-icon="bx:bx-log-out"></span>Logout</button>
+                <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="iconify" data-icon="bx:bx-log-in" ></span>Login</button>
+            </div>
+            <div class="col ">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="form-floating pb-3">
+                        <input type="email " class="form-control" id="nickname" placeholder="nickname">
+                        <label for="email "><Nav>Nickname</Nav></label>
+                    </div>
+                    <div class="form-floating pb-5">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <label for="password">Password</label>
+                    </div>
+                    <button class="btn btn-outline-primary" data-bs-dismiss="modal">Sign in</button><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
