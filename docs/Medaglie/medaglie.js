@@ -1,4 +1,3 @@
-
 /**
  * Genera delle forme svg dalle dimensioni passate come parametro e ritorna 
  * tutte le forme sottoforma di array di stringhe.
@@ -12,7 +11,7 @@
  * @param {number} d definisce la lunghezza del lato del quadrato (spazio) dove
  * creare le forme
  * 
- * @returns {Array.<String>} ritorna un array di stringhe contenente le forme 
+ * @returns {Array.<string>} ritorna un array di stringhe contenente le forme 
  * svg nel formato html, dalla piu grande alla piu piccola.
  */
 function createMedal(x, y, d){ 
@@ -70,6 +69,11 @@ function drawMedal(medal){
 
 }
 
+/**
+ * Questo metodo ritorna un colore generto casualmente.
+ * 
+ * @returns una stringa con un colore casuale definito nel formato #rrggbb
+ */
 function getRandomColor(){
     var letters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" ];
     var result = "#";
@@ -79,6 +83,16 @@ function getRandomColor(){
     return result;
 }
 
+/**
+ * Questa funzione data una medaglia e un colore assegna il colore dato come
+ * colore di riempimento della medaglia.
+ * 
+ * @param {string} vMedal La medaglia nel formato di una tag forma svg
+ * 
+ * @param {string} color Il colore definito nel formato #rrggbb
+ * 
+ * @returns ritorna la medaglia con il colore di riempimento.
+ */
 function setColor(vMedal, color){
     var array = vMedal.split('"');
     var result = "";
@@ -95,7 +109,15 @@ function setColor(vMedal, color){
     return result;
     
 }
-
+/**
+ * Il metodo fillMedal sceglie in modo casuale quali elenti della medaglia 
+ * disegnare e di quali colori (anch'essi scelti in modo casuale) colorarli.
+ * L'array finale viene ordinato dalla forma più grande a quella piccola per
+ * evitare sovrapposizioni.
+ * 
+ * @param {Array.<string>} medal un array di stringhe contenente le forme 
+ * svg nel formato html, dalla piu grande alla piu piccola.
+ */
 function fillMedal(medal){
     var result = [];
     var quantity = Math.floor(Math.random() * (medal.length-1))+1 ;
