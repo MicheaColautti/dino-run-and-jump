@@ -81,3 +81,10 @@ function generateSession(){
         id,
     });
 }
+
+function connectToGame(){
+
+    var code=document.getElementById("code").value;
+    
+
+}
