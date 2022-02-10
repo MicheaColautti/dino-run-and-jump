@@ -21,6 +21,7 @@ const auth = firebase.auth();
 var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 const nickname = "";
+await setPersistence(auth, browserSessionPersistence);
 
 function registerNewUser() {
     var password = document.getElementById("password_signIn").value;
