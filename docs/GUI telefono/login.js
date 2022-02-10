@@ -73,3 +73,11 @@ function showUserInfromation() {
     console.log(firebase.auth().currentUser.uid);
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email;
 }
+
+
+function generateSession(){
+    var id=Math.floor(100000 + Math.random() * 900000);
+    db.ref("session/" + id).set({
+        id,
+    });
+}
