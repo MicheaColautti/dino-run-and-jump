@@ -75,16 +75,21 @@ function showUserInfromation() {
 }
 
 
-function generateSession(){
-    var id=Math.floor(100000 + Math.random() * 900000);
+function generateSession() {
+    var id = Math.floor(100000 + Math.random() * 900000);
     db.ref("session/" + id).set({
         id,
     });
 }
 
-function connectToGame(){
+function connectToGame() {
+    var code = document.getElementById("code").value;
 
-    var code=document.getElementById("code").value;
-    
-
+    db.ref('session/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            if (code == childSnapshot.key) {
+                console.log(childSnapshot.key);
+            }
+        });
+    });
 }
