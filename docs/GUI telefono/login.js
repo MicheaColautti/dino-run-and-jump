@@ -108,38 +108,25 @@ function connectToGame() {
     });
 }
 
-function isLogged() {
-    console.log(firebase.auth().currentUser);
-    if (firebase.auth().currentUser != null) {
-        document.getElementById("btn_logout").classList.remove("d-none");
-        document.getElementById("btn_account").classList.remove("d-none");
-        document.getElementById("btn_account").innerHTML += nickname;
-        document.getElementById("div_signin").style.display = "none";
-        document.getElementById("btn_login").style.display = "none";
-    }
-}
-
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        var path=window.location.pathname;
-
-        path=path.split("/");
-        
-        console.log("Pth:"+path[path.length-1]);
+        var path = window.location.pathname;
+        path = path.split("/");
+        console.log("Pth:" + path[path.length - 1]);
+        path = path[path.length - 1];
         //dino-run-and-jump/GUI%20telefono/paginaUtente.html
-
-
-        document.getElementById("btn_logout").classList.remove("d-none");
-        document.getElementById("btn_account").classList.remove("d-none");
-        document.getElementById("btn_account").innerHTML += user.email.split("@")[0];
-        document.getElementById("div_signin").style.display = "none";
-        document.getElementById("btn_login").style.display = "none";
-
-        showUserInfromation();
-    } else {}
+        if (path == "login.html") {
+            document.getElementById("btn_logout").classList.remove("d-none");
+            document.getElementById("btn_account").classList.remove("d-none");
+            document.getElementById("btn_account").innerHTML += user.email.split("@")[0];
+            document.getElementById("div_signin").style.display = "none";
+            document.getElementById("btn_login").style.display = "none";
+        } else if (path == "paginaUtente.html") {
+            showUserInfromation();
+        }
+    }
 });
 
+function watchGame() {
 
-function loadAuth() {
-    console.log(firebase.auth().currentUser);
 }
