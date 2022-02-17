@@ -121,8 +121,13 @@ function isLogged() {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        var path=window.location.pathname;
 
-        console.log(window.location.pathname);
+        path=path.split("/");
+        
+        console.log("Pth:"+path[path.length-1]);
+        //dino-run-and-jump/GUI%20telefono/paginaUtente.html
+
 
         document.getElementById("btn_logout").classList.remove("d-none");
         document.getElementById("btn_account").classList.remove("d-none");
