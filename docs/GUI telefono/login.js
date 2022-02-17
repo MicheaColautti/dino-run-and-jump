@@ -72,7 +72,15 @@ function showUserInfromation() {
     console.log(firebase.auth().currentUser);
     console.log("entra");
     console.log(firebase.auth().currentUser.uid);
-    document.getElementById('user').innerHTML = firebase.auth().currentUser.email;
+    document.getElementById('user').innerHTML = firebase.auth().currentUser.email.split("@")[0];
+
+    db.ref('user/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            if (firebase.auth().currentUser.uid == childSnapshot.key) {
+                document.getElementById('dino').style.fill = childSnapshot.val().dino_color;
+            }
+        });
+    });
 }
 
 function generateSession() {
@@ -123,10 +131,36 @@ firebase.auth().onAuthStateChanged((user) => {
             document.getElementById("btn_login").style.display = "none";
         } else if (path == "paginaUtente.html") {
             showUserInfromation();
+        } else if (path == "personalizzaDino.html") {
+            db.ref('user/').once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    if (firebase.auth().currentUser.uid == childSnapshot.key) {
+                        document.getElementById('dino').style.fill = childSnapshot.val().dino_color;
+                        document.getElementById('color_input').value = childSnapshot.val().dino_color;
+                    }
+                });
+            });
+        } else if (path == "bacheca.html") {
+            document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
     }
 });
 
 function watchGame() {
 
+}
+
+function changeDinoColor(color) {
+    console.log(document.getElementById('dino').style.fill);
+    document.getElementById('dino').style.fill = color;
+}
+
+function saveDinoColor() {
+    color = document.getElementById('color_input').value;
+    console.log(color);
+    db.ref('user/' + firebase.auth().currentUser.uid).set({
+        dino_color: color,
+    });
+
+    window.open("paginaUtente.html", "_self");
 }
