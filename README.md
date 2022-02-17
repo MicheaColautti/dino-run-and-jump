@@ -17,7 +17,7 @@
 
 #### Struttura:
 - [Codice](docs/)
-- [Documentazione](Documenti/Doc_Dino_Run_and_Jump.docx)
+- [Documentazione](Documenti/Documentazione/Doc_Dino_Run_and_Jump.docx)
 - [Diari di lavoro](Diari/)
 
 ### Gantt preventivo 
