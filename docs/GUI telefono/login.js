@@ -21,6 +21,7 @@ const auth = firebase.auth();
 var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 const nickname = "";
+var id = "";
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 function registerNewUser() {
@@ -74,7 +75,6 @@ function showUserInfromation() {
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email;
 }
 
-
 function generateSession() {
     var id = Math.floor(100000 + Math.random() * 900000);
     db.ref("session/" + id).set({
@@ -82,14 +82,59 @@ function generateSession() {
     });
 }
 
+function generateGuestId() {
+    id = "guest_" + Math.floor(100000 + Math.random() * 900000);
+}
+
 function connectToGame() {
     var code = document.getElementById("code").value;
+    console.log(firebase.auth().currentUser);
 
+    if (firebase.auth().currentUser == null) {
+        generateGuestId();
+    } else {
+        id = firebase.auth().currentUser.uid;
+    }
     db.ref('session/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (code == childSnapshot.key) {
-                console.log(childSnapshot.key);
+                db.ref('session/' + childSnapshot.key + '/' + id).set({
+                    is_jumping: false,
+                    is_alive: true,
+                    score: 0,
+                });
             }
         });
     });
+}
+
+function isLogged() {
+    console.log(firebase.auth().currentUser);
+    if (firebase.auth().currentUser != null) {
+        document.getElementById("btn_logout").classList.remove("d-none");
+        document.getElementById("btn_account").classList.remove("d-none");
+        document.getElementById("btn_account").innerHTML += nickname;
+        document.getElementById("div_signin").style.display = "none";
+        document.getElementById("btn_login").style.display = "none";
+    }
+}
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+
+        console.log(window.location.pathname);
+
+        document.getElementById("btn_logout").classList.remove("d-none");
+        document.getElementById("btn_account").classList.remove("d-none");
+        document.getElementById("btn_account").innerHTML += user.email.split("@")[0];
+        document.getElementById("div_signin").style.display = "none";
+        document.getElementById("btn_login").style.display = "none";
+
+        showUserInfromation();
+    } else {}
+});
+
+
+function loadAuth() {
+    console.log(firebase.auth().currentUser);
 }
