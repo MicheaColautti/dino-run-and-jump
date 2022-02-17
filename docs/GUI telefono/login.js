@@ -22,6 +22,7 @@ var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 const nickname = "";
 var id = "";
+var code = 0;
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 function registerNewUser() {
@@ -95,7 +96,7 @@ function generateGuestId() {
 }
 
 function connectToGame() {
-    var code = document.getElementById("code").value;
+    code = document.getElementById("code").value;
     console.log(firebase.auth().currentUser);
 
     if (firebase.auth().currentUser == null) {
@@ -111,6 +112,7 @@ function connectToGame() {
                     is_alive: true,
                     score: 0,
                 });
+                window.open("game.html", "_self");
             }
         });
     });
@@ -163,4 +165,20 @@ function saveDinoColor() {
     });
 
     window.open("paginaUtente.html", "_self");
+}
+
+function jump() {
+    db.ref('session/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            childSnapshot.forEach(function(childChildSnapshot) {
+                if (childChildSnapshot.key == firebase.auth().currentUser.uid) {
+                    db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).set({
+                        is_jumping: true,
+                        score: childChildSnapshot.val().score,
+                        is_alive: childChildSnapshot.val().is_alive,
+                    });
+                }
+            });
+        });
+    });
 }

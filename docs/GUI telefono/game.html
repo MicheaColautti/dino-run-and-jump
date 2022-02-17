@@ -21,6 +21,8 @@
     <script src="game.js"></script>
     <link href="game.css" rel="stylesheet">
 
+    <script src="login.js"></script>
+
 
 </head>
 
@@ -30,11 +32,29 @@
             <div class="col">
             </div>
             <div class="col-9 pt-5 text-center">
-                <button type="button" class="pb-5 btn btn-danger w-100 rounded-circle p-5 fs-1 shadow p-3 mb-5 rounded btn-lg">Jump</button>
-
+                <button type="button" class="pb-5 btn btn-danger w-100 rounded-circle p-5 fs-1 shadow p-3 mb-5 rounded btn-lg" id="btn_jump" onclick="jump()">Jump</button>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-9 pt-5 text-center">
+                <p id="x"></p>
+                <p id="y"></p>
+                <p id="z"></p>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-9 pt-5 text-center">
                 <div class="pt-5 fixed-bottom">
                     <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" onclick="blockInput()">
                     <span class="slider round"></span>
                 </label>
                     <label>Blocca input</label>

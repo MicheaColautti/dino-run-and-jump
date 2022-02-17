@@ -1,4 +1,3 @@
-document.getElementById("x").innerHTML = "ciao";
 let accelerometer = null;
 try {
     accelerometer = new Accelerometer({ referenceFrame: 'device' });
@@ -36,4 +35,8 @@ try {
     } else {
         throw error;
     }
+}
+
+function blockInput() {
+    document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
 }
