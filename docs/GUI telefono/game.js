@@ -58,8 +58,10 @@ function reqmotionListener() {
                         document.getElementById("x").innerHTML = event.acceleration.x;
                         document.getElementById("y").innerHTML = event.acceleration.y;
                         document.getElementById("z").innerHTML = event.acceleration.z;
-                        document.getElementById("a").innerHTML = "Casted x" + x;
-                        document.getElementById("b").innerHTML = "Gravity x" + event.accelerationIncludingGravity.y;
+                        document.getElementById("a").innerHTML = "Casted X " + x;
+                        document.getElementById("b").innerHTML = "Gravity Y " + event.accelerationIncludingGravity.y;
+                        document.getElementById("c").innerHTML = "Only event Y " + event.y;
+
 
 
                     });
