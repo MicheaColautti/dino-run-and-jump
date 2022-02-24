@@ -1,4 +1,4 @@
-var host = ""//"/dino-run-and-jump/";
+var host = ""//"/dino-run-and-jump/Game";
 var game;
 
 function setSettingsPhaser(){     
