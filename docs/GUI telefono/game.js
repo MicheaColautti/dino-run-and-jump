@@ -39,16 +39,30 @@ try {
     }
 }*/
 
-window.addEventListener('devicemotion', function(event) {
-    console.log(event.acceleration.x + ' m/s2');
-    console.log("Acceleration along the X-axis " + event.acceleration.x);
-    console.log("Acceleration along the Y-axis " + event.acceleration.y);
-    console.log("Acceleration along the Z-axis " + event.acceleration.z);
 
-    document.getElementById("x").innerHTML = event.acceleration.x;
-    document.getElementById("y").innerHTML = event.acceleration.y;
-    document.getElementById("z").innerHTML = event.acceleration.z;
-});
+function motionListener() {
+    // feature detect
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('devicemotion', function(event) {
+                        console.log(event.acceleration.x + ' m/s2');
+                        console.log("Acceleration along the X-axis " + event.acceleration.x);
+                        console.log("Acceleration along the Y-axis " + event.acceleration.y);
+                        console.log("Acceleration along the Z-axis " + event.acceleration.z);
+
+                        document.getElementById("x").innerHTML = event.acceleration.x;
+                        document.getElementById("y").innerHTML = event.acceleration.y;
+                        document.getElementById("z").innerHTML = event.acceleration.z;
+                    });
+                }
+            })
+            .catch(console.error);
+    } else {
+        // handle regular non iOS 13+ devices
+    }
+}
 
 function blockInput() {
     document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
