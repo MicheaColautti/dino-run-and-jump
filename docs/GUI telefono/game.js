@@ -1,7 +1,7 @@
 let accelerometer = null;
 try {
-    DeviceMotionEvent.requestPermission().then(response => {
-        if (response === 'granted') {
+    navigator.permissions.query({ name: 'accelerometer' }).then(function(result) {
+        if (result.state === 'granted') {
             accelerometer = new Accelerometer({ referenceFrame: 'device' });
             accelerometer.addEventListener('error', event => {
                 // Handle runtime errors.
@@ -26,8 +26,7 @@ try {
 
             accelerometer.start();
         }
-    }).catch(console.error);
-
+    });
 } catch (error) {
     // Handle construction errors.
     if (error.name === 'SecurityError') {
