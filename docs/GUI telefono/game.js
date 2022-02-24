@@ -1,4 +1,4 @@
-/*let accelerometer = null;
+let accelerometer = null;
 try {
     navigator.permissions.query({ name: 'accelerometer' }).then(function(result) {
         if (result.state === 'granted') {
@@ -39,17 +39,6 @@ try {
     }
 }
 
-window.addEventListener('devicemotion', function(event) {
-    console.log(event.acceleration.x + ' m/s2');
-    console.log("Acceleration along the X-axis " + event.acceleration.x);
-    console.log("Acceleration along the Y-axis " + event.acceleration.y);
-    console.log("Acceleration along the Z-axis " + event.acceleration.z);
-
-    document.getElementById("x").innerHTML = event.acceleration.x;
-    document.getElementById("y").innerHTML = event.acceleration.y;
-    document.getElementById("z").innerHTML = event.acceleration.z;
-});
-*/
 
 function reqmotionListener() {
     // feature detect
@@ -58,20 +47,12 @@ function reqmotionListener() {
             .then(response => {
                 if (response === 'granted') {
                     window.addEventListener('devicemotion', function(event) {
-                        console.log(event.acceleration.x + ' m/s2');
-                        console.log("Acceleration along the X-axis " + event.acceleration.x);
-                        console.log("Acceleration along the Y-axis " + event.acceleration.y);
-                        console.log("Acceleration along the Z-axis " + event.acceleration.z);
 
-                        document.getElementById("x").innerHTML = event.acceleration.x;
-                        document.getElementById("y").innerHTML = event.acceleration.y;
-                        document.getElementById("z").innerHTML = event.acceleration.z;
-                    });
-                } else {
-                    window.addEventListener('devicemotion', function(event) {
-                        console.log(event.acceleration.x + ' m/s2');
-                        console.log("Acceleration along the X-axis " + event.acceleration.x);
-                        console.log("Acceleration along the Y-axis " + event.acceleration.y);
+                        var x = Math.floor(event.acceleration.x);
+
+
+                        console.log("Acceleration along the X-axis " + x);
+                        console.log("Acceleration along the Y-axis " + event.accelerationIncludingGravity.y);
                         console.log("Acceleration along the Z-axis " + event.acceleration.z);
 
                         document.getElementById("x").innerHTML = event.acceleration.x;
