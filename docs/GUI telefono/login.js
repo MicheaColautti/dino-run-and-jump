@@ -93,6 +93,8 @@ function generateSession() {
 
 function generateGuestId() {
     id = "guest_" + Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('guestId', id);
+    window.open("personalizzaDino.html", "_self");
 }
 
 function connectToGame() {
@@ -156,11 +158,28 @@ function changeDinoColor(color) {
 
 function saveDinoColor() {
     color = document.getElementById('color_input').value;
-    db.ref('user/' + firebase.auth().currentUser.uid).set({
-        dino_color: color,
-    });
+    console.log(localStorage.getItem('guestId'));
+    if (localStorage.getItem('guestId') != null) {
+        db.ref('guest_user/' + localStorage.getItem('guestId')).set({
+                dino_color: color,
+            })
+            .then(() => {
+                window.open("game.html", "_self");
+            });
+    } else {
+        db.ref('user/' + firebase.auth().currentUser.uid).set({
+            dino_color: color,
+        }).then(() => {
+            window.open("paginaUtente.html", "_self");
+        });
+    }
+}
 
-    window.open("paginaUtente.html", "_self");
+function checkLoggedUser() {
+    document.getElementById('dino').style.fill = document.getElementById('color_input').value;
+    if (localStorage.getItem('guestId') != null) {
+        document.getElementById("user_menu").style.display = "none";
+    }
 }
 
 function jump() {
