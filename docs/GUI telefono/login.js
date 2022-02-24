@@ -21,7 +21,6 @@ const auth = firebase.auth();
 var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 const nickname = "";
-var id = "";
 var code = 0;
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
@@ -47,8 +46,6 @@ function loginUser() {
     auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             nickname = firebase.auth().currentUser.email.split("@")[0];
-            console.log(userCredential);
-            console.log(document.getElementById("btn_account").innerHTML);
 
             document.getElementById("btn_logout").classList.remove("d-none");
             document.getElementById("btn_account").classList.remove("d-none");
@@ -70,9 +67,6 @@ function openUserInformation() {
 }
 
 function showUserInfromation() {
-    console.log(firebase.auth().currentUser);
-    console.log("entra");
-    console.log(firebase.auth().currentUser.uid);
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email.split("@")[0];
 
     db.ref('user/').once('value', function(snapshot) {
@@ -85,10 +79,16 @@ function showUserInfromation() {
 }
 
 function generateSession() {
-    var id = Math.floor(100000 + Math.random() * 900000);
+    id = Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem("sessionId", id);
+    console.log(id);
     db.ref("session/" + id).set({
-        id,
-    });
+            id,
+        })
+        .then(() => {
+            window.open("provaLobby.html", "_self");
+            console.log(localStorage.getItem('sessionId'));
+        });
 }
 
 function generateGuestId() {
@@ -97,7 +97,6 @@ function generateGuestId() {
 
 function connectToGame() {
     code = document.getElementById("code").value;
-    console.log(firebase.auth().currentUser);
 
     if (firebase.auth().currentUser == null) {
         generateGuestId();
@@ -122,7 +121,6 @@ firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         var path = window.location.pathname;
         path = path.split("/");
-        console.log("Pth:" + path[path.length - 1]);
         path = path[path.length - 1];
         //dino-run-and-jump/GUI%20telefono/paginaUtente.html
         if (path == "login.html") {
@@ -153,13 +151,11 @@ function watchGame() {
 }
 
 function changeDinoColor(color) {
-    console.log(document.getElementById('dino').style.fill);
     document.getElementById('dino').style.fill = color;
 }
 
 function saveDinoColor() {
     color = document.getElementById('color_input').value;
-    console.log(color);
     db.ref('user/' + firebase.auth().currentUser.uid).set({
         dino_color: color,
     });
