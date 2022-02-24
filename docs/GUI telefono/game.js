@@ -41,12 +41,26 @@ try {
 
 
 function reqmotionListener() {
+    let accelerometer = null;
+
     // feature detect
-    if (window.DeviceMotionEvent && typeof window.DeviceMotionEvent.requestPermission === 'function') {
-        window.DeviceMotionEvent.requestPermission()
+    if (window.EventTarget && typeof window.EventTarget.requestPermission === 'function') {
+        window.EventTarget.requestPermission()
             .then(response => {
                 if (response === 'granted') {
-                    window.addEventListener('devicemotion', function(event) {
+
+                    let acl = new Accelerometer({ frequency: 60 });
+                    acl.addEventListener('reading', () => {
+                        console.log("Acceleration along the X-axis " + acl.x);
+                        console.log("Acceleration along the Y-axis " + acl.y);
+                        console.log("Acceleration along the Z-axis " + acl.z);
+                        document.getElementById("x").innerHTML = acl.x;
+                        document.getElementById("y").innerHTML = acl.y;
+                        document.getElementById("z").innerHTML = acl.z;
+                    });
+
+                    acl.start();
+                    /*window.addEventListener('linear', function(event) {
 
                         var x = Math.floor(event.acceleration.x);
 
@@ -64,16 +78,13 @@ function reqmotionListener() {
 
 
 
-                    });
+
+                    });*/
                 } else {
-
-
 
                 }
             })
             .catch(e => { console.error(e) });
-    } else {
-        // handle regular non iOS 13+ devices
     }
 }
 
