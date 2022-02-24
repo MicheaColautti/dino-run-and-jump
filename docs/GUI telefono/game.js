@@ -16,7 +16,7 @@ try {
         console.log("Acceleration along the Y-axis " + accelerometer.y);
         console.log("Acceleration along the Z-axis " + accelerometer.z);
 
-
+        alert("Acceleration along the Y-axis " + accelerometer.y);
         document.getElementById("x").innerHTML = accelerometer.x;
         document.getElementById("y").innerHTML = accelerometer.y;
         document.getElementById("z").innerHTML = accelerometer.z;
