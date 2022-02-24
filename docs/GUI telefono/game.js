@@ -41,14 +41,15 @@ try {
 
 
 function reqmotionListener() {
-    let accelerometer = null;
+    alert("fuori");
+
 
     // feature detect
     if (window.EventTarget && typeof window.EventTarget.requestPermission === 'function') {
-        window.EventTarget.requestPermission()
+        window.EventTarget.permission()
             .then(response => {
                 if (response === 'granted') {
-
+                    alert("dentro");
                     let acl = new Accelerometer({ frequency: 60 });
                     acl.addEventListener('reading', () => {
                         console.log("Acceleration along the X-axis " + acl.x);
