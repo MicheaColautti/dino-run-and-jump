@@ -40,7 +40,7 @@ try {
 }*/
 
 
-function motionListener() {
+/*function motionListener() {
     // feature detect
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
         DeviceMotionEvent.requestPermission()
@@ -62,6 +62,23 @@ function motionListener() {
     } else {
         // handle regular non iOS 13+ devices
     }
+}*/
+
+function getAccel() {
+    DeviceMotionEvent.requestPermission().then(response => {
+        if (response == 'granted') {
+            window.addEventListener('devicemotion', function(event) {
+                console.log(event.acceleration.x + ' m/s2');
+                console.log("Acceleration along the X-axis " + event.acceleration.x);
+                console.log("Acceleration along the Y-axis " + event.acceleration.y);
+                console.log("Acceleration along the Z-axis " + event.acceleration.z);
+
+                document.getElementById("x").innerHTML = event.acceleration.x;
+                document.getElementById("y").innerHTML = event.acceleration.y;
+                document.getElementById("z").innerHTML = event.acceleration.z;
+            });
+        }
+    });
 }
 
 function blockInput() {
