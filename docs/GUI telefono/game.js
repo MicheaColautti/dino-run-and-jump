@@ -52,13 +52,21 @@ function reqmotionListener() {
 
 
                         console.log("Acceleration along the X-axis " + x);
-                        console.log("Acceleration along the Y-axis " + event.accelerationIncludingGravity.y);
+                        console.log("Acceleration along the Y-axis " + event.acceleration.y);
                         console.log("Acceleration along the Z-axis " + event.acceleration.z);
 
                         document.getElementById("x").innerHTML = event.acceleration.x;
                         document.getElementById("y").innerHTML = event.acceleration.y;
                         document.getElementById("z").innerHTML = event.acceleration.z;
+                        document.getElementById("a").innerHTML = "Casted x" + x;
+                        document.getElementById("b").innerHTML = "Gravity x" + event.accelerationIncludingGravity.y;
+
+
                     });
+                } else {
+
+
+
                 }
             })
             .catch(e => { console.error(e) });
