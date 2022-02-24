@@ -24,15 +24,13 @@
     <script src="login.js"></script>
 </head>
 
-<body>
+<body onload="detectOS()">
     <div class="container-fluid">
         <div class="row">
             <div class="col">
             </div>
-            <div class="col-6 pt-5 text-center">
+            <div class="col-9 pt-5 text-center">
                 <button type="button" class="pb-5 btn btn-danger w-100 rounded-circle p-5 fs-1 shadow p-3 mb-5 rounded btn-lg" id="btn_jump" onclick="jump()">Jump</button>
-                <button type="button" id="req_mot" onclick="reqmotionListener()">Jump</button>
-
             </div>
             <div class="col">
             </div>
@@ -44,9 +42,6 @@
                 <p id="x"></p>
                 <p id="y"></p>
                 <p id="z"></p>
-                <p id="a"></p>
-                <p id="b"></p>
-                <p id="c"></p>
             </div>
             <div class="col">
             </div>

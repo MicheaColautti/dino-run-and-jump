@@ -39,56 +39,21 @@ try {
     }
 }
 
-
-function reqmotionListener() {
-    alert("fuori");
-
-
-    // feature detect
-    if (window.EventTarget && typeof window.EventTarget.requestPermission === 'function') {
-        window.EventTarget.permission()
-            .then(response => {
-                if (response === 'granted') {
-                    alert("dentro");
-                    let acl = new Accelerometer({ frequency: 60 });
-                    acl.addEventListener('reading', () => {
-                        console.log("Acceleration along the X-axis " + acl.x);
-                        console.log("Acceleration along the Y-axis " + acl.y);
-                        console.log("Acceleration along the Z-axis " + acl.z);
-                        document.getElementById("x").innerHTML = acl.x;
-                        document.getElementById("y").innerHTML = acl.y;
-                        document.getElementById("z").innerHTML = acl.z;
-                    });
-
-                    acl.start();
-                    /*window.addEventListener('linear', function(event) {
-
-                        var x = Math.floor(event.acceleration.x);
-
-
-                        console.log("Acceleration along the X-axis " + x);
-                        console.log("Acceleration along the Y-axis " + event.acceleration.y);
-                        console.log("Acceleration along the Z-axis " + event.acceleration.z);
-
-                        document.getElementById("x").innerHTML = event.acceleration.x;
-                        document.getElementById("y").innerHTML = event.acceleration.y;
-                        document.getElementById("z").innerHTML = event.acceleration.z;
-                        document.getElementById("a").innerHTML = "Casted X " + x;
-                        document.getElementById("b").innerHTML = "Gravity Y " + event.accelerationIncludingGravity.y;
-                        document.getElementById("c").innerHTML = "Only event Y " + event.y;
-
-
-
-
-                    });*/
-                } else {
-
-                }
-            })
-            .catch(e => { console.error(e) });
-    }
-}
-
 function blockInput() {
     document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
+}
+
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+        os = null;
+
+    if (iosPlatforms.indexOf(platform) !== -1) {
+        os = 'iOS';
+
+    }
+    document.getElementById("os").innerHTML = "Dispositivi IOS non supportati. <br>Usa il tasto Jump";
+
+
 }
