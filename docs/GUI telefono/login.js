@@ -86,7 +86,7 @@ function generateSession() {
             id,
         })
         .then(() => {
-            window.open("/../Game2/index.html", "_self");
+            window.open("../Game/index.html", "_self");
         });
 }
 
