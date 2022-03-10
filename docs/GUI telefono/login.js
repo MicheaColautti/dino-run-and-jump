@@ -86,15 +86,25 @@ function generateSession() {
             id,
         })
         .then(() => {
-            window.open("provaLobby.html", "_self");
-            console.log(localStorage.getItem('sessionId'));
+            window.open("/../Game2/index.html", "_self");
         });
 }
 
 function generateGuestId() {
     id = "guest_" + Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem('guestId', id);
-    window.open("personalizzaDino.html", "_self");
+    db.ref('session/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            if (code == childSnapshot.key) {
+                db.ref('session/' + childSnapshot.key + '/' + id).set({
+                    is_jumping: false,
+                    is_alive: true,
+                    score: 0,
+                });
+                window.open("personalizzaDino.html", "_self");
+            }
+        });
+    });
 }
 
 function connectToGame() {

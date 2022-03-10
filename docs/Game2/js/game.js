@@ -1,12 +1,55 @@
-var host = ""//"/dino-run-and-jump/Game";
+var host = "" //"/dino-run-and-jump/Game";
 var game;
 
-function setSettingsPhaser(){     
+var firebaseConfig = {
+    apiKey: "AIzaSyA4fyvc6p7bnP6TipjCpcc4V-dhysnRdx0",
+    authDomain: "dino-run-and-jump-d2cdb.firebaseapp.com",
+    databaseURL: "https://dino-run-and-jump-d2cdb-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "dino-run-and-jump-d2cdb",
+    storageBucket: "dino-run-and-jump-d2cdb.appspot.com",
+    messagingSenderId: "200118050769",
+    appId: "1:200118050769:web:71d81d4e42b99e56110af0",
+    measurementId: "G-S7CQ1S72TK"
+};
+
+// Inizializzare Firebase
+const app = firebase.initializeApp(firebaseConfig);
+
+// Inizializzare database
+const db = firebase.database();
+
+// Inizializzare variabili
+const auth = firebase.auth();
+var timestamp = Date.now();
+const user = firebase.auth().currentUser;
+var waitLobby = true;
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
+db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
+    console.log(snapshot.val());
+    const messages = snapshot.val();
+    setColliderLines(this);
+    setTerreni(this);
+    setMontagne(this);
+    setNuvola(this)
+    setCactus(this);
+    setAnimations(this);
+    setDini(this);
+    setColliderCactusDini(this);
+    keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    /*db.ref("users/").orderByChild("name").on("child_added", function(data) {
+        if ((data.val().uid == messages.uid && messages.currentChannel == currentChannel) || (messages.broadcast && data.val().uid == messages.uid)) {
+            document.getElementById("messages").appendChild(getChatBox(data.val().nickname, messages.message, user.uid == messages.uid, messages.broadcast));
+        }
+    });*/
+});
+
+function setSettingsPhaser() {
     var sceneGame = {
         key: 'sceneGame',
         preload: preloadGame,
         create: createGame,
-       
+
     };
 
     var sceneLeaderboard = {
@@ -74,7 +117,7 @@ var colorDini = "0x";
 var dini = new Array(NUM_DINI);
 
 var cactus = new Array(NUM_DINI);
-for(var i = 0; i< cactus.length; i++){
+for (var i = 0; i < cactus.length; i++) {
     cactus[i] = new Array(NUM_CACTUS);
 }
 
@@ -96,20 +139,20 @@ function preloadGame() {
     });
 }
 
-function setColliderLines(gamescene){
+function setColliderLines(gamescene) {
     linesGroup = gamescene.physics.add.staticGroup();
-    for(var i = 0; i< NUM_DINI; i++){
-        var height = START_HEIGHT+(i*HEIGHT_SPACE);
-        let line = gamescene.add.zone(0, height, innerWidth,1)
+    for (var i = 0; i < NUM_DINI; i++) {
+        var height = START_HEIGHT + (i * HEIGHT_SPACE);
+        let line = gamescene.add.zone(0, height, innerWidth, 1)
         linesGroup.add(line);
-        heights[i] = height ;
+        heights[i] = height;
     }
     console.log(linesGroup)
 }
 
-function setTerreni(gamescene){
+function setTerreni(gamescene) {
     var counter = 0;
-    for(var i = 0; i< terreni.length; i++){
+    for (var i = 0; i < terreni.length; i++) {
         terreni[i] = gamescene.physics.add.image(counter, 350, 'terreno').setOrigin(0, 0);
         terreni[i].setImmovable(true); //fissa i terreni
         terreni[i].body.allowGravity = false; // toglie la gravità
@@ -117,9 +160,9 @@ function setTerreni(gamescene){
     }
 }
 
-function setMontagne(gamescene){
+function setMontagne(gamescene) {
     counter = 0;
-    for(var i = 0; i<montagne.length; i++){
+    for (var i = 0; i < montagne.length; i++) {
         montagne[i] = gamescene.physics.add.image(counter, 275, 'montagne').setOrigin(0, 0);
         montagne[i].setImmovable(true); //fissa le montagne
         montagne[i].body.allowGravity = false; // toglie la gravità
@@ -127,35 +170,35 @@ function setMontagne(gamescene){
     }
 }
 
-function setNuvola(gamescene){
+function setNuvola(gamescene) {
     nuvola = gamescene.add.image(1200, 255, 'nuvola').setOrigin(0, 0);
 }
 
-function setCactus(gamescene){
+function setCactus(gamescene) {
 
-    for(var i = 0; i<cactus.length; i++){
-        for(var j = 0; j<cactus[i].length; j++){
+    for (var i = 0; i < cactus.length; i++) {
+        for (var j = 0; j < cactus[i].length; j++) {
             var distanza = Math.floor(Math.random() * 200) + 70;
             var x = 0;
-            if(j== 0){
-                x = START_DISTANCE_CACTUS -(i*TRANSLATION);
-            }else if(i == 0){
-                x = (cactus[i][j-1]).x + distanzaMinima + distanza;
-            }else{  
-                x = cactus[i-1][j].x - TRANSLATION;
+            if (j == 0) {
+                x = START_DISTANCE_CACTUS - (i * TRANSLATION);
+            } else if (i == 0) {
+                x = (cactus[i][j - 1]).x + distanzaMinima + distanza;
+            } else {
+                x = cactus[i - 1][j].x - TRANSLATION;
             }
-            cactus[i][j] = gamescene.physics.add.image(x, START_HEIGHT+(i*HEIGHT_SPACE)-ALTEZZA_CACTUS, 'cactus').setOrigin(0, 0);
+            cactus[i][j] = gamescene.physics.add.image(x, START_HEIGHT + (i * HEIGHT_SPACE) - ALTEZZA_CACTUS, 'cactus').setOrigin(0, 0);
             cactus[i][j].setImmovable(true);
             cactus[i][j].body.allowGravity = false;
         }
     }
 }
 
-function setDini(gamescene){
+function setDini(gamescene) {
 
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
-    for(var i = 0; i< dini.length; i++){
-        dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI-(i*TRANSLATION), START_HEIGHT-(i*HEIGHT_SPACE)- ALTEZZA_DINI, 'dinoSprite').setOrigin(0, 0);
+    for (var i = 0; i < dini.length; i++) {
+        dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI - (i * TRANSLATION), START_HEIGHT - (i * HEIGHT_SPACE) - ALTEZZA_DINI, 'dinoSprite').setOrigin(0, 0);
         dini[i].setTintFill(colorDini, colorDini, colorDini, colorDini);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
@@ -164,7 +207,7 @@ function setDini(gamescene){
     }
 }
 
-function setAnimations(gamescene){
+function setAnimations(gamescene) {
     //animazione di corsa
     gamescene.anims.create({
         key: 'run',
@@ -198,32 +241,33 @@ function setAnimations(gamescene){
         repeat: -1
     });
 }
+
 function collideCactus(dino) {
     dino.setVelocityX(-200);
     dino.play("death");
-    for(var i = 0; i<NUM_DINI; i++){
-        if(colliderDini[i] != null || colliderDini[i] != undefined ){
+    for (var i = 0; i < NUM_DINI; i++) {
+        if (colliderDini[i] != null || colliderDini[i] != undefined) {
             this.physics.world.removeCollider(colliderDini[i]);
         }
     }
-    
-
-
 }
-function setColliderCactusDini(gamescene){
+
+function setColliderCactusDini(gamescene) {
     for (var i = 0; i < cactus.length; i++) {
-        for(var j = 0; j < cactus[i].length; j++) {
+        for (var j = 0; j < cactus[i].length; j++) {
             gamescene.physics.add.overlap(dini[i], cactus[i][j], collideCactus, null, gamescene);
-            
-        } 
+
+        }
     }
 }
 
-
 var keySpace;
 //funzione createGame, crea nel canvas tutti i vari assets caricati nella funzione preload game
-function createGame() { 
-
+function createGame() {
+    document.getElementById('sessionId').innerHTML = localStorage.getItem("sessionId");
+    /*do {
+        var millisecondstoWait = 10000;
+        setTimeout(function() {*/
     setColliderLines(this);
     setTerreni(this);
     setMontagne(this);
@@ -233,25 +277,26 @@ function createGame() {
     setDini(this);
     setColliderCactusDini(this);
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    /*}, millisecondstoWait);
+
+    } while (waitLobby)*/
 }
-
-
 
 //variabili di supporto per velocità e assegnazione punteggio
 //velocità sfondo
 
 var velocitaSfondo = 5;
 var punteggio = new Array(NUM_DINI);
-for(var i = 0; i<punteggio.length; i++){
+for (var i = 0; i < punteggio.length; i++) {
     punteggio[i] = 0;
 }
 var pAssegnati = new Array(NUM_DINI);
-for(var i = 0; i< pAssegnati.length; i++){
+for (var i = 0; i < pAssegnati.length; i++) {
     pAssegnati[i] = new Array(5);
 }
 
-for(var i = 0; i<pAssegnati.length; i++){
-    for(var j = 0; j<pAssegnati[i].length; j++){
+for (var i = 0; i < pAssegnati.length; i++) {
+    for (var j = 0; j < pAssegnati[i].length; j++) {
         pAssegnati[i][j] = false;
     }
 }
@@ -263,7 +308,7 @@ for (var i = 0; i < supVelocita.length; i++) {
 }
 
 
-function updateTerreni(){
+function updateTerreni() {
     //terreni si spostano
     for (var i = 0; i < terreni.length; i++) {
         terreni[i].x -= velocitaSfondo;
@@ -276,7 +321,8 @@ function updateTerreni(){
         }
     }
 }
-function updateMontagne(){
+
+function updateMontagne() {
     //montagne si spostano
     for (var i = 0; i < montagne.length; i++) {
         montagne[i].x -= 1;
@@ -290,30 +336,31 @@ function updateMontagne(){
         }
     }
 }
-function updateCactus(){
+
+function updateCactus() {
     //cactus si spostano
 
-    for(var i = 0; i<cactus.length; i++){
-        for(var j = 0; j<cactus[i].length; j++){
+    for (var i = 0; i < cactus.length; i++) {
+        for (var j = 0; j < cactus[i].length; j++) {
             cactus[i][j].x -= velocitaSfondo;
         }
     }
 
     //cacactus1Dino1 riposizionamento
 
-    for(var i = 0; i<cactus.length; i++){
-        for(var j = 0; j<cactus[i].length; j++){
-            if(cactus[i][j].x < -26){
-                if(i == 0){
+    for (var i = 0; i < cactus.length; i++) {
+        for (var j = 0; j < cactus[i].length; j++) {
+            if (cactus[i][j].x < -26) {
+                if (i == 0) {
                     var num = 0;
-                    if(j == 0){
-                        num = cactus[i].length -1;
-                    }else{
-                        num = j-1;
+                    if (j == 0) {
+                        num = cactus[i].length - 1;
+                    } else {
+                        num = j - 1;
                     }
                     cactus[i][j].x = cactus[i][num].x + distanzaMinima + Math.floor(Math.random() * 200) + 70;
-                }else{
-                    cactus[i][j].x = cactus[i-1][j].x - TRANSLATION  ;
+                } else {
+                    cactus[i][j].x = cactus[i - 1][j].x - TRANSLATION;
                 }
                 pAssegnati[i][j] = false;
             }
@@ -321,7 +368,8 @@ function updateCactus(){
     }
 
 }
-function updateNuvola(){
+
+function updateNuvola() {
     //movimento nuvola
     nuvola.x -= 3;
 
@@ -334,49 +382,49 @@ function updateNuvola(){
 
 //funzione updateGame, viene richiamata 60 volte al secondo, utilizzata per i movimenti nel animazione
 function updateGame() {
-    
+
     updateTerreni();
     updateMontagne();
     updateCactus();
     updateNuvola();
-   
+
     //input salto
     if (keySpace.isDown) {
-        for(var i = 0; i<dini.length; i++){
-            if (dini[i].body.touching.down) {    // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
+        for (var i = 0; i < dini.length; i++) {
+            if (dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
                 //salto
                 dini[i].play("jump");
                 dini[i].setVelocityY(-800);
 
             }
         }
-        
+
     }
 
-    
+
     //velocità & punteggioDini  
-    for(var i = 0; i<dini.length; i++){
-        for(var j = 0; j<cactus[i].length; j++){
+    for (var i = 0; i < dini.length; i++) {
+        for (var j = 0; j < cactus[i].length; j++) {
             if (dini[i].x > cactus[i][j].x + 26 && !pAssegnati[i][j]) {
                 punteggio[i]++;
                 pAssegnati[i][j] = true;
             }
         }
     }
-    
+
 
     //difficolta
     var count = 4;
-    for(var i = 0; i<5 ; i++){ 
+    for (var i = 0; i < 5; i++) {
         var check = false;
-        for(var j = 0; j<dini.length; j++){
-            if(!check){
+        for (var j = 0; j < dini.length; j++) {
+            if (!check) {
                 check = check || (punteggio[j] > count && supVelocita[i]);
-            }else{
+            } else {
                 break;
             }
         }
-        if(check){
+        if (check) {
             velocitaSfondo += 1;
             supVelocita[i] = false;
             distanzaMinima += 30; // 0 -> 30 / 1 -> 30 / 2 -> 20 / 3 -> 0 / 4 -> 0 
@@ -385,7 +433,7 @@ function updateGame() {
 
     }
     var check = true;
-    for(var i = 0; i< dini.length; i++){
+    for (var i = 0; i < dini.length; i++) {
         check = check && dini[i].x < -50;
     }
 

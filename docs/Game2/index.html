@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>ChromeDino</title>
-        <!-- <link rel="icon" href="D:\Scuola\I3\Mod 306-Progeti\ChromeDinoHotseat\favico\i1agromanfav.ico" type="image/x-icon"> -->
-        <meta cahrset="UTF-8">
-        <meta name="description" content="file base">
-        <meta name="keywords" contenent="HTML,CSS,XML,JavaScript">
-        <meta name="author" content="Manuel Grosso">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--data creazione 07.10.21-->
-        <script src="js/phaser.js"></script>
-        <script src="js/phaser-arcade-physics.js"></script>
-        <script src="js/game.js"></script>
-        <style>
-            body {
-            
-                background-color: black
-            }
-        </style>
 
-        
+<head>
+    <title>ChromeDino</title>
+    <!-- <link rel="icon" href="D:\Scuola\I3\Mod 306-Progeti\ChromeDinoHotseat\favico\i1agromanfav.ico" type="image/x-icon"> -->
+    <meta cahrset="UTF-8">
+    <meta name="description" content="file base">
+    <meta name="keywords" contenent="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="Manuel Grosso">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--data creazione 07.10.21-->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 
-    </head>
+    <link href="../GUI telefono/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="../GUI telefono/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <body style="padding-top: 50px">
-        <div id='gameDiv'></div>
-    </body>
-    <script>
-         setSettingsPhaser();
-    </script>
+    <script src="js/phaser.js"></script>
+    <script src="js/phaser-arcade-physics.js"></script>
+    <script src="js/game.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row pt-2">
+            <div class="col">
+                <p id="sessionId" style="font-size:xx-large;"></p>
+            </div>
+            <div class="col-9">
+            </div>
+            <div class="col ">
+                <button type="button" class="btn btn-success w-100 p-2 mb-4">START</button>
+            </div>
+        </div>
+        <div class="row">
+            <div id='gameDiv'></div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+<script>
+    setSettingsPhaser();
+</script>
+
 </html>
-
-
