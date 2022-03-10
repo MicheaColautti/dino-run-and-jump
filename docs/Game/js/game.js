@@ -127,7 +127,6 @@ var colliderDini;
 var velocitaSfondo;
 var punteggio;
 var pAssegnati;
-var supVelocita;
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
@@ -176,11 +175,6 @@ function setStartValues() {
         }
     }
 
-    //var supporto per cambio difficoltà
-    supVelocita = new Array(NUM_CACTUS);
-    for (var i = 0; i < supVelocita.length; i++) {
-        supVelocita[i] = true;
-    }
 }
 
 function setDiniNicknames(gamescene) {
@@ -437,30 +431,17 @@ function setScore() {
             if (dini[i].x > cactus[i][j].x + TRANSLATION && !pAssegnati[i][j]) {
                 punteggio[i]++;
                 pAssegnati[i][j] = true;
+                setDifficulty();
             }
         }
     }
 }
 
 function setDifficulty() {
-    var count = 4;
-    for (var i = 0; i < 5; i++) {
-        var check = false;
-        for (var j = 0; j < dini.length; j++) {
-            if (!check) {
-                check = check || (punteggio[j] > count && supVelocita[i]);
-            } else {
-                break;
-            }
-        }
-        if (check) {
-            velocitaSfondo += 1;
-            supVelocita[i] = false;
-            distanzaMinima += 30;
-        }
-        check++;
+    console.log("aumento")
+    velocitaSfondo += 0.2/NUM_DINI;
+    distanzaMinima += 6/NUM_DINI;
 
-    }
 }
 
 function checkEndOfGame(game) {
@@ -473,7 +454,6 @@ function checkEndOfGame(game) {
         endOfTheGame(game);
         check = false;
     }
-
 }
 
 //funzione updateGame, viene richiamata 60 volte al secondo, utilizzata per i movimenti nel animazione
@@ -484,17 +464,8 @@ function updateGame() {
     updateNuvola();
     checkJump();
     setScore();
-    setDifficulty();
     checkEndOfGame(this);
-
 }
-
-
-
-//collisione tra dinosauri e cactus
-//function collideCactus(num) {
-
-
 
 function endOfTheGame(game) {
     game.input.stopPropagation();
