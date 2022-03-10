@@ -6,7 +6,7 @@ function setSettingsPhaser(){
         key: 'sceneGame',
         preload: preloadGame,
         create: createGame,
-        update: updateGame,
+       
     };
 
     var sceneLeaderboard = {
@@ -52,7 +52,7 @@ function setSettingsPhaser(){
 
 //dichiarazione costanti ecc
 
-const NUM_DINI = 10;
+const NUM_DINI = 2;
 const NUM_TERRENI = 2;
 const NUM_MONTAGNE = 2;
 const NUM_CACTUS = 5;
@@ -215,9 +215,7 @@ function setColliderCactusDini(gamescene){
         for(var j = 0; j < cactus[i].length; j++) {
             gamescene.physics.add.overlap(dini[i], cactus[i][j], collideCactus, null, gamescene);
             
-        }
-
-        
+        } 
     }
 }
 
@@ -225,6 +223,7 @@ function setColliderCactusDini(gamescene){
 var keySpace;
 //funzione createGame, crea nel canvas tutti i vari assets caricati nella funzione preload game
 function createGame() { 
+
     setColliderLines(this);
     setTerreni(this);
     setMontagne(this);
