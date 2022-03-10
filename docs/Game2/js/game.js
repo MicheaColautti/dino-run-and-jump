@@ -24,19 +24,14 @@ var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 var waitLobby = true;
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+var rif;
+var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     console.log(snapshot.val());
-    const messages = snapshot.val();
-    setColliderLines(this);
-    setTerreni(this);
-    setMontagne(this);
-    setNuvola(this)
-    setCactus(this);
-    setAnimations(this);
-    setDini(this);
-    setColliderCactusDini(this);
-    keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    NUM_DINI++;
+    rif.scene.restart();
+    console.log(NUM_DINI);
     /*db.ref("users/").orderByChild("name").on("child_added", function(data) {
         if ((data.val().uid == messages.uid && messages.currentChannel == currentChannel) || (messages.broadcast && data.val().uid == messages.uid)) {
             document.getElementById("messages").appendChild(getChatBox(data.val().nickname, messages.message, user.uid == messages.uid, messages.broadcast));
@@ -45,11 +40,17 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
 });
 
 function setSettingsPhaser() {
+    var sceneLobby = {
+        key: 'sceneLobby',
+        preload: preloadGame,
+        create: createGame
+    };
+
     var sceneGame = {
         key: 'sceneGame',
         preload: preloadGame,
         create: createGame,
-
+        update: updateGame
     };
 
     var sceneLeaderboard = {
@@ -65,7 +66,7 @@ function setSettingsPhaser() {
         height: window.innerHeight,
 
 
-        scene: [sceneGame, sceneLeaderboard],
+        scene: [sceneLobby, sceneGame, sceneLeaderboard],
 
         scale: {
             autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -95,7 +96,7 @@ function setSettingsPhaser() {
 
 //dichiarazione costanti ecc
 
-const NUM_DINI = 2;
+var NUM_DINI = -1;
 const NUM_TERRENI = 2;
 const NUM_MONTAGNE = 2;
 const NUM_CACTUS = 5;
@@ -107,25 +108,20 @@ const TRANSLATION = 20;
 const ALTEZZA_CACTUS = 50;
 const ALTEZZA_DINI = 50;
 
-var terreni = new Array(NUM_TERRENI);
+var terreni;
 
-var montagne = new Array(NUM_MONTAGNE);
+var montagne;
 
 var nuvola;
 var colorDini = "0x";
 
-var dini = new Array(NUM_DINI);
+var dini;
+var cactus;
+var linesGroup;
+var heights;
 
-var cactus = new Array(NUM_DINI);
-for (var i = 0; i < cactus.length; i++) {
-    cactus[i] = new Array(NUM_CACTUS);
-}
-
-var linesGroup = [];
-var heights = new Array(NUM_DINI);
-
-var distanzaMinima = 180;
-var colliderDini = new Array(NUM_DINI);
+var distanzaMinima;
+var colliderDini;
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
@@ -139,6 +135,28 @@ function preloadGame() {
     });
 }
 
+function setStartValues() {
+    terreni = new Array(NUM_TERRENI);
+
+    montagne = new Array(NUM_MONTAGNE);
+
+    nuvola;
+    colorDini = "0x";
+
+    dini = new Array(NUM_DINI);
+
+    cactus = new Array(NUM_DINI);
+    for (var i = 0; i < cactus.length; i++) {
+        cactus[i] = new Array(NUM_CACTUS);
+    }
+
+    linesGroup = [];
+    heights = new Array(NUM_DINI);
+
+    distanzaMinima = 180;
+    colliderDini = new Array(NUM_DINI);
+}
+
 function setColliderLines(gamescene) {
     linesGroup = gamescene.physics.add.staticGroup();
     for (var i = 0; i < NUM_DINI; i++) {
@@ -147,7 +165,6 @@ function setColliderLines(gamescene) {
         linesGroup.add(line);
         heights[i] = height;
     }
-    console.log(linesGroup)
 }
 
 function setTerreni(gamescene) {
@@ -265,9 +282,8 @@ var keySpace;
 //funzione createGame, crea nel canvas tutti i vari assets caricati nella funzione preload game
 function createGame() {
     document.getElementById('sessionId').innerHTML = localStorage.getItem("sessionId");
-    /*do {
-        var millisecondstoWait = 10000;
-        setTimeout(function() {*/
+    rif = this;
+    setStartValues();
     setColliderLines(this);
     setTerreni(this);
     setMontagne(this);
@@ -277,9 +293,9 @@ function createGame() {
     setDini(this);
     setColliderCactusDini(this);
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    /*}, millisecondstoWait);
-
-    } while (waitLobby)*/
+    if (runGame) {
+        this.scene.switch('sceneGame');
+    }
 }
 
 //variabili di supporto per velocità e assegnazione punteggio
@@ -347,7 +363,6 @@ function updateCactus() {
     }
 
     //cacactus1Dino1 riposizionamento
-
     for (var i = 0; i < cactus.length; i++) {
         for (var j = 0; j < cactus[i].length; j++) {
             if (cactus[i][j].x < -26) {
@@ -382,6 +397,7 @@ function updateNuvola() {
 
 //funzione updateGame, viene richiamata 60 volte al secondo, utilizzata per i movimenti nel animazione
 function updateGame() {
+    console.log("update");
 
     updateTerreni();
     updateMontagne();
@@ -484,4 +500,9 @@ function createLeaderboard() {
 
 function updateLeaderboard() {
     graphics.strokeLineShape(line3);
+}
+
+function startGame() {
+    runGame = true;
+    rif.scene.restart();
 }
