@@ -98,16 +98,19 @@ function generateGuestId() {
 
 function watchGame() {
     code = document.getElementById("code").value;
-    //window.open("../Game/index.html", "_self");
+    window.open("../Game/index.html", "_self");
+
+    var vieweId = "view" + Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('viewId', id);
 
     db.ref('session/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (code == childSnapshot.key) {
-                /*db.ref('session/' + childSnapshot.key + '/' + id).set({
+                db.ref('session/' + childSnapshot.key + '/' + id).set({
                     is_jumping: false,
                     is_alive: true,
                     score: 0,
-                });*/
+                });
                 window.open("../Game/index.html", "_self");
             }
         });
@@ -116,6 +119,7 @@ function watchGame() {
 
 function connectToGame() {
     code = document.getElementById("code").value;
+    localStorage.setItem('code', code);
 
     if (firebase.auth().currentUser == null) {
         generateGuestId();
@@ -189,12 +193,16 @@ function saveDinoColor() {
                 window.open("game.html", "_self");
             });
         db.ref('session/').once('value', function(snapshot) {
+
             snapshot.forEach(function(childSnapshot) {
-                db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
-                    is_jumping: false,
-                    is_alive: true,
-                    score: 0,
-                });
+                console.log(localStorage.getItem("code") + " || " + childSnapshot.key);
+                if (localStorage.getItem("code") == childSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
+                        is_jumping: false,
+                        is_alive: true,
+                        score: 0,
+                    });
+                }
 
             });
         });
