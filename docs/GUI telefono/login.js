@@ -101,12 +101,12 @@ function watchGame() {
     window.open("../Game/index.html", "_self");
 
     var vieweId = "view" + Math.floor(100000 + Math.random() * 900000);
-    localStorage.setItem('viewId', id);
+    localStorage.setItem('viewId', vieweId);
 
     db.ref('session/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (code == childSnapshot.key) {
-                db.ref('session/' + childSnapshot.key + '/' + id).set({
+                db.ref('session/' + childSnapshot.key + '/' + vieweId).set({
                     is_jumping: false,
                     is_alive: true,
                     score: 0,
