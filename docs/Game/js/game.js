@@ -28,10 +28,8 @@ var rif;
 var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
-    console.log(snapshot.val());
     NUM_DINI++;
     rif.scene.restart();
-    console.log(NUM_DINI);
 });
 
 function setSettingsPhaser() {
@@ -183,7 +181,6 @@ function setColliderLines(gamescene) {
         let line = gamescene.add.zone(0, height, innerWidth, 1)
         linesGroup.add(line);
         heights[i] = height;
-        console.log("linea " + i + " " + height)
     }
 }
 
@@ -314,6 +311,10 @@ function createGame() {
     setColliderCactusDini(this);
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
+        db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
+            NUM_DINI++;
+            rif.scene.restart();
+        });
         this.scene.switch('sceneGame');
     }
 }
@@ -416,9 +417,8 @@ function setScore() {
 }
 
 function setDifficulty() {
-    console.log("aumento")
-    velocitaSfondo += 0.2/NUM_DINI;
-    distanzaMinima += 6/NUM_DINI;
+    velocitaSfondo += 0.2 / NUM_DINI;
+    distanzaMinima += 6 / NUM_DINI;
 
 }
 
