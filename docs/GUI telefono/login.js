@@ -159,8 +159,9 @@ function changeDinoColor(color) {
 }
 
 function saveDinoColor() {
+    var idUsr = firebase.auth().currentUser.uid;
     color = document.getElementById('color_input').value;
-    if (localStorage.getItem('guestId') != null) {
+    if (localStorage.getItem('guestId') != null && idUsr == null) {
         db.ref('guest_user/' + localStorage.getItem('guestId')).set({
                 dino_color: color,
             })
