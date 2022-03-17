@@ -159,8 +159,13 @@ function changeDinoColor(color) {
 }
 
 function saveDinoColor() {
-    //prova
-    var idUsr = firebase.auth().currentUser.uid;
+
+    try {
+        var idUsr = firebase.auth().currentUser.uid;
+    } catch (error) {
+        console.log(error);
+        var idUsr = null;
+    }
     color = document.getElementById('color_input').value;
     if (localStorage.getItem('guestId') != null && idUsr == null) {
         db.ref('guest_user/' + localStorage.getItem('guestId')).set({
