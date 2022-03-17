@@ -29,6 +29,9 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
+    if (snapshot.key != "id") {
+        diniNicknames.push(snapshot.key);
+    }
     rif.scene.restart();
 });
 
@@ -46,19 +49,12 @@ function setSettingsPhaser() {
         update: updateGame
     };
 
-    var sceneLeaderboard = {
-        key: 'sceneLeaderboard',
-        preload: preloadLeaderboard,
-        create: createLeaderboard,
-        update: updateLeaderboard
-    };
-
     var config = {
         type: Phaser.auto,
         width: window.innerWidth,
         height: window.innerHeight,
 
-        scene: [sceneLobby, sceneGame, sceneLeaderboard],
+        scene: [sceneLobby, sceneGame],
 
         scale: {
             autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -96,7 +92,7 @@ function setSettingsPhaser() {
 
 var NUM_DINI = -1;
 const NUM_TERRENI = 2;
-const NUM_MONTAGNE = 2;
+const NUM_MONTAGNE = 10;
 const NUM_CACTUS = 5;
 const START_HEIGHT = 410;
 const HEIGHT_SPACE = 30;
@@ -124,10 +120,13 @@ var velocitaSfondo;
 var punteggio;
 var pAssegnati;
 
+var diniNicknames = [];
+var textDiniNicknames = [];
+
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
     this.load.image('terreno', host + 'img/terreno2.png');
-    this.load.image('montagne', host + 'img/montagne2.png');
+    this.load.image('montagne', host + 'img/montagne.png');
     this.load.image('nuvola', host + 'img/Nuvola.png');
     this.load.image('cactus', host + 'img/Cactus.png');
     this.load.spritesheet('dinoSprite', host + 'img/dinoSprite.png', {
@@ -174,6 +173,12 @@ function setStartValues() {
 
 }
 
+function setDiniNicknames(gamescene) {
+    for (var i = 0; i < diniNicknames.length; i++) {
+        textDiniNicknames.push(gamescene.add.text(START_DISTANCE_DINI + (i * TRANSLATION) - 200, START_HEIGHT - 20 + HEIGHT_SPACE * i, diniNicknames[i], { fontFamily: 'Arial', fontSize: 20, color: '#000' }));
+    }
+}
+
 function setColliderLines(gamescene) {
     linesGroup = gamescene.physics.add.staticGroup();
     for (var i = 0; i < NUM_DINI; i++) {
@@ -200,7 +205,7 @@ function setMontagne(gamescene) {
         montagne[i] = gamescene.physics.add.image(counter, 275, 'montagne').setOrigin(0, 0);
         montagne[i].setImmovable(true); //fissa le montagne
         montagne[i].body.allowGravity = false; // toglie la gravità
-        counter += 2000;
+        counter += 408;
     }
 }
 
@@ -233,6 +238,7 @@ function setDini(gamescene) {
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
+
         dini[i].setTintFill(colorDini, colorDini, colorDini, colorDini);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
@@ -294,7 +300,6 @@ function setColliderCactusDini(gamescene) {
     }
 }
 
-
 var keySpace;
 //funzione createGame, crea nel canvas tutti i vari assets caricati nella funzione preload game
 function createGame() {
@@ -304,17 +309,27 @@ function createGame() {
     setColliderLines(this);
     setTerreni(this);
     setMontagne(this);
-    setNuvola(this)
+    setNuvola(this);
     setCactus(this);
     setAnimations(this);
     setDini(this);
     setColliderCactusDini(this);
+    setDiniNicknames(this);
+    db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
+        //snapshot.forEach(function(childSnapshot) {
+        console.log(snapshot.key);
+        //  console.log(childSnapshot.val().is_jumping);
+        //});
+    });
+
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
+        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'id': "started" });
         db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
             NUM_DINI++;
             rif.scene.restart();
         });
+
         this.scene.switch('sceneGame');
     }
 }
@@ -447,39 +462,41 @@ function updateGame() {
 
 function endOfTheGame(game) {
     game.input.stopPropagation();
-    game.scene.switch('sceneLeaderboard');
-}
-
-
-//scena leaderboard
-
-function preloadLeaderboard() {}
-
-var line3;
-
-function createLeaderboard() {
-    graphics = this.add.graphics({
-        lineStyle: {
-            width: 4,
-            color: 0xaa00aa
-        }
-    });
-    line3 = new Phaser.Geom.Line(0, 80, 700, 80);
-
-    var style = {
-        font: "bold 32px Arial",
-        fill: "#000",
-        boundsAlignH: "center",
-        boundsAlignV: "middle"
-    };
-    this.add.text(250, 25, "Leaderboard", style).setOrigin(0, 0);
-}
-
-function updateLeaderboard() {
-    graphics.strokeLineShape(line3);
+    leaderboard();
+    game.scene.stop();
 }
 
 function startGame() {
     runGame = true;
     rif.scene.restart();
+}
+
+function leaderboard() {
+    document.getElementById("game").style.display = "none";
+    document.getElementById("leaderboard").style.display = "block";
+    var result = {};
+    diniNicknames.forEach((key, i) => result[key] = punteggio[i]);
+
+    /*result.sort(function(first, second) {
+        return second[1] - first[1];
+    });*/
+
+
+    var i = 1;
+    var table = document.getElementById("leader_table");
+
+    for (const [key, value] of Object.entries(result)) {
+        var row = "";
+        row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
+        if (i == 1) {
+            row += '<td><svg width="50px" height="50px">' + createMedal(0, 0, 50) + '</svg></td>';
+        } else {
+            row += "<td></td>";
+        }
+        row += "</tr>"
+        table.innerHTML += row;
+        i++;
+
+    };
+
 }

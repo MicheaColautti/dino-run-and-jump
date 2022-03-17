@@ -18,21 +18,27 @@
 
     <link href="../GUI telefono/bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="../GUI telefono/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .table-image:td {
+            vertical-align: middle;
+        }
+    </style>
 
     <script src="js/phaser.js"></script>
     <script src="js/phaser-arcade-physics.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/medaglie.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid" id="game">
         <div class="row pt-2">
             <div class="col">
                 <p id="sessionId" style="font-size:xx-large;"></p>
             </div>
             <div class="col-9">
             </div>
-            <div class="col ">
+            <div class="col">
                 <button type="button" class="btn btn-success w-100 p-2 mb-4" onclick="startGame()">START</button>
             </div>
         </div>
@@ -41,10 +47,28 @@
         </div>
     </div>
 
-
-
-
-
+    <div class="container-fluid" id="leaderboard" style="display: none;">
+        <div class="row pt-2">
+            <div class="col">
+            </div>
+            <div class="col-10 pt-5">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nickname</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Medal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leader_table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
 </body>
 <script>
     setSettingsPhaser();
