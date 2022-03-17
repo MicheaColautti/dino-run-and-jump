@@ -81,7 +81,6 @@ function showUserInfromation() {
 function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
-    console.log(id);
     db.ref("session/" + id).set({
             id,
         })
@@ -93,19 +92,11 @@ function generateSession() {
 function generateGuestId() {
     id = "guest_" + Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem('guestId', id);
-    db.ref('session/').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            if (code == childSnapshot.key) {
-                db.ref('session/' + childSnapshot.key + '/' + id).set({
-                    is_jumping: false,
-                    is_alive: true,
-                    score: 0,
-                });
-                window.open("personalizzaDino.html", "_self");
-            }
-        });
-    });
+    window.open("personalizzaDino.html", "_self");
 }
+
+
+
 
 function connectToGame() {
     code = document.getElementById("code").value;
@@ -163,12 +154,12 @@ function watchGame() {
 }
 
 function changeDinoColor(color) {
+
     document.getElementById('dino').style.fill = color;
 }
 
 function saveDinoColor() {
     color = document.getElementById('color_input').value;
-    console.log(localStorage.getItem('guestId'));
     if (localStorage.getItem('guestId') != null) {
         db.ref('guest_user/' + localStorage.getItem('guestId')).set({
                 dino_color: color,
@@ -176,6 +167,16 @@ function saveDinoColor() {
             .then(() => {
                 window.open("game.html", "_self");
             });
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
+                    is_jumping: false,
+                    is_alive: true,
+                    score: 0,
+                });
+
+            });
+        });
     } else {
         db.ref('user/' + firebase.auth().currentUser.uid).set({
             dino_color: color,
