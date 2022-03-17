@@ -49,7 +49,7 @@ function loginUser() {
 
             document.getElementById("btn_logout").classList.remove("d-none");
             document.getElementById("btn_account").classList.remove("d-none");
-            document.getElementById("btn_account").innerHTML += nickname;
+            document.getElementById("btn_account").innerHTML == nickname;
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
             //window.open("paginaUtente.html", "_self");
@@ -96,7 +96,23 @@ function generateGuestId() {
 }
 
 
+function watchGame() {
+    code = document.getElementById("code").value;
+    //window.open("../Game/index.html", "_self");
 
+    db.ref('session/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            if (code == childSnapshot.key) {
+                /*db.ref('session/' + childSnapshot.key + '/' + id).set({
+                    is_jumping: false,
+                    is_alive: true,
+                    score: 0,
+                });*/
+                window.open("../Game/index.html", "_self");
+            }
+        });
+    });
+}
 
 function connectToGame() {
     code = document.getElementById("code").value;
@@ -149,9 +165,7 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
-function watchGame() {
 
-}
 
 function changeDinoColor(color) {
 
