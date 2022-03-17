@@ -226,12 +226,15 @@ function jump() {
     db.ref('session/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             childSnapshot.forEach(function(childChildSnapshot) {
-                if (childChildSnapshot.key == firebase.auth().currentUser.uid) {
-                    db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).set({
-                        is_jumping: true,
-                        score: childChildSnapshot.val().score,
-                        is_alive: childChildSnapshot.val().is_alive,
-                    });
+                if (localStorage.getItem('guestId') == null) {
+                    if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
+                        db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).set({
+                            is_jumping: true,
+                            score: childChildSnapshot.val().score,
+                            is_alive: childChildSnapshot.val().is_alive,
+                        });
+                    }
+
                 } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
                     db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
                         is_jumping: true,
