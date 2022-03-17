@@ -35,6 +35,13 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     rif.scene.restart();
 });
 
+db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
+    //snapshot.forEach(function(childSnapshot) {
+    console.log(snapshot.key);
+    //   console.log(childSnapshot.val().is_jumping);
+    //});
+});
+
 function setSettingsPhaser() {
 
     var sceneLobby = {
@@ -315,12 +322,6 @@ function createGame() {
     setDini(this);
     setColliderCactusDini(this);
     setDiniNicknames(this);
-    db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
-        //snapshot.forEach(function(childSnapshot) {
-        console.log(snapshot.key);
-        //  console.log(childSnapshot.val().is_jumping);
-        //});
-    });
 
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
