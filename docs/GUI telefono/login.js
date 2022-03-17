@@ -232,6 +232,12 @@ function jump() {
                         score: childChildSnapshot.val().score,
                         is_alive: childChildSnapshot.val().is_alive,
                     });
+                } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
+                        is_jumping: true,
+                        score: childChildSnapshot.val().score,
+                        is_alive: childChildSnapshot.val().is_alive,
+                    });
                 }
             });
         });
