@@ -29,7 +29,6 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
-    diniNicknames.push(snapshot.key);
     rif.scene.restart();
 });
 
@@ -112,15 +111,12 @@ var terreni;
 var montagne;
 
 var nuvola;
-var colorDini = [];
+var colorDini = "0x";
 
 var dini;
 var cactus;
 var linesGroup;
 var heights;
-
-var diniNicknames = [];
-var textDiniNicknames = [];
 
 var distanzaMinima;
 var colliderDini;
@@ -146,6 +142,7 @@ function setStartValues() {
     montagne = new Array(NUM_MONTAGNE);
 
     nuvola;
+    colorDini = "0x";
 
     dini = new Array(NUM_DINI);
 
@@ -175,14 +172,6 @@ function setStartValues() {
         }
     }
 
-}
-
-function setDiniNicknames(gamescene) {
-    for (var i = 0; i < diniNicknames.length; i++) {
-        if (i != diniNicknames.length - 1) {
-            textDiniNicknames.push(gamescene.add.text(START_DISTANCE_DINI + (i * TRANSLATION) - 200, START_HEIGHT - 20 + HEIGHT_SPACE * i, diniNicknames[i], { fontFamily: 'Arial', fontSize: 20, color: '#000' }));
-        }
-    }
 }
 
 function setColliderLines(gamescene) {
@@ -244,26 +233,13 @@ function setDini(gamescene) {
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
-        var color
-        db.ref('guest_user/').once('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                for (var i = 0; i < diniNicknames.length; i++) {
-                    if (diniNicknames[i] == childSnapshot.key) {
-                        console.log(diniNicknames[i] + " - " + childSnapshot.key);
-                        color = childSnapshot.val().dino_color;
-                        console.log(color);
-                        dini[i].setTintFill(color, color, color, color);
-                    }
-                }
-
-            });
-        });
-
+        dini[i].setTintFill(colorDini, colorDini, colorDini, colorDini);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
         dini[i].play("run");
 
     }
+
 }
 
 function setAnimations(gamescene) {
@@ -333,9 +309,12 @@ function createGame() {
     setAnimations(this);
     setDini(this);
     setColliderCactusDini(this);
-    setDiniNicknames(this);
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
+        db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
+            NUM_DINI++;
+            rif.scene.restart();
+        });
         this.scene.switch('sceneGame');
     }
 }
@@ -438,9 +417,8 @@ function setScore() {
 }
 
 function setDifficulty() {
-    console.log("aumento")
-    velocitaSfondo += 0.2/NUM_DINI;
-    distanzaMinima += 6/NUM_DINI;
+    velocitaSfondo += 0.2 / NUM_DINI;
+    distanzaMinima += 6 / NUM_DINI;
 
 }
 
