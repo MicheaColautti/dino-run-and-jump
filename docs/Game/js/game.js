@@ -35,11 +35,16 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     rif.scene.restart();
 });
 
-db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
-    //snapshot.forEach(function(childSnapshot) {
-    console.log(snapshot.key);
-    //   console.log(childSnapshot.val().is_jumping);
-    //});
+db.ref("session/" + localStorage.getItem("sessionId")).once("value", function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        console.log(snapshot.key);
+        db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                console.log(snapshot.key);
+                console.log(childSnapshot.val().is_jumping);
+            });
+        });
+    });
 });
 
 function setSettingsPhaser() {
