@@ -132,6 +132,7 @@ function connectToGame() {
                     is_jumping: false,
                     is_alive: true,
                     score: 0,
+                    dino_color: "0x000",
                 });
                 window.open("game.html", "_self");
             }
@@ -219,7 +220,6 @@ function checkLoggedUser() {
 
 function jump() {
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
-
         if (snapshot.val().started) {
             console.log("jump");
             db.ref('session/').once('value', function(snapshot) {
