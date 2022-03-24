@@ -219,6 +219,7 @@ function checkLoggedUser() {
 
 function jump() {
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
+
         if (snapshot.val().started) {
             console.log("jump");
             db.ref('session/').once('value', function(snapshot) {
@@ -238,6 +239,7 @@ function jump() {
                                 is_jumping: true,
                                 score: childChildSnapshot.val().score,
                                 is_alive: childChildSnapshot.val().is_alive,
+                                dino_color: childChildSnapshot.val().dino_color,
                             });
                         }
                     });
