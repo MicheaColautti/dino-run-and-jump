@@ -40,7 +40,7 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
 
         diniJumps.push(false);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
-            if (!data.val() && runGame) {
+            if (data.val() && runGame) {
                 diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
             }
 
@@ -421,6 +421,7 @@ function checkJump() {
             dini[i].play("jump");
             dini[i].setVelocityY(-800);
             dini[i].play("run");
+            console.log(i + " is jumping");
         }
         diniJumps[i] = false;
         db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
