@@ -223,6 +223,10 @@ function checkLoggedUser() {
 }
 
 function jump() {
+    db.ref('session/' +191738+"/id").once('value', function(snapshot) {
+        console.log(snapshot.child.val);
+        //console.log(localStorage.getItem('code'));
+    });
     db.ref('session/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             childSnapshot.forEach(function(childChildSnapshot) {

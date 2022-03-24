@@ -32,15 +32,14 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     if (snapshot.key != "id") {
         if (snapshot.key.startsWith("guest_")) {
             diniNicknames.push(snapshot.key);
-        } else {
-
         }
 
         diniJumps.push(false);
-        console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
-            diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
-            console.log(data.val());
+            if(data.val() && runGame){
+                diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
+            }
+            
         });
     }
     rif.scene.restart();
@@ -336,7 +335,7 @@ function createGame() {
             NUM_DINI++;
             rif.scene.restart();
         });
-
+        
         this.scene.switch('sceneGame');
     }
 }
@@ -413,16 +412,14 @@ function updateNuvola() {
 }
 
 function checkJump() {
-    if (keySpace.isDown) {
-        for (var i = 0; i < dini.length; i++) {
-            if (dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
-                //salto
-                dini[i].play("jump");
-                dini[i].setVelocityY(-800);
-                dini[i].play("run");
-
-            }
+    for (var i = 0; i < dini.length; i++) {
+        if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
+            dini[i].play("jump");
+            dini[i].setVelocityY(-800);
+            dini[i].play("run");
         }
+        diniJumps[i] = false;
+        db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
     }
 }
 
@@ -494,8 +491,6 @@ function leaderboard() {
     items.sort(function(first, second) {
         return second[1] - first[1];
     });
-
-    console.log(items);
 
     var i = 1;
     var table = document.getElementById("leader_table");
