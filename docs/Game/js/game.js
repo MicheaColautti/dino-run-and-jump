@@ -29,23 +29,18 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
-    if (snapshot.key != "id") {
-        if (snapshot.key.startsWith("guest_")) {
-            diniNicknames.push(snapshot.key);
-            console.log(snapshot.val().dino_color);
-            diniColor.push(snapshot.val().dino_color);
-        } else {
-            //console.log(firebase.auth().getUser(uid));
-        }
-
-        diniJumps.push(false);
-        db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
-            if (data.val() && runGame) {
-                diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
-            }
-
-        });
+    console.log(snapshot.val());
+    console.log(snapshot.key);
+    if (snapshot.key.startsWith("guest_")) {
+        diniNicknames.push(snapshot.key);
+        console.log(snapshot.val().dino_color);
+        diniColor.push(snapshot.val().dino_color);
+    } else {
+        //console.log(firebase.auth().getUser(uid));
     }
+    diniJumps.push(false);
+    console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
+
     rif.scene.restart();
 });
 
@@ -138,6 +133,20 @@ var diniNicknames = [];
 var textDiniNicknames = [];
 var diniJumps = [];
 var diniColor = [];
+
+function createListeners() {
+    console.log("listeners");
+    for (var i = 0; i < diniNicknames.length; i++) {
+        db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
+            console.log("entra");
+            if (!data.val() && runGame) {
+                diniJumps[i] = true;
+                console.log("jump");
+            }
+
+        });
+    }
+}
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
@@ -476,6 +485,7 @@ function endOfTheGame(game) {
 }
 
 function startGame() {
+    createListeners();
     runGame = true;
     rif.scene.restart();
 }
