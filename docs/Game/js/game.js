@@ -31,20 +31,13 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     NUM_DINI++;
     if (snapshot.key != "id") {
         diniNicknames.push(snapshot.key);
+        console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
+        db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
+            console.log(data.val());
+            console.log("The updated player name is " + data.val());
+        });
     }
     rif.scene.restart();
-});
-
-db.ref("session/" + localStorage.getItem("sessionId")).once("value", function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-        console.log(snapshot.key);
-        db.ref("session/" + localStorage.getItem("sessionId")).on("child_changed", function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                console.log(snapshot.key);
-                console.log(childSnapshot.val().is_jumping);
-            });
-        });
-    });
 });
 
 function setSettingsPhaser() {
@@ -483,15 +476,23 @@ function leaderboard() {
     var result = {};
     diniNicknames.forEach((key, i) => result[key] = punteggio[i]);
 
-    /*result.sort(function(first, second) {
-        return second[1] - first[1];
-    });*/
+    //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
 
+    var items = Object.keys(result).map(function(key) {
+        return [key, result[key]];
+    });
+
+    // Sort the array based on the second element
+    items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+
+    console.log(items);
 
     var i = 1;
     var table = document.getElementById("leader_table");
 
-    for (const [key, value] of Object.entries(result)) {
+    for (const [key, value] of items) {
         var row = "";
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
