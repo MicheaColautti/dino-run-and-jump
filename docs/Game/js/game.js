@@ -32,21 +32,18 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     if (snapshot.key != "id") {
         if (snapshot.key.startsWith("guest_")) {
             diniNicknames.push(snapshot.key);
-<<<<<<< Updated upstream
-=======
             console.log(snapshot.val().dino_color);
             diniColor.push(snapshot.val().dino_color);
         } else {
             console.log(firebase.auth().getUser(uid));
->>>>>>> Stashed changes
         }
 
         diniJumps.push(false);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
-            if(data.val() && runGame){
+            if (data.val() && runGame) {
                 diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
             }
-            
+
         });
     }
     rif.scene.restart();
@@ -342,7 +339,7 @@ function createGame() {
             NUM_DINI++;
             rif.scene.restart();
         });
-        
+
         this.scene.switch('sceneGame');
     }
 }

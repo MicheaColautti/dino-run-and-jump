@@ -169,8 +169,6 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
-
-
 function changeDinoColor(color) {
 
     document.getElementById('dino').style.fill = color;
@@ -221,7 +219,7 @@ function checkLoggedUser() {
 }
 
 function jump() {
-    db.ref('session/' +191738+"/id").once('value', function(snapshot) {
+    db.ref('session/' + 191738 + "/id").once('value', function(snapshot) {
         console.log(snapshot.child.val);
         //console.log(localStorage.getItem('code'));
     });
