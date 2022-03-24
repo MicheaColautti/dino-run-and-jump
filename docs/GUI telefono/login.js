@@ -219,9 +219,9 @@ function checkLoggedUser() {
 }
 
 function jump() {
-    db.ref('session/' + localStorage.getItem('code') + "/id/").once('value', function(snapshot) {
-        console.log(snapshot.val());
-        if (snapshot.val() != "started") {
+    db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
+        var status = snapshot.val().id;
+        if (status == "started") {
             console.log("jump");
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
