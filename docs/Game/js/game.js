@@ -40,7 +40,7 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
 
         diniJumps.push(false);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
-            if (data.val() && runGame) {
+            if (!data.val() && runGame) {
                 diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
             }
 
