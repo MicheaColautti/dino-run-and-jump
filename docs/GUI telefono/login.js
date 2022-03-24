@@ -186,27 +186,25 @@ function saveDinoColor() {
     }
     color = document.getElementById('color_input').value;
     if (localStorage.getItem('guestId') != null && idUsr == null) {
-        db.ref('guest_user/' + localStorage.getItem('guestId')).set({
-                dino_color: color,
-            })
-            .then(() => {
-                window.open("game.html", "_self");
-            });
         db.ref('session/').once('value', function(snapshot) {
 
             snapshot.forEach(function(childSnapshot) {
                 console.log(localStorage.getItem("code") + " || " + childSnapshot.key);
                 if (localStorage.getItem("code") == childSnapshot.key) {
+                    color = color.replace("#", "0x");
                     db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
                         is_jumping: false,
                         is_alive: true,
                         score: 0,
+                        dino_color: color,
                     });
                 }
-
             });
+        }).then(() => {
+            window.open("game.html", "_self");
         });
     } else {
+        color = color.replace("#", "0x");
         db.ref('user/' + firebase.auth().currentUser.uid).set({
             dino_color: color,
         }).then(() => {

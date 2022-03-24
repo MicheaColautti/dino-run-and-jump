@@ -32,6 +32,13 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     if (snapshot.key != "id") {
         if (snapshot.key.startsWith("guest_")) {
             diniNicknames.push(snapshot.key);
+<<<<<<< Updated upstream
+=======
+            console.log(snapshot.val().dino_color);
+            diniColor.push(snapshot.val().dino_color);
+        } else {
+            console.log(firebase.auth().getUser(uid));
+>>>>>>> Stashed changes
         }
 
         diniJumps.push(false);
@@ -251,7 +258,7 @@ function setDini(gamescene) {
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
 
-        dini[i].setTintFill(colorDini, colorDini, colorDini, colorDini);
+        dini[i].setTintFill(diniColor[i], diniColor[i], diniColor[i], diniColor[i]);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
         dini[i].play("run");
