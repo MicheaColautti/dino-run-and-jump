@@ -30,7 +30,12 @@ var runGame = false;
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
     if (snapshot.key != "id") {
-        diniNicknames.push(snapshot.key);
+        if (snapshot.key.startsWith("guest_")) {
+            diniNicknames.push(snapshot.key);
+        } else {
+
+        }
+
         diniJumps.push(false);
         console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
