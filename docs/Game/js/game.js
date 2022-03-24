@@ -31,10 +31,11 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     NUM_DINI++;
     if (snapshot.key != "id") {
         diniNicknames.push(snapshot.key);
+        diniJumps.push(false);
         console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key).on("child_changed", function(data) {
+            diniJumps[diniNicknames.indexOf(snapshot.key)] = true;
             console.log(data.val());
-            console.log("The updated player name is " + data.val());
         });
     }
     rif.scene.restart();
@@ -127,6 +128,8 @@ var pAssegnati;
 
 var diniNicknames = [];
 var textDiniNicknames = [];
+var diniJumps = [];
+var diniColor = [];
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
@@ -504,6 +507,5 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
 
-    };
-
+    }
 }
