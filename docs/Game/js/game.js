@@ -35,7 +35,7 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
             console.log(snapshot.val().dino_color);
             diniColor.push(snapshot.val().dino_color);
         } else {
-            console.log(firebase.auth().getUser(uid));
+            //console.log(firebase.auth().getUser(uid));
         }
 
         diniJumps.push(false);
@@ -334,7 +334,7 @@ function createGame() {
 
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
-        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'id': "started" });
+        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': "true" });
         db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
             NUM_DINI++;
             rif.scene.restart();

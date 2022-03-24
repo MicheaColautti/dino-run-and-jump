@@ -82,7 +82,7 @@ function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
     db.ref("session/" + id).set({
-            id,
+            started: false,
         })
         .then(() => {
             window.open("../Game/index.html", "_self");
@@ -94,7 +94,6 @@ function generateGuestId() {
     localStorage.setItem('guestId', id);
     window.open("personalizzaDino.html", "_self");
 }
-
 
 function watchGame() {
     code = document.getElementById("code").value;
@@ -220,8 +219,7 @@ function checkLoggedUser() {
 
 function jump() {
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
-        var status = snapshot.val().id;
-        if (status == "started") {
+        if (snapshot.val().started) {
             console.log("jump");
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
