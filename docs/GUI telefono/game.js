@@ -25,6 +25,7 @@ function handleMotion(event){
         console.log(event.acceleration.z);
         if(acc>12){
             jump();
+            document.getElementById("z").innerHTML += "SALTO ";
         }
     }  
 }

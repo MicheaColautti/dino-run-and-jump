@@ -29,6 +29,7 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
+
     if (snapshot.key.startsWith("guest_")) {
         diniNicknames.push(snapshot.key);
         diniColor.push(snapshot.val().dino_color);
@@ -171,6 +172,7 @@ function setStartValues() {
 
     montagne = new Array(NUM_MONTAGNE);
 
+
     nuvola;
     colorDini = "0x";
 
@@ -201,6 +203,13 @@ function setStartValues() {
             pAssegnati[i][j] = false;
         }
     }
+    for(var i = 0; i< dini.length; i++){
+        db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
+            is_jumping: false
+        });
+    }
+
+    
 
 }
 
