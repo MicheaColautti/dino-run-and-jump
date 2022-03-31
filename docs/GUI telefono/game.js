@@ -1,4 +1,4 @@
-let accelerometer = null;
+/*let accelerometer = null;
 try {
     navigator.permissions.query({ name: 'accelerometer' }).then(function(result) {
         if (result.state === 'granted') {
@@ -37,7 +37,7 @@ try {
     } else {
         throw error;
     }
-}
+}*/
 
 function blockInput() {
     document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
@@ -54,6 +54,13 @@ function getOS() {
 
     }
     document.getElementById("os").innerHTML = "Dispositivi IOS non supportati. <br>Usa il tasto Jump";
-
-
 }
+
+window.addEventListener("devicemotion", handleMotion, true);
+
+    function handleMotion(event){
+        console.log(event.acceleration.z);
+        document.getElementById("z").innerHTML = event.acceleration.z;
+        document.getElementById("y").innerHTML = "evento";
+        
+    }
