@@ -26,8 +26,6 @@ function handleMotion(event){
         if(acc>12){
             document.getElementById("val").innerHTML += "SALTO ";
             jump();
-            document.getElementById("val").innerHTML += "SALTO ";
         }
     }  
 }
-document.getElementById("val").innerHTML += "SALTO ";
