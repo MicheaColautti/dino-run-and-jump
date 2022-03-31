@@ -20,9 +20,10 @@ function getOS() {
 window.addEventListener("devicemotion", handleMotion, true);
 
 function handleMotion(event){
-    document.getElementById("val").innerHTML += "SALTO ";
+    var acc = event.acceleration.z;
     if(acc != null){
-        var acc = event.acceleration.z;
+        document.getElementById("val").innerHTML += "SALTO ";
+        
         console.log(event.acceleration.z);
         if(acc>12){
             document.getElementById("val").innerHTML += "SALTO ";
