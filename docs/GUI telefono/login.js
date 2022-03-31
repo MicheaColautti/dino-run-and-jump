@@ -37,7 +37,7 @@ function registerNewUser() {
             const errorMessage = error.message;
             document.getElementById('singIn_error').innerHTML = error.message;
         });
-    
+
 
 }
 
@@ -170,14 +170,15 @@ firebase.auth().onAuthStateChanged((user) => {
             document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
         db.ref('user/').once('value', function(snapshot) {
-            if(!snapshot.child(firebase.auth().currentUser.uid).exists()){
+            if (!snapshot.child(firebase.auth().currentUser.uid).exists()) {
                 db.ref('user/' + firebase.auth().currentUser.uid).set({
                     dino_color: "0x0",
+                    nickname: firebase.auth().currentUser.email.split("@")[0],
                 });
             }
         });
 
-       
+
     }
 });
 
