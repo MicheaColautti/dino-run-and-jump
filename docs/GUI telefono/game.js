@@ -22,11 +22,9 @@ window.addEventListener("devicemotion", handleMotion, true);
 function handleMotion(event){
     var acc = event.acceleration.z;
     if(acc != null){
-        document.getElementById("val").innerHTML += "SALTO ";
-        
         console.log(event.acceleration.z);
         if(acc>12){
-            document.getElementById("val").innerHTML += "SALTO ";
+            document.getElementById("val").innerHTML = acc;
             jump();
         }
     }  
