@@ -61,4 +61,6 @@ window.addEventListener("devicemotion", handleMotion, true);
     function handleMotion(event){
         console.log(event.acceleration.z);
         document.getElementById("z").innerHTML = event.acceleration.z;
+        document.getElementById("y").innerHTML = "evento";
+        
     }
