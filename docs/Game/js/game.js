@@ -32,8 +32,13 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     if (snapshot.key.startsWith("guest_")) {
         diniNicknames.push(snapshot.key);
         diniColor.push(snapshot.val().dino_color);
+        uids.push(null);
     } else {
-        //console.log(firebase.auth().getUser(uid));
+        db.ref('user/' + snapshot.key).once("value", function(data) {
+            uids.push(data.key);
+            diniNicknames.push(data.val().nickname);
+            diniColor.push(data.val().dino_color);
+        });
     }
     diniJumps.push(false);
 
@@ -127,6 +132,7 @@ var ignoreCollisions = false;
 
 var diniNicknames = [];
 var textDiniNicknames = [];
+var uids = [];
 var diniJumps = [];
 var dato = false;
 var diniColor = [];
@@ -259,7 +265,6 @@ function setCactus(gamescene) {
 }
 
 function setDini(gamescene) {
-
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
@@ -270,7 +275,6 @@ function setDini(gamescene) {
         dini[i].play("run");
 
     }
-
 }
 
 function setAnimations(gamescene) {
@@ -325,7 +329,6 @@ function setColliderCactusDini(gamescene) {
     }
 }
 
-var keySpace;
 //funzione createGame, crea nel canvas tutti i vari assets caricati nella funzione preload game
 function createGame() {
     document.getElementById('sessionId').innerHTML = localStorage.getItem("sessionId");
@@ -411,7 +414,6 @@ function updateCactus() {
             }
         }
     }
-
 }
 
 
@@ -458,7 +460,6 @@ function setScore() {
 function setDifficulty() {
     velocitaSfondo += 0.2 / NUM_DINI;
     distanzaMinima += 6 / NUM_DINI;
-
 }
 
 function checkEndOfGame(game) {
