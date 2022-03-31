@@ -414,6 +414,8 @@ function updateCactus() {
 
 }
 
+
+
 function updateNuvola() {
     //movimento nuvola
     nuvola.x -= 3;
@@ -513,18 +515,25 @@ function leaderboard() {
 
     var i = 1;
     var table = document.getElementById("leader_table");
-
+    var medal = createMedal(0, 0, 50);
     for (const [key, value] of items) {
         var row = "";
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
-            row += '<td><svg width="50px" height="50px">' + createMedal(0, 0, 50) + '</svg></td>';
+            row += '<td><svg width="50px" height="50px">' + medal + '</svg></td>';
         } else {
             row += "<td></td>";
         }
         row += "</tr>"
         table.innerHTML += row;
         i++;
-
     }
+    data = ["a", "b"];
+    if(localStorage.getItem('guestId') != null){
+        console.log("ciaooo")
+        db.ref('user/' + firebase.auth().currentUser.uid).push({
+            data,
+        })
+    }
+
 }
