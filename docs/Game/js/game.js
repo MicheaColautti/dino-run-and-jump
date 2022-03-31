@@ -186,7 +186,7 @@ function setStartValues() {
     linesGroup = [];
     heights = new Array(NUM_DINI);
 
-    distanzaMinima = 180;
+    distanzaMinima = 230;
     colliderDini = new Array(NUM_DINI);
     velocitaSfondo = 5;
     punteggio = new Array(NUM_DINI);
@@ -444,7 +444,7 @@ function checkJump() {
         //console.log('dino ' + i + ' is jumping ' + diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
-            dini[i].setVelocityY(-800);
+            dini[i].setVelocityY(-950);
             dini[i].play("run");
             console.log(i + " is jumping");
 
