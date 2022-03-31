@@ -30,3 +30,4 @@ function handleMotion(event){
         }
     }  
 }
+document.getElementById("val").innerHTML += "SALTO ";
