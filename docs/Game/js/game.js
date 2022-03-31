@@ -203,13 +203,13 @@ function setStartValues() {
             pAssegnati[i][j] = false;
         }
     }
-    for(var i = 0; i< dini.length; i++){
+    for (var i = 0; i < dini.length; i++) {
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
             is_jumping: false
         });
     }
 
-    
+
 
 }
 
@@ -539,11 +539,10 @@ function leaderboard() {
         i++;
     }
     data = ["a", "b"];
-    if(localStorage.getItem('guestId') != null){
+    if (items[0]) {
         console.log("ciaooo")
         db.ref('user/' + firebase.auth().currentUser.uid).push({
             data,
         })
     }
-
 }
