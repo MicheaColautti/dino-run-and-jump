@@ -29,17 +29,13 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
-    console.log(snapshot.val());
-    console.log(snapshot.key);
     if (snapshot.key.startsWith("guest_")) {
         diniNicknames.push(snapshot.key);
-        console.log(snapshot.val().dino_color);
         diniColor.push(snapshot.val().dino_color);
     } else {
         //console.log(firebase.auth().getUser(uid));
     }
     diniJumps.push(false);
-    console.log("session/" + localStorage.getItem("sessionId") + "/" + snapshot.key);
 
     rif.scene.restart();
 });
@@ -112,9 +108,7 @@ const ALTEZZA_CACTUS = 50;
 const ALTEZZA_DINI = 50;
 
 var terreni;
-
 var montagne;
-
 var nuvola;
 var colorDini = "0x";
 
@@ -129,21 +123,27 @@ var velocitaSfondo;
 var punteggio;
 var pAssegnati;
 
+var ignoreCollisions = false;
+
 var diniNicknames = [];
 var textDiniNicknames = [];
 var diniJumps = [];
+var dato = false;
 var diniColor = [];
 
 function createListeners() {
-    console.log("listeners");
     for (var i = 0; i < diniNicknames.length; i++) {
+        var dato = false;
+        localStorage.setItem("dato", false);
+        //console.log('creating child state listener for ' + diniNicknames[i]);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
-            console.log("entra");
-            if (!data.val() && runGame) {
-                diniJumps[i] = true;
-                console.log("jump");
+            var player_jump = data.val();
+            console.log(data.parent);
+            console.log('player_jump event: ' + player_jump);
+            if (player_jump) {
+                diniJumps[i - 1] = true;
+                console.log(i);
             }
-
         });
     }
 }
@@ -169,8 +169,8 @@ function setStartValues() {
     colorDini = "0x";
 
     dini = new Array(NUM_DINI);
-
     cactus = new Array(NUM_DINI);
+
     for (var i = 0; i < cactus.length; i++) {
         cactus[i] = new Array(NUM_CACTUS);
     }
@@ -338,12 +338,12 @@ function createGame() {
     setCactus(this);
     setAnimations(this);
     setDini(this);
-    setColliderCactusDini(this);
+    if (!ignoreCollisions) { setColliderCactusDini(this); }
     setDiniNicknames(this);
 
     keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
-        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': "true" });
+        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': true });
         db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
             NUM_DINI++;
             rif.scene.restart();
@@ -426,14 +426,18 @@ function updateNuvola() {
 
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
+        console.log(diniJumps[i]);
+        //console.log(dini[i]);
+        //console.log('dino ' + i + ' is jumping ' + diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
             dini[i].setVelocityY(-800);
             dini[i].play("run");
             console.log(i + " is jumping");
+
+            diniJumps[i] = false;
+            db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
         }
-        diniJumps[i] = false;
-        db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
     }
 }
 
