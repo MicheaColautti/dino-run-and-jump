@@ -61,7 +61,7 @@ window.addEventListener("devicemotion", handleMotion, true);
     function handleMotion(event){
         var acc = event.acceleration.z;
         console.log(event.acceleration.z);
-        if(acc>9){
+        if(acc>12){
             document.getElementById("z").innerHTML += "SALTO ";
         }
         
