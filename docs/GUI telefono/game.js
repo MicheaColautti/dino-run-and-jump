@@ -59,8 +59,12 @@ function getOS() {
 window.addEventListener("devicemotion", handleMotion, true);
 
     function handleMotion(event){
+        var acc = event.acceleration.z;
         console.log(event.acceleration.z);
-        document.getElementById("z").innerHTML = event.acceleration.z;
-        document.getElementById("y").innerHTML = "evento";
+        if(acc>9 || acc<-9){
+            document.getElementById("z").innerHTML += "SALTO ";
+        }
+        
+
         
     }
