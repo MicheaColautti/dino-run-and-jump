@@ -30,12 +30,15 @@ function registerNewUser() {
     var email = nickname + "@dino.ch";
 
     // creare nuovo account
+    var creato = true;
     auth.createUserWithEmailAndPassword(email, password)
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             document.getElementById('singIn_error').innerHTML = error.message;
         });
+    
+
 }
 
 function loginUser() {
@@ -166,6 +169,15 @@ firebase.auth().onAuthStateChanged((user) => {
         } else if (path == "bacheca.html") {
             document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
+        db.ref('user/').once('value', function(snapshot) {
+            if(!snapshot.child(firebase.auth().currentUser.uid).exists()){
+                db.ref('user/' + firebase.auth().currentUser.uid).set({
+                    dino_color: "0x0",
+                });
+            }
+        });
+
+       
     }
 });
 
