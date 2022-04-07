@@ -73,13 +73,17 @@ function openUserInformation() {
 
 }
 
-function showUserInfromation() {
+function showUserInformation() {
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email.split("@")[0];
 
     db.ref('user/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (firebase.auth().currentUser.uid == childSnapshot.key) {
-                document.getElementById('dino').style.fill = childSnapshot.val().dino_color;
+                console.log(document.getElementById('dino').style.fill);
+                console.log(childSnapshot.val().dino_color);
+                var c = childSnapshot.val().dino_color;
+                document.getElementById('dino').style.fill = childSnapshot.val().dino_color.replace("0x", "#");
+                console.log(c);
             }
         });
     });
@@ -165,6 +169,7 @@ firebase.auth().onAuthStateChanged((user) => {
         var path = window.location.pathname;
         path = path.split("/");
         path = path[path.length - 1];
+        console.log(path);
         //dino-run-and-jump/GUI%20telefono/paginaUtente.html
         if (path == "login.html") {
             document.getElementById("btn_logout").classList.remove("d-none");
@@ -173,7 +178,8 @@ firebase.auth().onAuthStateChanged((user) => {
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
         } else if (path == "paginaUtente.html") {
-            showUserInfromation();
+            console.log("entra");
+            showUserInformation();
         } else if (path == "personalizzaDino.html") {
             db.ref('user/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
@@ -183,7 +189,7 @@ firebase.auth().onAuthStateChanged((user) => {
                     }
                 });
             });
-            
+
         } else if (path == "bacheca.html") {
             document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
@@ -234,7 +240,7 @@ function saveDinoColor() {
         });
     } else {
         color = color.replace("#", "0x");
-        db.ref('user/' + firebase.auth().currentUser.uid).set({
+        db.ref('user/' + firebase.auth().currentUser.uid).update({
             dino_color: color,
         }).then(() => {
             window.open("paginaUtente.html", "_self");
@@ -281,11 +287,11 @@ function jump() {
 }
 
 
-function writeMedals(){
-    db.ref('user/' +  localStorage.getItem("userUid") +"/medals").once('value', function(snapshot) {
+function writeMedals() {
+    db.ref('user/' + localStorage.getItem("userUid") + "/medals").once('value', function(snapshot) {
         var elemento = document.getElementById("tabMedaglie");
-            snapshot.forEach(function(childSnapshot) {
-                elemento.innerHTML += '<svg width="60px" height="60px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
-            });
-     });
+        snapshot.forEach(function(childSnapshot) {
+            elemento.innerHTML += '<svg width="60px" height="60px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
+        });
+    });
 }
