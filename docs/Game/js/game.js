@@ -145,11 +145,8 @@ function createListeners() {
         //console.log('creating child state listener for ' + diniNicknames[i]);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
             var player_jump = data.val();
-            console.log(data.parent);
-            console.log('player_jump event: ' + player_jump);
             if (player_jump) {
-                diniJumps[i - 1] = true;
-                console.log(i);
+                diniJumps[i] = true;
             }
         });
     }
@@ -439,15 +436,10 @@ function updateNuvola() {
 
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
-        console.log(diniJumps[i]);
-        //console.log(dini[i]);
-        //console.log('dino ' + i + ' is jumping ' + diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
             dini[i].play("run");
-            console.log(i + " is jumping");
-
             diniJumps[i] = false;
             db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
         }
@@ -540,7 +532,6 @@ function leaderboard() {
     }
     data = ["a", "b"];
     if (items[0]) {
-        console.log("ciaooo")
         db.ref('user/' + firebase.auth().currentUser.uid).push({
             data,
         })
