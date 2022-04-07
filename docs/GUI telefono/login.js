@@ -64,6 +64,10 @@ function loginUser() {
         });
 }
 
+function logoutUser() {
+    firebase.auth().signOut();
+}
+
 function openUserInformation() {
     window.open("paginaUtente.html", "_self");
 
