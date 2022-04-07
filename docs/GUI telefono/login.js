@@ -161,6 +161,7 @@ function connectToGame() {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        localStorage.setItem("userUid", firebase.auth().currentUser.uid);
         var path = window.location.pathname;
         path = path.split("/");
         path = path[path.length - 1];
@@ -182,6 +183,7 @@ firebase.auth().onAuthStateChanged((user) => {
                     }
                 });
             });
+            
         } else if (path == "bacheca.html") {
             document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
@@ -276,4 +278,14 @@ function jump() {
             });
         }
     });
+}
+
+
+function writeMedals(){
+    db.ref('user/' +  localStorage.getItem("userUid") +"/medals").once('value', function(snapshot) {
+        var elemento = document.getElementById("tabMedaglie");
+            snapshot.forEach(function(childSnapshot) {
+                elemento.innerHTML += '<svg width="60px" height="60px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
+            });
+     });
 }
