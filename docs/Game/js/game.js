@@ -186,7 +186,7 @@ function setStartValues() {
     linesGroup = [];
     heights = new Array(NUM_DINI);
 
-    distanzaMinima = 230;
+    distanzaMinima = 260;
     colliderDini = new Array(NUM_DINI);
     velocitaSfondo = 5;
     punteggio = new Array(NUM_DINI);
