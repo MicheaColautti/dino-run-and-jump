@@ -80,9 +80,18 @@ function showUserInformation() {
         snapshot.forEach(function(childSnapshot) {
             if (firebase.auth().currentUser.uid == childSnapshot.key) {
                 console.log(document.getElementById('dino').style.fill);
-                console.log(childSnapshot.val().dino_color);
-                var c = childSnapshot.val().dino_color;
-                document.getElementById('dino').style.fill = childSnapshot.val().dino_color.replace("0x", "#");
+                var path = window.location.pathname;
+                path = path.split("/");
+                path = path[path.length - 1];
+                console.log(path);
+                var c = childSnapshot.val().dino_color.replace("0x", "#");
+                if (path == "paginaUtente.html") {
+                    document.getElementById('dino').style.fill = c;
+                } else if (path = "personalizzaDino.html") {
+                    document.getElementById('color_input').value = c;
+                    document.getElementById('dino').style.fill = c;
+                }
+
                 console.log(c);
             }
         });
@@ -169,7 +178,6 @@ firebase.auth().onAuthStateChanged((user) => {
         var path = window.location.pathname;
         path = path.split("/");
         path = path[path.length - 1];
-        console.log(path);
         //dino-run-and-jump/GUI%20telefono/paginaUtente.html
         if (path == "login.html") {
             document.getElementById("btn_logout").classList.remove("d-none");
@@ -181,6 +189,7 @@ firebase.auth().onAuthStateChanged((user) => {
             console.log("entra");
             showUserInformation();
         } else if (path == "personalizzaDino.html") {
+            showUserInformation();
             db.ref('user/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (firebase.auth().currentUser.uid == childSnapshot.key) {
@@ -285,7 +294,6 @@ function jump() {
         }
     });
 }
-
 
 function writeMedals() {
     db.ref('user/' + localStorage.getItem("userUid") + "/medals").once('value', function(snapshot) {
