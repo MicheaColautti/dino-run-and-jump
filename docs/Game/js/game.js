@@ -29,20 +29,21 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
-
-    if (snapshot.key.startsWith("guest_")) {
+    var id = snapshot.key;
+    if (id.startsWith("guest_")) {
         diniNicknames.push(snapshot.key);
         diniColor.push(snapshot.val().dino_color);
         uids.push(null);
-    } else {
+    } else if (id.length == 28) {
+        console.log("secondo if: " + id);
         db.ref('user/' + snapshot.key).once("value", function(data) {
-            uids.push(data.key);
+            var uid = data.key;
+            uids.push(uid);
             diniNicknames.push(data.val().nickname);
             diniColor.push(data.val().dino_color);
         });
     }
     diniJumps.push(false);
-
     rif.scene.restart();
 });
 
@@ -99,7 +100,7 @@ function setSettingsPhaser() {
     game = new Phaser.Game(config);
 }
 
-//dichiarazione costanti 
+//#region dichiarazione costanti 
 
 var NUM_DINI = -1;
 const NUM_TERRENI = 2;
@@ -137,19 +138,17 @@ var uids = [];
 var diniJumps = [];
 var dato = false;
 var diniColor = [];
+//#endregion
 
 function createListeners() {
     for (var i = 0; i < diniNicknames.length; i++) {
-        var dato = false;
         localStorage.setItem("dato", false);
-        //console.log('creating child state listener for ' + diniNicknames[i]);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
+            var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
             var player_jump = data.val();
-            console.log(data.parent);
-            console.log('player_jump event: ' + player_jump);
             if (player_jump) {
-                diniJumps[i - 1] = true;
-                console.log(i);
+                diniJumps[index] = true;
+
             }
         });
     }
@@ -186,7 +185,7 @@ function setStartValues() {
     linesGroup = [];
     heights = new Array(NUM_DINI);
 
-    distanzaMinima = 230;
+    distanzaMinima = 260;
     colliderDini = new Array(NUM_DINI);
     velocitaSfondo = 5;
     punteggio = new Array(NUM_DINI);
@@ -203,14 +202,18 @@ function setStartValues() {
             pAssegnati[i][j] = false;
         }
     }
-    for (var i = 0; i < dini.length; i++) {
-        db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
-            is_jumping: false
-        });
+
+    for (var i = 0; i < diniNicknames.length; i++) {
+        if (diniNicknames[i].startsWith("guest_")) {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
+                is_jumping: false
+            });
+        } else /*if (id.length == 28)*/ {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).update({
+                is_jumping: false
+            });
+        }
     }
-
-
-
 }
 
 function setDiniNicknames(gamescene) {
@@ -274,10 +277,11 @@ function setCactus(gamescene) {
 }
 
 function setDini(gamescene) {
+    console.log(diniColor);
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
-
+        console.log(diniColor[i]);
         dini[i].setTintFill(diniColor[i], diniColor[i], diniColor[i], diniColor[i]);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
@@ -353,7 +357,6 @@ function createGame() {
     if (!ignoreCollisions) { setColliderCactusDini(this); }
     setDiniNicknames(this);
 
-    keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
         db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': true });
         db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
@@ -425,8 +428,6 @@ function updateCactus() {
     }
 }
 
-
-
 function updateNuvola() {
     //movimento nuvola
     nuvola.x -= 3;
@@ -439,17 +440,16 @@ function updateNuvola() {
 
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
-        console.log(diniJumps[i]);
-        //console.log(dini[i]);
-        //console.log('dino ' + i + ' is jumping ' + diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
             dini[i].play("run");
-            console.log(i + " is jumping");
-
             diniJumps[i] = false;
-            db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
+            if (diniNicknames[i].startsWith("guest_")) {
+                db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
+            } else {
+                db.ref('session/' + localStorage.getItem("sessionId") + "/" + uids[i]).update({ 'is_jumping': false });
+            }
         }
     }
 }
@@ -525,12 +525,16 @@ function leaderboard() {
 
     var i = 1;
     var table = document.getElementById("leader_table");
-    var medal = createMedal(0, 0, 50);
+    var medal = createMedal(0, 0, 100);
     for (const [key, value] of items) {
         var row = "";
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
-            row += '<td><svg width="50px" height="50px">' + medal + '</svg></td>';
+            row += '<td><svg width="100px" height="100px">' + medal + '</svg></td>';
+            if(!key.includes("guest")){
+                saveMedal(medal, key);
+
+            }
         } else {
             row += "<td></td>";
         }
@@ -538,11 +542,12 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
     }
-    data = ["a", "b"];
-    if (items[0]) {
-        console.log("ciaooo")
-        db.ref('user/' + firebase.auth().currentUser.uid).push({
-            data,
-        })
-    }
+    
+    
+}
+function saveMedal(medal, nick) {
+
+    db.ref('user/' + uids[diniNicknames.indexOf(nick)] + "/medals").push({
+        medal
+    })
 }

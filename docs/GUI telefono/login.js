@@ -64,18 +64,35 @@ function loginUser() {
         });
 }
 
+function logoutUser() {
+    firebase.auth().signOut();
+}
+
 function openUserInformation() {
     window.open("paginaUtente.html", "_self");
 
 }
 
-function showUserInfromation() {
+function showUserInformation() {
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email.split("@")[0];
 
     db.ref('user/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (firebase.auth().currentUser.uid == childSnapshot.key) {
-                document.getElementById('dino').style.fill = childSnapshot.val().dino_color;
+                console.log(document.getElementById('dino').style.fill);
+                var path = window.location.pathname;
+                path = path.split("/");
+                path = path[path.length - 1];
+                console.log(path);
+                var c = childSnapshot.val().dino_color.replace("0x", "#");
+                if (path == "paginaUtente.html") {
+                    document.getElementById('dino').style.fill = c;
+                } else if (path = "personalizzaDino.html") {
+                    document.getElementById('color_input').value = c;
+                    document.getElementById('dino').style.fill = c;
+                }
+
+                console.log(c);
             }
         });
     });
@@ -125,26 +142,39 @@ function connectToGame() {
 
     if (firebase.auth().currentUser == null) {
         generateGuestId();
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                if (code == childSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + id).set({
+                        is_jumping: false,
+                        is_alive: true,
+                        score: 0,
+                        dino_color: "0x000",
+                    });
+                    window.open("game.html", "_self");
+                }
+            });
+        });
     } else {
         id = firebase.auth().currentUser.uid;
-    }
-    db.ref('session/').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            if (code == childSnapshot.key) {
-                db.ref('session/' + childSnapshot.key + '/' + id).set({
-                    is_jumping: false,
-                    is_alive: true,
-                    score: 0,
-                    dino_color: "0x000",
-                });
-                window.open("game.html", "_self");
-            }
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                if (code == childSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + id).set({
+                        is_jumping: false,
+                        is_alive: true,
+                        score: 0,
+                    });
+                    window.open("game.html", "_self");
+                }
+            });
         });
-    });
+    }
 }
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        localStorage.setItem("userUid", firebase.auth().currentUser.uid);
         var path = window.location.pathname;
         path = path.split("/");
         path = path[path.length - 1];
@@ -156,8 +186,10 @@ firebase.auth().onAuthStateChanged((user) => {
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
         } else if (path == "paginaUtente.html") {
-            showUserInfromation();
+            console.log("entra");
+            showUserInformation();
         } else if (path == "personalizzaDino.html") {
+            showUserInformation();
             db.ref('user/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (firebase.auth().currentUser.uid == childSnapshot.key) {
@@ -166,6 +198,7 @@ firebase.auth().onAuthStateChanged((user) => {
                     }
                 });
             });
+
         } else if (path == "bacheca.html") {
             document.getElementById('username').innerHTML = firebase.auth().currentUser.email.split("@")[0];
         }
@@ -216,7 +249,7 @@ function saveDinoColor() {
         });
     } else {
         color = color.replace("#", "0x");
-        db.ref('user/' + firebase.auth().currentUser.uid).set({
+        db.ref('user/' + firebase.auth().currentUser.uid).update({
             dino_color: color,
         }).then(() => {
             window.open("paginaUtente.html", "_self");
@@ -259,5 +292,14 @@ function jump() {
                 });
             });
         }
+    });
+}
+
+function writeMedals() {
+    db.ref('user/' + localStorage.getItem("userUid") + "/medals").once('value', function(snapshot) {
+        var elemento = document.getElementById("tabMedaglie");
+        snapshot.forEach(function(childSnapshot) {
+            elemento.innerHTML += '<svg width="120px" height="120px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
+        });
     });
 }
