@@ -139,17 +139,19 @@ var dato = false;
 var diniColor = [];
 
 function createListeners() {
+    console.log(diniNicknames);
     for (var i = 0; i < diniNicknames.length; i++) {
-        var dato = false;
         localStorage.setItem("dato", false);
-        //console.log('creating child state listener for ' + diniNicknames[i]);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
+            var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
             var player_jump = data.val();
             if (player_jump) {
-                diniJumps[i] = true;
+                diniJumps[index] = true;
+                
             }
         });
     }
+    console.log(i);
 }
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
