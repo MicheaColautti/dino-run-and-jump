@@ -291,7 +291,7 @@ function writeMedals() {
     db.ref('user/' + localStorage.getItem("userUid") + "/medals").once('value', function(snapshot) {
         var elemento = document.getElementById("tabMedaglie");
         snapshot.forEach(function(childSnapshot) {
-            elemento.innerHTML += '<svg width="60px" height="60px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
+            elemento.innerHTML += '<svg width="120px" height="120px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
         });
     });
 }
