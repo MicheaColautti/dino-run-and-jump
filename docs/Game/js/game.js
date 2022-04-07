@@ -35,7 +35,6 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
         diniColor.push(snapshot.val().dino_color);
         uids.push(null);
     } else if (id.length == 28) {
-        console.log("secondo if: " + id);
         db.ref('user/' + snapshot.key).once("value", function(data) {
             var uid = data.key;
             uids.push(uid);
@@ -136,21 +135,30 @@ var diniNicknames = [];
 var textDiniNicknames = [];
 var uids = [];
 var diniJumps = [];
-var dato = false;
 var diniColor = [];
 //#endregion
 
 function createListeners() {
     for (var i = 0; i < diniNicknames.length; i++) {
-        localStorage.setItem("dato", false);
-        db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
-            var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
-            var player_jump = data.val();
-            if (player_jump) {
-                diniJumps[index] = true;
+        if (diniNicknames[i].startsWith("guest_")) {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
+                var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
+                var player_jump = data.val();
+                if (player_jump) {
+                    diniJumps[index] = true;
 
-            }
-        });
+                }
+            });
+        } else {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).on("child_changed", function(data) {
+                var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
+                var player_jump = data.val();
+                if (player_jump) {
+                    diniJumps[index] = true;
+                }
+            });
+        }
+
     }
 }
 
@@ -277,11 +285,9 @@ function setCactus(gamescene) {
 }
 
 function setDini(gamescene) {
-    console.log(diniColor);
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
-        console.log(diniColor[i]);
         dini[i].setTintFill(diniColor[i], diniColor[i], diniColor[i], diniColor[i]);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
@@ -441,6 +447,7 @@ function updateNuvola() {
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
+            console.log("is_jumping: " + diniNicknames[i]);
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
             dini[i].play("run");
@@ -531,7 +538,7 @@ function leaderboard() {
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
             row += '<td><svg width="100px" height="100px">' + medal + '</svg></td>';
-            if(!key.includes("guest")){
+            if (!key.includes("guest")) {
                 saveMedal(medal, key);
 
             }
@@ -542,9 +549,10 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
     }
-    
-    
+
+
 }
+
 function saveMedal(medal, nick) {
 
     db.ref('user/' + uids[diniNicknames.indexOf(nick)] + "/medals").push({
