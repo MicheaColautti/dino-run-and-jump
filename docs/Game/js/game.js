@@ -31,12 +31,11 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     NUM_DINI++;
     var id = snapshot.key;
     if (id.startsWith("guest_")) {
-        console.log("guest: " + snapshot.key);
         diniNicknames.push(snapshot.key);
         diniColor.push(snapshot.val().dino_color);
         uids.push(null);
     } else if (id.length == 28) {
-        console.log("guest: " + snapshot.key);
+        console.log("secondo if: " + id);
         db.ref('user/' + snapshot.key).once("value", function(data) {
             var uid = data.key;
             uids.push(uid);
@@ -45,7 +44,6 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
         });
     }
     diniJumps.push(false);
-    console.log(uids);
     rif.scene.restart();
 });
 
@@ -86,7 +84,7 @@ function setSettingsPhaser() {
                     left: false,
                     right: true
                 },
-                debug: true
+                debug: false
             }
         },
 
@@ -143,7 +141,6 @@ var diniColor = [];
 //#endregion
 
 function createListeners() {
-    console.log(diniNicknames);
     for (var i = 0; i < diniNicknames.length; i++) {
         localStorage.setItem("dato", false);
         db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
@@ -155,7 +152,6 @@ function createListeners() {
             }
         });
     }
-    console.log(i);
 }
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
@@ -207,10 +203,7 @@ function setStartValues() {
         }
     }
 
-    console.log(diniNicknames);
-    console.log(diniColor);
     for (var i = 0; i < diniNicknames.length; i++) {
-        console.log(diniNicknames[i]);
         if (diniNicknames[i].startsWith("guest_")) {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
                 is_jumping: false
@@ -284,6 +277,7 @@ function setCactus(gamescene) {
 }
 
 function setDini(gamescene) {
+    console.log(diniColor);
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
@@ -446,7 +440,6 @@ function updateNuvola() {
 
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
-        console.log(diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
@@ -538,7 +531,7 @@ function leaderboard() {
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
             row += '<td><svg width="50px" height="50px">' + medal + '</svg></td>';
-            if(!key.includes("guest")){
+            if (!key.includes("guest")) {
                 saveMedal(medal, key);
 
             }
@@ -549,13 +542,13 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
     }
-    
-    
+
+
 }
 
-function saveMedal(medal, nick){
+function saveMedal(medal, nick) {
 
-    db.ref('user/' + uids[diniNicknames.indexOf(nick)]+"/medals").push({
-       medal
+    db.ref('user/' + uids[diniNicknames.indexOf(nick)] + "/medals").push({
+        medal
     })
 }

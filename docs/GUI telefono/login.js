@@ -129,22 +129,34 @@ function connectToGame() {
 
     if (firebase.auth().currentUser == null) {
         generateGuestId();
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                if (code == childSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + id).set({
+                        is_jumping: false,
+                        is_alive: true,
+                        score: 0,
+                        dino_color: "0x000",
+                    });
+                    window.open("game.html", "_self");
+                }
+            });
+        });
     } else {
         id = firebase.auth().currentUser.uid;
-    }
-    db.ref('session/').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            if (code == childSnapshot.key) {
-                db.ref('session/' + childSnapshot.key + '/' + id).set({
-                    is_jumping: false,
-                    is_alive: true,
-                    score: 0,
-                    dino_color: "0x000",
-                });
-                window.open("game.html", "_self");
-            }
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                if (code == childSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + id).set({
+                        is_jumping: false,
+                        is_alive: true,
+                        score: 0,
+                    });
+                    window.open("game.html", "_self");
+                }
+            });
         });
-    });
+    }
 }
 
 firebase.auth().onAuthStateChanged((user) => {
