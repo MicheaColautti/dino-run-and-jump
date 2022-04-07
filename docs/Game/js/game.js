@@ -538,6 +538,10 @@ function leaderboard() {
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
         if (i == 1) {
             row += '<td><svg width="50px" height="50px">' + medal + '</svg></td>';
+            if(!key.includes("guest")){
+                saveMedal(medal, key);
+
+            }
         } else {
             row += "<td></td>";
         }
@@ -545,10 +549,13 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
     }
-    data = ["a", "b"];
-    if (items[0]) {
-        db.ref('user/' + firebase.auth().currentUser.uid).push({
-            data,
-        })
-    }
+    
+    
+}
+
+function saveMedal(medal, nick){
+
+    db.ref('user/' + uids[diniNicknames.indexOf(nick)]+"/medals").push({
+       medal
+    })
 }
