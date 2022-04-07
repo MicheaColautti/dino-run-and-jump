@@ -29,20 +29,23 @@ var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     NUM_DINI++;
-
-    if (snapshot.key.startsWith("guest_")) {
+    var id = snapshot.key;
+    if (id.startsWith("guest_")) {
+        console.log("guest: " + snapshot.key);
         diniNicknames.push(snapshot.key);
         diniColor.push(snapshot.val().dino_color);
         uids.push(null);
-    } else {
+    } else if (id.length == 28) {
+        console.log("guest: " + snapshot.key);
         db.ref('user/' + snapshot.key).once("value", function(data) {
-            uids.push(data.key);
+            var uid = data.key;
+            uids.push(uid);
             diniNicknames.push(data.val().nickname);
             diniColor.push(data.val().dino_color);
         });
     }
     diniJumps.push(false);
-
+    console.log(uids);
     rif.scene.restart();
 });
 
@@ -83,7 +86,7 @@ function setSettingsPhaser() {
                     left: false,
                     right: true
                 },
-                debug: false
+                debug: true
             }
         },
 
@@ -99,7 +102,7 @@ function setSettingsPhaser() {
     game = new Phaser.Game(config);
 }
 
-//dichiarazione costanti 
+//#region dichiarazione costanti 
 
 var NUM_DINI = -1;
 const NUM_TERRENI = 2;
@@ -137,6 +140,7 @@ var uids = [];
 var diniJumps = [];
 var dato = false;
 var diniColor = [];
+//#endregion
 
 function createListeners() {
     console.log(diniNicknames);
@@ -147,7 +151,7 @@ function createListeners() {
             var player_jump = data.val();
             if (player_jump) {
                 diniJumps[index] = true;
-                
+
             }
         });
     }
@@ -202,14 +206,21 @@ function setStartValues() {
             pAssegnati[i][j] = false;
         }
     }
-    for (var i = 0; i < dini.length; i++) {
-        db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
-            is_jumping: false
-        });
+
+    console.log(diniNicknames);
+    console.log(diniColor);
+    for (var i = 0; i < diniNicknames.length; i++) {
+        console.log(diniNicknames[i]);
+        if (diniNicknames[i].startsWith("guest_")) {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({
+                is_jumping: false
+            });
+        } else /*if (id.length == 28)*/ {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).update({
+                is_jumping: false
+            });
+        }
     }
-
-
-
 }
 
 function setDiniNicknames(gamescene) {
@@ -276,7 +287,7 @@ function setDini(gamescene) {
     graphics = gamescene.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
     for (var i = 0; i < dini.length; i++) {
         dini[i] = gamescene.physics.add.sprite(START_DISTANCE_DINI + (i * TRANSLATION), 0, 'dinoSprite').setOrigin(0, 0);
-
+        console.log(diniColor[i]);
         dini[i].setTintFill(diniColor[i], diniColor[i], diniColor[i], diniColor[i]);
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
@@ -352,7 +363,6 @@ function createGame() {
     if (!ignoreCollisions) { setColliderCactusDini(this); }
     setDiniNicknames(this);
 
-    keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     if (runGame) {
         db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': true });
         db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
@@ -424,8 +434,6 @@ function updateCactus() {
     }
 }
 
-
-
 function updateNuvola() {
     //movimento nuvola
     nuvola.x -= 3;
@@ -438,12 +446,17 @@ function updateNuvola() {
 
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
+        console.log(diniJumps[i]);
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
             dini[i].play("run");
             diniJumps[i] = false;
-            db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
+            if (diniNicknames[i].startsWith("guest_")) {
+                db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
+            } else {
+                db.ref('session/' + localStorage.getItem("sessionId") + "/" + uids[i]).update({ 'is_jumping': false });
+            }
         }
     }
 }
