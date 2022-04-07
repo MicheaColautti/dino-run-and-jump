@@ -284,8 +284,11 @@ function jump() {
 function writeMedals(){
     db.ref('user/' +  localStorage.getItem("userUid") +"/medals").once('value', function(snapshot) {
         var elemento = document.getElementById("tabMedaglie");
+            console.log("mammaPuttaba");
             snapshot.forEach(function(childSnapshot) {
-                elemento.innerHTML += '<svg width="60px" height="60px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
+                console.log( childSnapshot.node_.children_.root_.value.value_);
+
+                elemento.innerHTML += '<svg width="120px" height="120px">' + childSnapshot.node_.children_.root_.value.value_ + '</svg>';
             });
      });
 }
