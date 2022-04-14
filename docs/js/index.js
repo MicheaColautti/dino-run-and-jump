@@ -324,6 +324,6 @@ function checkLoggedUser() {
 
 function getIsTouchingDown(){
     db.ref('session/' +localStorage.getItem("sessionId")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
-        return snapshot.val().is_touchingDown;
+        console.log(snapshot.val().is_touchingDown);
     });
 }
