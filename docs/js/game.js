@@ -20,6 +20,7 @@ window.addEventListener("devicemotion", handleMotion, true);
 function handleMotion(event){
     var acc = event.acceleration.z;
     var itd = getIsTouchingDown();
+    alert(itd+" acc"+acc);
     if(itd == undefined){
         itd = false;
     }
