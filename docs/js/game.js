@@ -17,13 +17,15 @@ function getOS() {
 
 window.addEventListener("devicemotion", handleMotion, true);
 
-function handleMotion(event) {
+function handleMotion(event){
     var acc = event.acceleration.z;
-    if (acc != null) {
-        console.log(event.acceleration.z);
-        if (acc > 12) {
-            document.getElementById("val").innerHTML = acc;
-            jump();
-        }
+    var itd = getIsTouchingDown();
+    if(itd == undefined){
+        itd = false;
     }
+    
+    if(acc>12 && itd){
+        jump();
+    }
+    
 }

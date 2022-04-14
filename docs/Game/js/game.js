@@ -144,7 +144,8 @@ function createListeners() {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
                 var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
                 var player_jump = data.val();
-                if (player_jump) {
+                console.log(player_jump);
+                if (player_jump &&  (data.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
 
                 }
@@ -490,8 +491,17 @@ function checkEndOfGame(game) {
     }
 }
 
+
+function setTouchingDown(){
+    for(let i = 0; i<diniNicknames.length; i++){
+        db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_touchingDown': dini[i].body.touching.down });
+    } 
+}
+
+
 //funzione updateGame, viene richiamata 60 volte al secondo, utilizzata per i movimenti nel animazione
 function updateGame() {
+    setTouchingDown();
     updateTerreni();
     updateMontagne();
     updateCactus();

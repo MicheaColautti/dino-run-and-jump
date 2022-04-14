@@ -49,6 +49,7 @@ function connectToGame() {
                     db.ref('session/' + childSnapshot.key + '/' + id).set({
                         is_jumping: false,
                         is_alive: true,
+						is_touchingDown: false,
                         score: 0,
                         dino_color: "0x000",
                     });
@@ -64,6 +65,7 @@ function connectToGame() {
                     db.ref('session/' + childSnapshot.key + '/' + id).set({
                         is_jumping: false,
                         is_alive: true,
+						is_touchingDown: false,
                         score: 0,
                     });
                     window.open("game.html", "_self");
@@ -260,6 +262,7 @@ function watchGame() {
                 db.ref('session/' + childSnapshot.key + '/' + vieweId).set({
                     is_jumping: false,
                     is_alive: true,
+					is_touchingDown: false,
                     score: 0,
                 });
                 window.open("../Game/index.html", "_self");
@@ -316,4 +319,11 @@ function checkLoggedUser() {
     if (localStorage.getItem('guestId') != null) {
         document.getElementById("user_menu").style.display = "none";
     }
+}
+
+
+function getIsTouchingDown(){
+    db.ref('session/' +localStorage.getItem("sessionId")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
+        return snapshot.val().is_touchingDown;
+    });
 }
