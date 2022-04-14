@@ -18,7 +18,7 @@ function getOS() {
 window.addEventListener("devicemotion", handleMotion, true);
 
 function handleMotion(event){
-    alert(getIsTouchingDown());
+    document.getElementById("test").innerHTML = getIsTouchingDown();
     var acc = event.acceleration.z;
     var itd = getIsTouchingDown();
     if(itd == undefined){
