@@ -65,7 +65,9 @@ function loginUser() {
 }
 
 function logoutUser() {
-    firebase.auth().signOut();
+    firebase.auth().signOut().then(function() {
+        location.reload();
+    });
 }
 
 function openUserInformation() {
