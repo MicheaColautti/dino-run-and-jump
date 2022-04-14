@@ -10,25 +10,31 @@
     <meta name="author" content="Nadia Fasani">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
     <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 
-    <script src="login.js"></script>
+    <script src="../js/index.js"></script>
 
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
+            <div class="col pt-2">
+                <span class="iconify" data-icon="bx:home" data-width="25" data-height="25" onclick="window.location.href='login.html'"></span>
+                <span class="iconify" data-icon="bx:bxs-user" data-width="25" data-height="25" onclick="window.location.href='paginaUtente.html'"></span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col">
             </div>
-            <div class="col-9 col-sm-9 col-md-9 col-lg-5 col-xl-5 col-xxl-5 pt-5 text-center">
-                <p class="text-center fs-1 fw-bold pb-5">Guarda una partita</p>
+            <div class="col-9 pt-5 text-center">
+                <p class="text-center fs-1 fw-bold pb-5">Medaglie</p>
             </div>
             <div class="col ">
             </div>
@@ -36,17 +42,18 @@
         <div class="row">
             <div class="col">
             </div>
-            <div class="col-9 col-sm-9 col-md-9 col-lg-3 col-xl-3 col-xxl-3 pt-5 text-center">
-                <div class="form-floating pb-5">
-                    <input type="text" class="form-control" id="code" placeholder="code">
-                    <label for="text"><Nav>Codice</Nav></label>
+            <div class="col-10">
+                <div id="tabMedaglie">
+
                 </div>
-                <button type="button" onclick="watchGame()" class="btn btn-primary w-100 p-2 mt-5">Guarda</button>
             </div>
-            <div class="col ">
+            <div class="col">
             </div>
         </div>
     </div>
+    <script>
+        writeMedals();
+    </script>
 
 </body>
 

@@ -10,50 +10,57 @@
     <meta name="author" content="Nadia Fasani">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
     <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 
-    <script src="login.js"></script>
+    <script src="../js/game.js"></script>
+    <link href="../css/game.css" rel="stylesheet">
 
+    <script src="../js/index.js"></script>
 </head>
 
-<body>
+<body onload="detectOS()">
     <div class="container-fluid">
         <div class="row">
-            <div class="col pt-2">
-                <span class="iconify" data-icon="bx:home" data-width="25" data-height="25" onclick="window.location.href='login.html'"></span>
-                <span class="iconify" data-icon="bx:bxs-user" data-width="25" data-height="25" onclick="window.location.href='paginaUtente.html'"></span>
+            <div class="col">
+            </div>
+            <div class="col-9 pt-5 text-center">
+                <button type="button" class="pb-5 btn btn-danger w-100 rounded-circle p-5 fs-1 shadow p-3 mb-5 rounded btn-lg" id="btn_jump" onclick="jump()">Jump</button>
+            </div>
+            <div class="col">
             </div>
         </div>
         <div class="row">
             <div class="col">
             </div>
             <div class="col-9 pt-5 text-center">
-                <p class="text-center fs-1 fw-bold pb-5">Medaglie</p>
+                <p id="val"></p>
             </div>
-            <div class="col ">
+            <div class="col">
             </div>
         </div>
         <div class="row">
             <div class="col">
             </div>
-            <div class="col-10">
-                <div id="tabMedaglie">
-
+            <div class="col-9 pt-5 text-center">
+                <div class="pt-5 pb-3 fixed-bottom">
+                    <label class="switch">
+                    <input type="checkbox" onclick="blockInput()">
+                    <span class="slider round"></span>
+                </label>
+                    <label>Blocca input</label>
                 </div>
+
             </div>
             <div class="col">
             </div>
         </div>
     </div>
-    <script>
-        writeMedals();
-    </script>
 
 </body>
 

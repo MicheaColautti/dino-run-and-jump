@@ -1,5 +1,3 @@
-
-
 function blockInput() {
     document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
 }
@@ -19,13 +17,13 @@ function getOS() {
 
 window.addEventListener("devicemotion", handleMotion, true);
 
-function handleMotion(event){
+function handleMotion(event) {
     var acc = event.acceleration.z;
-    if(acc != null){
+    if (acc != null) {
         console.log(event.acceleration.z);
-        if(acc>12){
+        if (acc > 12) {
             document.getElementById("val").innerHTML = acc;
             jump();
         }
-    }  
+    }
 }
