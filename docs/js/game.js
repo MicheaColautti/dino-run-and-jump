@@ -26,6 +26,7 @@ function handleMotion(event) {
 }
 
 function requestPermission() {
+    console.log("permession executed");
     if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
         DeviceMotionEvent.requestPermission()
             .then(response => {
