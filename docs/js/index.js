@@ -170,7 +170,7 @@ function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
     db.ref("session/" + id).set({
-            started: false,
+            session_id: id,
         })
         .then(() => {
             window.open("../Game/index.html", "_self");
@@ -325,6 +325,8 @@ function getIsTouchingDown() {
 
     db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
         isTouchingDown = snapshot.val().is_touchingDown;
+
+
     });
     console.log('getIsTouchingDown: ' + isTouchingDown);
     return isTouchingDown;
