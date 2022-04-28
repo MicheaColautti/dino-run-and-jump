@@ -22,6 +22,7 @@ var timestamp = Date.now();
 const user = firebase.auth().currentUser;
 const nickname = "";
 var code = 0;
+var isTouchingDown = true;
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 //#region bacheca.html
@@ -322,10 +323,10 @@ function checkLoggedUser() {
 }
 
 function getIsTouchingDown(){
-    
+  
     db.ref('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
-        console.log("is touching "+ snapshot.val().is_touchingDown);
-        console.log("val "+ snapshot.val().is_touchingDown);
-        return snapshot.val().is_touchingDown;
+        isTouchingDown = snapshot.val().is_touchingDown;
     });
+    console.log('getIsTouchingDown: '+isTouchingDown);
+    return isTouchingDown;
 }

@@ -1,6 +1,5 @@
 function blockInput() {
     document.getElementById("btn_jump").disabled = !document.getElementById("btn_jump").disabled;
-    document.getElementById("test").innerHTML = getIsTouchingDown();
 }
 
 function getOS() {
@@ -19,13 +18,8 @@ function getOS() {
 window.addEventListener("devicemotion", handleMotion, true);
 
 function handleMotion(event){
-    //document.getElementById("test").innerHTML = getIsTouchingDown();
-    var acc = event.acceleration.z;
     var itd = getIsTouchingDown();
-    if(itd == undefined){
-        itd = false;
-    }
-    
+    var acc = event.acceleration.z;
     if(acc>10 && itd){
         jump();
     }
