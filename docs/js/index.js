@@ -166,7 +166,12 @@ function openUserInformation() {
 function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
-    window.open("../Game/index.html", "_self");
+    db.ref("session/" + id).set({
+        session_id: id,
+    })
+    .then(() => {
+        window.open("../Game/index.html", "_self");
+    });
 }
 
 //#endregion
