@@ -322,8 +322,10 @@ function checkLoggedUser() {
 }
 
 function getIsTouchingDown(){
-    console.log('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId"))
+    
     db.ref('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
+        console.log("is touching "+ snapshot.val().is_touchingDown);
+        console.log("val "+ snapshot.val().is_touchingDown);
         return snapshot.val().is_touchingDown;
     });
 }
