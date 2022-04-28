@@ -583,3 +583,9 @@ function saveScore(score, nick) {
     });
 
 }
+
+function backToHome() {
+
+    db.ref('session/' + localStorage.getItem("sessionId")).remove();
+    window.open("./../GUI/login.html", "_self");
+}
