@@ -328,5 +328,6 @@ function getIsTouchingDown(){
         console.log("val "+ snapshot.val().is_touchingDown);
         result = snapshot.val().is_touchingDown;
     });
+    console.log(result)
     return result;
 }
