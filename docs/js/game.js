@@ -25,8 +25,8 @@ function handleMotion(event){
         itd = false;
     }
     
-    if(acc>12 && itd){
+    if(acc>10 && itd){
         jump();
     }
-    
+
 }
