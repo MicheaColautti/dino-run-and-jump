@@ -51,7 +51,8 @@ function setSettingsPhaser() {
     var sceneLobby = {
         key: 'sceneLobby',
         preload: preloadGame,
-        create: createGame
+        create: createGame,
+        update: updateLobby
     };
     var sceneGame = {
         key: 'sceneGame',
@@ -174,6 +175,21 @@ function preloadGame() {
     });
 }
 
+function updateLobby(){
+
+    setTouchingDown();
+    checkJump();
+    if (runGame) {
+
+        db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
+            NUM_DINI++;
+            rif.scene.restart();
+        });
+
+        this.scene.switch('sceneGame');
+    }
+}
+
 function setStartValues() {
     terreni = new Array(NUM_TERRENI);
 
@@ -221,6 +237,7 @@ function setStartValues() {
             });
         }
     }
+    createListeners();
 }
 
 function setDiniNicknames(gamescene) {
@@ -360,16 +377,6 @@ function createGame() {
     setDini(this);
     if (!ignoreCollisions) { setColliderCactusDini(this); }
     setDiniNicknames(this);
-
-    if (runGame) {
-        db.ref('session/' + localStorage.getItem("sessionId")).update({ 'started': true });
-        db.ref("session/" + localStorage.getItem("sessionId")).off("child_added", function(snapshot) {
-            NUM_DINI++;
-            rif.scene.restart();
-        });
-
-        this.scene.switch('sceneGame');
-    }
 }
 
 function updateTerreni() {
@@ -514,7 +521,6 @@ function endOfTheGame(game) {
 }
 
 function startGame() {
-    createListeners();
     runGame = true;
     rif.scene.restart();
 }

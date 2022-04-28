@@ -86,33 +86,28 @@ function generateGuestId() {
 
 //#region game.html
 function jump() {
-    db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
-        if (snapshot.val().started) {
-            console.log("jump");
-            db.ref('session/').once('value', function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    childSnapshot.forEach(function(childChildSnapshot) {
-                        if (localStorage.getItem('guestId') == null) {
-                            if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
-                                db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
-                                    is_jumping: true,
-                                    score: childChildSnapshot.val().score,
-                                    is_alive: childChildSnapshot.val().is_alive,
-                                });
-                            }
+    db.ref('session/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            childSnapshot.forEach(function(childChildSnapshot) {
+                if (localStorage.getItem('guestId') == null) {
+                    if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
+                        db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
+                            is_jumping: true,
+                            score: childChildSnapshot.val().score,
+                            is_alive: childChildSnapshot.val().is_alive,
+                        });
+                    }
 
-                        } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
-                            db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
-                                is_jumping: true,
-                                score: childChildSnapshot.val().score,
-                                is_alive: childChildSnapshot.val().is_alive,
-                                dino_color: childChildSnapshot.val().dino_color,
-                            });
-                        }
+                } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
+                    db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
+                        is_jumping: true,
+                        score: childChildSnapshot.val().score,
+                        is_alive: childChildSnapshot.val().is_alive,
+                        dino_color: childChildSnapshot.val().dino_color,
                     });
-                });
+                }
             });
-        }
+        });
     });
 }
 
@@ -171,12 +166,7 @@ function openUserInformation() {
 function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
-    db.ref("session/" + id).set({
-            started: false,
-        })
-        .then(() => {
-            window.open("../Game/index.html", "_self");
-        });
+    window.open("../Game/index.html", "_self");
 }
 
 //#endregion
