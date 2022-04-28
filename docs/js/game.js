@@ -22,9 +22,6 @@ function handleMotion(event){
     //document.getElementById("test").innerHTML = getIsTouchingDown();
     var acc = event.acceleration.z;
     var itd = getIsTouchingDown();
-    if(itd == undefined){
-        itd = false;
-    }
     
     if(acc>10 && itd){
         jump();
