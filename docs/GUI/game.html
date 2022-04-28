@@ -21,10 +21,10 @@
     <script src="../js/game.js"></script>
     <link href="../css/game.css" rel="stylesheet">
 
-    
+
 </head>
 
-<body onload="detectOS()">
+<body>
     <div class="container-fluid">
         <div class="row">
             <div class="col">
@@ -49,6 +49,8 @@
             </div>
             <div class="col-9 pt-5 text-center">
                 <div class="pt-5 pb-3 fixed-bottom">
+                    <button type="button" class="btn btn-outline-primary w-30 p-2 mb-4" onclick="requestPermission()">Clicca se usi IOS</button><br>
+
                     <label class="switch">
                     <input type="checkbox" onclick="blockInput()">
                     <span class="slider round"></span>

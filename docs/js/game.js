@@ -22,4 +22,19 @@ function handleMotion(event) {
     if (acc > 10 && itd) {
         jump();
     }
+
+}
+
+function requestPermission() {
+    if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response == "granted") {
+                    window.addEventListener("devicemotion", (e) => {})
+                }
+            })
+            .catch(console.error)
+    } else {
+        alert("DeviceMotionEvent is not defined");
+    }
 }
