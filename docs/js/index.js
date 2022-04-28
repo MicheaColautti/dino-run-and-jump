@@ -321,9 +321,9 @@ function checkLoggedUser() {
     }
 }
 
-
-function getIsTouchingDown() {
-    db.ref('session/' + localStorage.getItem("sessionId") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
+function getIsTouchingDown(){
+    console.log('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId"))
+    db.ref('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
         return snapshot.val().is_touchingDown;
     });
 }
