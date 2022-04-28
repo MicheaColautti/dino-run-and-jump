@@ -49,7 +49,7 @@ function connectToGame() {
                     db.ref('session/' + childSnapshot.key + '/' + id).set({
                         is_jumping: false,
                         is_alive: true,
-						is_touchingDown: false,
+                        is_touchingDown: false,
                         score: 0,
                         dino_color: "0x000",
                     });
@@ -65,7 +65,7 @@ function connectToGame() {
                     db.ref('session/' + childSnapshot.key + '/' + id).set({
                         is_jumping: false,
                         is_alive: true,
-						is_touchingDown: false,
+                        is_touchingDown: false,
                         score: 0,
                     });
                     window.open("game.html", "_self");
@@ -93,7 +93,7 @@ function jump() {
                     childSnapshot.forEach(function(childChildSnapshot) {
                         if (localStorage.getItem('guestId') == null) {
                             if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
-                                db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).set({
+                                db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
                                     is_jumping: true,
                                     score: childChildSnapshot.val().score,
                                     is_alive: childChildSnapshot.val().is_alive,
@@ -101,7 +101,7 @@ function jump() {
                             }
 
                         } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
-                            db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
+                            db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
                                 is_jumping: true,
                                 score: childChildSnapshot.val().score,
                                 is_alive: childChildSnapshot.val().is_alive,
@@ -237,6 +237,7 @@ function showUserInformation() {
                 console.log(path);
                 var c = childSnapshot.val().dino_color.replace("0x", "#");
                 if (path == "paginaUtente.html") {
+                    document.getElementById('best_score').innerHTML = childSnapshot.val().best_score == null ? "" : childSnapshot.val().best_score;
                     document.getElementById('dino').style.fill = c;
                 } else if (path = "personalizzaDino.html") {
                     document.getElementById('color_input').value = c;
@@ -262,7 +263,7 @@ function watchGame() {
                 db.ref('session/' + childSnapshot.key + '/' + vieweId).set({
                     is_jumping: false,
                     is_alive: true,
-					is_touchingDown: false,
+                    is_touchingDown: false,
                     score: 0,
                 });
                 window.open("../Game/index.html", "_self");
@@ -285,7 +286,6 @@ firebase.auth().onAuthStateChanged((user) => {
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
         } else if (path == "paginaUtente.html") {
-            console.log("entra");
             showUserInformation();
         } else if (path == "personalizzaDino.html") {
             showUserInformation();
@@ -322,8 +322,8 @@ function checkLoggedUser() {
 }
 
 
-function getIsTouchingDown(){
-    db.ref('session/' +localStorage.getItem("sessionId")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
+function getIsTouchingDown() {
+    db.ref('session/' + localStorage.getItem("sessionId") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
         return snapshot.val().is_touchingDown;
     });
 }
