@@ -28,22 +28,25 @@ var rif;
 var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
-    NUM_DINI++;
-    var id = snapshot.key;
-    if (id.startsWith("guest_")) {
-        diniNicknames.push(snapshot.key);
-        diniColor.push(snapshot.val().dino_color);
-        uids.push(null);
-    } else if (id.length == 28) {
-        db.ref('user/' + snapshot.key).once("value", function(data) {
-            var uid = data.key;
-            uids.push(uid);
-            diniNicknames.push(data.val().nickname);
-            diniColor.push(data.val().dino_color);
-        });
+    if(NUM_DINI < 10){
+        NUM_DINI++;
+        var id = snapshot.key;
+        if (id.startsWith("guest_")) {
+            diniNicknames.push(snapshot.key);
+            diniColor.push(snapshot.val().dino_color);
+            uids.push(null);
+        } else if (id.length == 28) {
+            db.ref('user/' + snapshot.key).once("value", function(data) {
+                var uid = data.key;
+                uids.push(uid);
+                diniNicknames.push(data.val().nickname);
+                diniColor.push(data.val().dino_color);
+            });
+        }
+        diniJumps.push(false);
+        rif.scene.restart();
     }
-    diniJumps.push(false);
-    rif.scene.restart();
+    
 });
 
 function setSettingsPhaser() {
