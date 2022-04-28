@@ -40,13 +40,13 @@ function writeMedals() {
 
 //#region collegamentoPartita.html
 function connectToGame() {
-   
+
     code = document.getElementById("code").value;
     localStorage.setItem('code', code);
-    db.ref('session/'+code+"/").once('value', function(snapshot) {
-        childNum=snapshot.numChildren();
+    db.ref('session/' + code + "/").once('value', function(snapshot) {
+        childNum = snapshot.numChildren();
     });
-    if(childNum<11 && childNum != null && childNum != undefined ){
+    if (childNum < 11 && childNum != null && childNum != undefined) {
         if (firebase.auth().currentUser == null) {
             generateGuestId();
             db.ref('session/').once('value', function(snapshot) {
@@ -79,7 +79,7 @@ function connectToGame() {
                 });
             });
         }
-    }else if(childNum>=10){
+    } else if (childNum >= 10) {
         alert("Troppi giocatori (numero massimo: 10)");
     }
 }
@@ -338,7 +338,7 @@ function getIsTouchingDown() {
         isTouchingDown = snapshot.val().is_touchingDown;
 
     });
-    console.log('getIsTouchingDown guest: ' + isTouchingDown);
+    //console.log('getIsTouchingDown guest: ' + isTouchingDown);
     //}
 
     return isTouchingDown;

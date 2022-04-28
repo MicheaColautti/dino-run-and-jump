@@ -147,7 +147,6 @@ function createListeners() {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
                 var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
                 var player_jump = data.val();
-                console.log(data);
                 if (player_jump && (data.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
                 }
@@ -156,7 +155,6 @@ function createListeners() {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).on("child_changed", function(snapshot) {
                 var index = uids.indexOf((snapshot.ref_.path.pieces_)[2]);
                 var player_jump = snapshot.val();
-                //console.log(snapshot);
                 if (player_jump && (snapshot.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
                 }
