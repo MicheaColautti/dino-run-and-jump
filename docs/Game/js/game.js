@@ -547,10 +547,11 @@ function leaderboard() {
     items.sort(function(first, second) {
         return second[1] - first[1];
     });
-
-    var i = 1;
+    document.getElementById("restart").style.display ="block";
+    document.getElementById("home").style.display = "block";
     var table = document.getElementById("leader_table");
     var medal = createMedal(0, 0, 100);
+    var i = 1;
     for (const [key, value] of items) {
         var row = "";
         row += '<tr><th scope="row">' + i + '</th><td>' + key + '</td><td>' + value + '</td>';
