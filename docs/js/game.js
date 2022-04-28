@@ -19,6 +19,7 @@ window.addEventListener("devicemotion", handleMotion, true);
 function handleMotion(event) {
     var itd = getIsTouchingDown();
     var acc = event.acceleration.z;
+    console.log(acc);
     if (acc > 10 && itd) {
         jump();
     }
