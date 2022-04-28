@@ -87,32 +87,30 @@ function generateGuestId() {
 //#region game.html
 function jump() {
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
-        if (snapshot.val().started) {
-            console.log("jump");
-            db.ref('session/').once('value', function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    childSnapshot.forEach(function(childChildSnapshot) {
-                        if (localStorage.getItem('guestId') == null) {
-                            if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
-                                db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
-                                    is_jumping: true,
-                                    score: childChildSnapshot.val().score,
-                                    is_alive: childChildSnapshot.val().is_alive,
-                                });
-                            }
-
-                        } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
-                            db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
+        db.ref('session/').once('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                childSnapshot.forEach(function(childChildSnapshot) {
+                    if (localStorage.getItem('guestId') == null) {
+                        console.log('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid);
+                        if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
+                            db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
                                 is_jumping: true,
                                 score: childChildSnapshot.val().score,
                                 is_alive: childChildSnapshot.val().is_alive,
-                                dino_color: childChildSnapshot.val().dino_color,
                             });
                         }
-                    });
+
+                    } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
+                        db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
+                            is_jumping: true,
+                            score: childChildSnapshot.val().score,
+                            is_alive: childChildSnapshot.val().is_alive,
+                            dino_color: childChildSnapshot.val().dino_color,
+                        });
+                    }
                 });
             });
-        }
+        });
     });
 }
 
@@ -204,6 +202,7 @@ function saveDinoColor() {
                     color = color.replace("#", "0x");
                     db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
                         is_jumping: false,
+                        is_touchingDown: true,
                         is_alive: true,
                         score: 0,
                         dino_color: color,
@@ -322,11 +321,11 @@ function checkLoggedUser() {
     }
 }
 
-function getIsTouchingDown(){
-  
-    db.ref('session/' +localStorage.getItem("code")+"/"+ localStorage.getItem("guestId")).once('value', function(snapshot) {
+function getIsTouchingDown() {
+
+    db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
         isTouchingDown = snapshot.val().is_touchingDown;
     });
-    console.log('getIsTouchingDown: '+isTouchingDown);
+    console.log('getIsTouchingDown: ' + isTouchingDown);
     return isTouchingDown;
 }

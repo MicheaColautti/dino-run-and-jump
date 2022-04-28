@@ -151,10 +151,11 @@ function createListeners() {
                 }
             });
         } else {
+            console.log("session/" + localStorage.getItem("sessionId") + "/" + uids[i]);
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).on("child_changed", function(data) {
                 var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
                 var player_jump = data.val();
-                if (player_jump) {
+                if (player_jump && (data.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
                 }
             });
@@ -491,7 +492,11 @@ function checkEndOfGame(game) {
 
 function setTouchingDown() {
     for (let i = 0; i < diniNicknames.length; i++) {
-        db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_touchingDown': dini[i].body.touching.down });
+        if (diniNicknames[i].startsWith("guest_")) {
+            db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_touchingDown': dini[i].body.touching.down });
+        } else {
+            db.ref('session/' + localStorage.getItem("sessionId") + "/" + uids[i]).update({ 'is_touchingDown': dini[i].body.touching.down });
+        }
     }
 }
 
