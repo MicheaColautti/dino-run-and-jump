@@ -99,7 +99,6 @@ function jump() {
             snapshot.forEach(function(childSnapshot) {
                 childSnapshot.forEach(function(childChildSnapshot) {
                     if (localStorage.getItem('guestId') == null) {
-                        console.log('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid);
                         if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
                             db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
                                 is_jumping: true,
@@ -107,7 +106,6 @@ function jump() {
                                 is_alive: childChildSnapshot.val().is_alive,
                             });
                         }
-
                     } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
                         db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({
                             is_jumping: true,
@@ -317,8 +315,6 @@ firebase.auth().onAuthStateChanged((user) => {
                 });
             }
         });
-
-
     }
 });
 
@@ -330,12 +326,20 @@ function checkLoggedUser() {
 }
 
 function getIsTouchingDown() {
+    /*if (localStorage.getItem("guestId") == null) {
+        console.log('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid);
+        db.ref('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid).once('value', function(snapshot) {
+            isTouchingDown = snapshot.val().is_touchingDown;
 
+        });
+        console.log('getIsTouchingDown uid: ' + isTouchingDown);
+    } else {*/
     db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
         isTouchingDown = snapshot.val().is_touchingDown;
 
-
     });
-    console.log('getIsTouchingDown: ' + isTouchingDown);
+    console.log('getIsTouchingDown guest: ' + isTouchingDown);
+    //}
+
     return isTouchingDown;
 }

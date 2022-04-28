@@ -28,7 +28,7 @@ var rif;
 var runGame = false;
 
 db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
-    if(NUM_DINI < 10){
+    if (NUM_DINI < 10) {
         NUM_DINI++;
         var id = snapshot.key;
         if (id.startsWith("guest_")) {
@@ -46,7 +46,6 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
         diniJumps.push(false);
         rif.scene.restart();
     }
-    
 });
 
 function setSettingsPhaser() {
@@ -148,18 +147,17 @@ function createListeners() {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
                 var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
                 var player_jump = data.val();
-                console.log(player_jump);
+                console.log(data);
                 if (player_jump && (data.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
-
                 }
             });
         } else {
-            console.log("session/" + localStorage.getItem("sessionId") + "/" + uids[i]);
-            db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).on("child_changed", function(data) {
-                var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
-                var player_jump = data.val();
-                if (player_jump && (data.ref_.path.pieces_)[3] == "is_jumping") {
+            db.ref("session/" + localStorage.getItem("sessionId") + "/" + uids[i]).on("child_changed", function(snapshot) {
+                var index = uids.indexOf((snapshot.ref_.path.pieces_)[2]);
+                var player_jump = snapshot.val();
+                //console.log(snapshot);
+                if (player_jump && (snapshot.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
                 }
             });
@@ -179,7 +177,7 @@ function preloadGame() {
     });
 }
 
-function updateLobby(){
+function updateLobby() {
 
     setTouchingDown();
     checkJump();
@@ -403,7 +401,6 @@ function updateMontagne() {
         montagne[i].x -= 1;
     }
 
-
     //se escono completamente dal canvas vengono ridisegnati infondo
     for (var i = 0; i < montagne.length; i++) {
         if (montagne[i].x < -2000) {
@@ -456,7 +453,6 @@ function updateNuvola() {
 function checkJump() {
     for (var i = 0; i < dini.length; i++) {
         if (diniJumps[i] && dini[i].body.touching.down) { // https://phaser.io/examples/v3/view/physics/arcade/body-on-a-path
-            console.log("is_jumping: " + diniNicknames[i]);
             dini[i].play("jump");
             dini[i].setVelocityY(-950);
             dini[i].play("run");
@@ -464,7 +460,9 @@ function checkJump() {
             if (diniNicknames[i].startsWith("guest_")) {
                 db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_jumping': false });
             } else {
-                db.ref('session/' + localStorage.getItem("sessionId") + "/" + uids[i]).update({ 'is_jumping': false });
+                db.ref('session/' + localStorage.getItem("sessionId") + "/" + uids[i]).update({
+                    is_jumping: false
+                });
             }
         }
     }
@@ -547,7 +545,7 @@ function leaderboard() {
     items.sort(function(first, second) {
         return second[1] - first[1];
     });
-    document.getElementById("restart").style.display ="block";
+    document.getElementById("restart").style.display = "block";
     document.getElementById("home").style.display = "block";
     var table = document.getElementById("leader_table");
     var medal = createMedal(0, 0, 100);
