@@ -23,6 +23,7 @@ const user = firebase.auth().currentUser;
 const nickname = "";
 var code = 0;
 var isTouchingDown = true;
+var childNum;
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 //#region bacheca.html
@@ -39,40 +40,47 @@ function writeMedals() {
 
 //#region collegamentoPartita.html
 function connectToGame() {
+   
     code = document.getElementById("code").value;
     localStorage.setItem('code', code);
-
-    if (firebase.auth().currentUser == null) {
-        generateGuestId();
-        db.ref('session/').once('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                if (code == childSnapshot.key) {
-                    db.ref('session/' + childSnapshot.key + '/' + id).set({
-                        is_jumping: false,
-                        is_alive: true,
-                        is_touchingDown: false,
-                        score: 0,
-                        dino_color: "0x000",
-                    });
-                    window.open("game.html", "_self");
-                }
+    db.ref('session/'+code+"/").once('value', function(snapshot) {
+        childNum=snapshot.numChildren();
+    });
+    if(childNum<11 && childNum != null && childNum != undefined ){
+        if (firebase.auth().currentUser == null) {
+            generateGuestId();
+            db.ref('session/').once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    if (code == childSnapshot.key) {
+                        db.ref('session/' + childSnapshot.key + '/' + id).set({
+                            is_jumping: false,
+                            is_alive: true,
+                            is_touchingDown: false,
+                            score: 0,
+                            dino_color: "0x000",
+                        });
+                        window.open("game.html", "_self");
+                    }
+                });
             });
-        });
-    } else {
-        id = firebase.auth().currentUser.uid;
-        db.ref('session/').once('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                if (code == childSnapshot.key) {
-                    db.ref('session/' + childSnapshot.key + '/' + id).set({
-                        is_jumping: false,
-                        is_alive: true,
-                        is_touchingDown: false,
-                        score: 0,
-                    });
-                    window.open("game.html", "_self");
-                }
+        } else {
+            id = firebase.auth().currentUser.uid;
+            db.ref('session/').once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    if (code == childSnapshot.key) {
+                        db.ref('session/' + childSnapshot.key + '/' + id).set({
+                            is_jumping: false,
+                            is_alive: true,
+                            is_touchingDown: false,
+                            score: 0,
+                        });
+                        window.open("game.html", "_self");
+                    }
+                });
             });
-        });
+        }
+    }else if(childNum>=10){
+        alert("Troppi giocatori (numero massimo: 10)");
     }
 }
 
