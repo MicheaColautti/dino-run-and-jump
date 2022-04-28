@@ -145,7 +145,7 @@ function createListeners() {
                 var index = diniNicknames.indexOf((data.ref_.path.pieces_)[2]);
                 var player_jump = data.val();
                 console.log(player_jump);
-                if (player_jump &&  (data.ref_.path.pieces_)[3] == "is_jumping") {
+                if (player_jump && (data.ref_.path.pieces_)[3] == "is_jumping") {
                     diniJumps[index] = true;
 
                 }
@@ -159,7 +159,6 @@ function createListeners() {
                 }
             });
         }
-
     }
 }
 
@@ -179,7 +178,6 @@ function setStartValues() {
     terreni = new Array(NUM_TERRENI);
 
     montagne = new Array(NUM_MONTAGNE);
-
 
     nuvola;
     colorDini = "0x";
@@ -293,7 +291,6 @@ function setDini(gamescene) {
         dini[i].setCollideWorldBounds(true); //collisioni del dino con i bordi
         colliderDini[i] = gamescene.physics.add.collider(dini[i], linesGroup.getChildren()[i]);
         dini[i].play("run");
-
     }
 }
 
@@ -492,12 +489,11 @@ function checkEndOfGame(game) {
 }
 
 
-function setTouchingDown(){
-    for(let i = 0; i<diniNicknames.length; i++){
+function setTouchingDown() {
+    for (let i = 0; i < diniNicknames.length; i++) {
         db.ref('session/' + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).update({ 'is_touchingDown': dini[i].body.touching.down });
-    } 
+    }
 }
-
 
 //funzione updateGame, viene richiamata 60 volte al secondo, utilizzata per i movimenti nel animazione
 function updateGame() {
@@ -529,8 +525,6 @@ function leaderboard() {
     var result = {};
     diniNicknames.forEach((key, i) => result[key] = punteggio[i]);
 
-    //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
-
     var items = Object.keys(result).map(function(key) {
         return [key, result[key]];
     });
@@ -550,7 +544,7 @@ function leaderboard() {
             row += '<td><svg width="100px" height="100px">' + medal + '</svg></td>';
             if (!key.includes("guest")) {
                 saveMedal(medal, key);
-
+                saveScore(score, key);
             }
         } else {
             row += "<td></td>";
@@ -559,13 +553,22 @@ function leaderboard() {
         table.innerHTML += row;
         i++;
     }
-
-
 }
 
 function saveMedal(medal, nick) {
-
     db.ref('user/' + uids[diniNicknames.indexOf(nick)] + "/medals").push({
         medal
-    })
+    });
+}
+
+function saveScore(score, nick) {
+    db.ref('user/' + uids[diniNicknames.indexOf(nick)]).once("value", function(data) {
+        var old_score = data.val().best_score
+        if (score > old_score) {
+            db.ref('user/' + uids[diniNicknames.indexOf(nick)]).update({
+                score: score,
+            });
+        }
+    });
+
 }
