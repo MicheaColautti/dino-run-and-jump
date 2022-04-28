@@ -1,0 +1,36 @@
+@startjson
+{
+  "user" : {
+    "user_UID" : {
+      "dino_color" : "",
+      "medaglia" : {
+        "svg" : "",
+        "svg_1" : ""
+      }
+    }
+  },
+  "session" : {
+    "session_ID" : {
+      "UID_1" : {
+          "is_jumping" : "",
+          "punteggio" : "",
+          "is_alive" : "",
+          "is_touchingDown" : ""
+      },
+     "UID_2" : {
+          "is_jumping" : "",
+          "punteggio" : "",
+          "is_alive" : "",
+          "is_touchingDown" : ""
+      },
+     "guest_1" : {
+          "dino_color" : "",
+          "is_jumping" : "",
+          "score" : "",
+          "is_alive" : "",
+          "is_touchingDown" : ""
+      }
+    }
+  }
+}
+@endjson
