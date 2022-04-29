@@ -165,7 +165,7 @@ function createListeners() {
 
 //funzione preloadGame, carica gli assets per poi usarli nella scena gioco
 function preloadGame() {
-    this.load.image('terreno', host + 'img/terreno2.png');
+    this.load.image('terreno', host + 'img/terreno3.png');
     this.load.image('montagne', host + 'img/montagne.png');
     this.load.image('nuvola', host + 'img/Nuvola.png');
     this.load.image('cactus', host + 'img/Cactus.png');
