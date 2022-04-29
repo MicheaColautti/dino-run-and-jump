@@ -259,7 +259,7 @@ function setColliderLines(gamescene) {
 function setTerreni(gamescene) {
     var counter = 0;
     for (var i = 0; i < terreni.length; i++) {
-        terreni[i] = gamescene.physics.add.image(counter, 350, 'terreno').setOrigin(0, 0);
+        terreni[i] = gamescene.physics.add.image(counter, 368, 'terreno').setOrigin(0, 0);
         terreni[i].setImmovable(true); //fissa i terreni
         terreni[i].body.allowGravity = false; // toglie la gravità
         counter += 2000;
