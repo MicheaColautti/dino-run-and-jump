@@ -129,7 +129,6 @@ function registerNewUser() {
     var email = nickname + "@dino.ch";
 
     // creare nuovo account
-    var creato = true;
     auth.createUserWithEmailAndPassword(email, password)
         .catch((error) => {
             const errorCode = error.code;
