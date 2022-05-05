@@ -151,7 +151,8 @@ function loginUser() {
             document.getElementById("btn_account").innerHTML == nickname;
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
-            //window.open("paginaUtente.html", "_self");
+
+            localStorage.setItem('guestId') == null;
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -194,7 +195,6 @@ function saveDinoColor() {
     try {
         var idUsr = firebase.auth().currentUser.uid;
     } catch (error) {
-        console.log(error);
         var idUsr = null;
     }
     color = document.getElementById('color_input').value;
@@ -202,7 +202,6 @@ function saveDinoColor() {
         db.ref('session/').once('value', function(snapshot) {
 
             snapshot.forEach(function(childSnapshot) {
-                console.log(localStorage.getItem("code") + " || " + childSnapshot.key);
                 if (localStorage.getItem("code") == childSnapshot.key) {
                     color = color.replace("#", "0x");
                     db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).set({
@@ -235,11 +234,9 @@ function showUserInformation() {
     db.ref('user/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             if (firebase.auth().currentUser.uid == childSnapshot.key) {
-                console.log(document.getElementById('dino').style.fill);
                 var path = window.location.pathname;
                 path = path.split("/");
                 path = path[path.length - 1];
-                console.log(path);
                 var c = childSnapshot.val().dino_color.replace("0x", "#");
                 if (path == "paginaUtente.html") {
                     document.getElementById('best_score').innerHTML = childSnapshot.val().best_score == null ? "" : childSnapshot.val().best_score;
@@ -248,8 +245,6 @@ function showUserInformation() {
                     document.getElementById('color_input').value = c;
                     document.getElementById('dino').style.fill = c;
                 }
-
-                console.log(c);
             }
         });
     });
@@ -279,6 +274,7 @@ function watchGame() {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        localStorage.setItem('guestId') == null;
         localStorage.setItem("userUid", firebase.auth().currentUser.uid);
         var path = window.location.pathname;
         path = path.split("/");
