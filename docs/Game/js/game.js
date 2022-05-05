@@ -684,7 +684,7 @@ function leaderboard() {
             row += '<td><svg width="100px" height="100px">' + medal + '</svg></td>';
             if (!key.includes("guest")) {
                 saveMedal(medal, key);
-                saveScore(score, key);
+                saveScore(value, key);
             }
         } else {
             row += "<td></td>";
@@ -706,17 +706,14 @@ function saveMedal(medal, user) {
     });
 }
 
-/**
- * La funzione saveScore salva il punteggio su firebase all'utente passato come parametro.
- * @param {*} score Il punteggio da salvare
- * @param {*} user L'utente a cui salvare il punteggio su firebase
- */
-function saveScore(score, user) {
-    db.ref('user/' + uids[diniNicknames.indexOf(user)]).once("value", function(data) {
-        var old_score = data.val().best_score
+function saveScore(score, nick) {
+    console.log('user/' + uids[diniNicknames.indexOf(nick)]);
+    console.log(score);
+    db.ref('user/' + uids[diniNicknames.indexOf(nick)]).once("value", function(data) {
+        var old_score = data.val().best_score;
         if (score > old_score) {
-            db.ref('user/' + uids[diniNicknames.indexOf(user)]).update({
-                score: score,
+            db.ref('user/' + uids[diniNicknames.indexOf(nick)]).update({
+                best_score: score,
             });
         }
     });
