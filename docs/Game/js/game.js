@@ -706,6 +706,11 @@ function saveMedal(medal, user) {
     });
 }
 
+/**
+ * La funzione saveScore salva il punteggio su firebase all'utente passato come parametro.
+ * @param {*} score Il punteggio da salvare
+ * @param {*} user L'utente a cui salvare il punteggio su firebase
+ */
 function saveScore(score, nick) {
     console.log('user/' + uids[diniNicknames.indexOf(nick)]);
     console.log(score);
