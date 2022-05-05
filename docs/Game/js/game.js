@@ -351,6 +351,16 @@ function setCactus() {
 }
 
 /**
+ * La funzione setDiniNicknames serve a fare apparire per ogni dino il suo nickname, visualizzandolo
+ * a sinistra all'inizio della sua corsia.
+ */
+function setDiniNicknames() {
+    for (var i = 0; i < diniNicknames.length; i++) {
+        gameRef.add.text(START_DISTANCE_DINI + (i * TRANSLATION) - 200, START_HEIGHT - 20 + HEIGHT_SPACE * i, diniNicknames[i], { fontFamily: 'Arial', fontSize: 20, color: '#000' });
+    }
+}
+
+/**
  * La funzione setDini crea i dini per ogni utente collegato.
  * Setta i dini nella posizione corretta in modo che si posizionino su una retta obliqua.
  * Imposta per ogni dino il suo colore.
@@ -441,6 +451,7 @@ function setColliderCactusDini() {
 function createGame() {
     document.getElementById('sessionId').innerHTML = localStorage.getItem("sessionId");
     gameRef = this;
+    
     setStartValues();
     setColliderLines();
     setGrounds();
@@ -450,8 +461,7 @@ function createGame() {
     setAnimations();
     setDini();
     setColliderCactusDini();
-    console.log(NUM_DINI)
-
+    setDiniNicknames();
 }
 
 
