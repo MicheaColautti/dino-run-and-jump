@@ -135,6 +135,10 @@ function registerNewUser() {
             const errorMessage = error.message;
             document.getElementById('singIn_error').innerHTML = error.message;
         });
+
+    db.ref('user/' + firebase.auth().currentUser.uid).update({
+        best_score: 0,
+    })
 }
 
 function loginUser() {

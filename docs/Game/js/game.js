@@ -555,7 +555,7 @@ function leaderboard() {
             row += '<td><svg width="100px" height="100px">' + medal + '</svg></td>';
             if (!key.includes("guest")) {
                 saveMedal(medal, key);
-                saveScore(score, key);
+                saveScore(value, key);
             }
         } else {
             row += "<td></td>";
@@ -573,11 +573,13 @@ function saveMedal(medal, nick) {
 }
 
 function saveScore(score, nick) {
+    console.log('user/' + uids[diniNicknames.indexOf(nick)]);
+    console.log(score);
     db.ref('user/' + uids[diniNicknames.indexOf(nick)]).once("value", function(data) {
-        var old_score = data.val().best_score
+        var old_score = data.val().best_score;
         if (score > old_score) {
             db.ref('user/' + uids[diniNicknames.indexOf(nick)]).update({
-                score: score,
+                best_score: score,
             });
         }
     });
