@@ -134,11 +134,9 @@ var checkFirst = false;
     db.ref('session/' + localStorage.getItem("sessionId") + "/").once('value', function(snapshot) {
         childNum = snapshot.numChildren();
     });
-    console.log(childNum);
     if(checkFirst && childNum > 0){
         if (NUM_DINI < 10) {
             NUM_DINI++;
-            console.log("cisooo");
             var id = snapshot.key;
             if (id.startsWith("guest_")) {
                 diniNicknames.push(snapshot.key);
