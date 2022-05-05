@@ -57,7 +57,7 @@ var firebaseConfig = {
                     left: false,
                     right: true
                 },
-                debug: true
+                debug: false
             }
         },
 
