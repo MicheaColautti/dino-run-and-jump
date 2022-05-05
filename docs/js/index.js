@@ -98,7 +98,8 @@ function jump() {
         db.ref('session/').once('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
                 childSnapshot.forEach(function(childChildSnapshot) {
-                    if (localStorage.getItem('guestId') == null) {
+                    console.log("jumpOut");
+                    if (localStorage.getItem('guestId') == "null") {
                         if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
                             db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
                                 is_jumping: true,
@@ -326,20 +327,18 @@ function checkLoggedUser() {
 }
 
 function getIsTouchingDown() {
-    /*if (localStorage.getItem("guestId") == null) {
-        console.log('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid);
+
+    if (localStorage.getItem("guestId") == "null") {
         db.ref('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid).once('value', function(snapshot) {
             isTouchingDown = snapshot.val().is_touchingDown;
 
         });
-        console.log('getIsTouchingDown uid: ' + isTouchingDown);
-    } else {*/
-    db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
-        isTouchingDown = snapshot.val().is_touchingDown;
+    } else {
+        db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
+            isTouchingDown = snapshot.val().is_touchingDown;
 
-    });
-    //console.log('getIsTouchingDown guest: ' + isTouchingDown);
-    //}
+        });
+    }
 
     return isTouchingDown;
 }
