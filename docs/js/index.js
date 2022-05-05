@@ -39,8 +39,12 @@ function writeMedals() {
 //#endregion
 
 //#region collegamentoPartita.html
-function connectToGame() {
 
+/**
+ * La funzione connectToGame prende il codice della partita inserita dall'utente e se esiste lo aggiunge alla partita.
+ * Ogni partita può avere al massimo 10 giocatori connessi.
+ */
+function connectToGame() {
     code = document.getElementById("code").value;
     localStorage.setItem('code', code);
     db.ref('session/' + code + "/").once('value', function(snapshot) {
@@ -84,6 +88,10 @@ function connectToGame() {
     }
 }
 
+/**
+ * La funzione generateGuestId crea un nome univoco per i giocatori che non haffo effettuato il login.
+ * La stringa contiene un numero randomico di 6 cifre: 'guest_XXXXXX'.
+ */
 function generateGuestId() {
     id = "guest_" + Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem('guestId', id);
@@ -93,6 +101,10 @@ function generateGuestId() {
 //#endregion
 
 //#region game.html
+
+/**
+ * La funzione jump permette all'utente di far saltare il proprio dino modificando il valore di una variabile su Firebase.
+ */
 function jump() {
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
         db.ref('session/').once('value', function(snapshot) {
@@ -124,6 +136,11 @@ function jump() {
 //#endregion
 
 //#region login.html
+
+/**
+ * La funzione registerNewUser prende nickname e password inseriti dall'utente e con Firebase l'account viene creato.
+ * Se Firebase restituisce un errore viene mostrato all'utente.
+ */
 function registerNewUser() {
     var password = document.getElementById("password_signIn").value;
     var nickname = document.getElementById("nickname_signIn").value;
@@ -142,6 +159,9 @@ function registerNewUser() {
     })
 }
 
+/**
+ * La funzione loginUser permette all'utente di autenticarsi con nickname e password.
+ */
 function loginUser() {
     var password = document.getElementById("password_logIn").value;
     var nickname = document.getElementById("nickname_logIn").value;
@@ -166,17 +186,28 @@ function loginUser() {
         });
 }
 
+/**
+ * La funzione logoutUser permette all'utente di disconnettersi dal proprio account.
+ */
 function logoutUser() {
     firebase.auth().signOut().then(function() {
         location.reload();
     });
 }
 
+
+/**
+ * La funzione openUserInformation permette agli utenti di vedere e modificare le proprie informazioni.
+ * Apre il file paginaUtente.html.
+ */
 function openUserInformation() {
     window.open("paginaUtente.html", "_self");
 
 }
 
+/**
+ * La funzione generateSession genera un numero a 8 cifre randomico per identificare univocamente le sessioni.
+ */
 function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
@@ -191,10 +222,18 @@ function generateSession() {
 //#endregion
 
 //#region personalizzaDino.html
+
+/**
+ * La funzione changeDinoColor modifica il colore del dino in base al parametro indicato.
+ * @param {*} color il nuovo colore per il dino
+ */
 function changeDinoColor(color) {
     document.getElementById('dino').style.fill = color;
 }
 
+/**
+ * La funzione saveDinoColor registra il colore scelto dagli utenti che hanno effettuato il login.
+ */
 function saveDinoColor() {
 
     try {
@@ -233,6 +272,9 @@ function saveDinoColor() {
 
 //#endregion
 
+/**
+ * La funzione showUserInformation dopo aver effettuato il login mostra le informazioni dell'utente e le opzioni non visibili ai guest.
+ */
 function showUserInformation() {
     document.getElementById('user').innerHTML = firebase.auth().currentUser.email.split("@")[0];
 
@@ -255,28 +297,11 @@ function showUserInformation() {
     });
 }
 
-function watchGame() {
-    code = document.getElementById("code").value;
-    window.open("../Game/index.html", "_self");
-
-    var vieweId = "view" + Math.floor(100000 + Math.random() * 900000);
-    localStorage.setItem('viewId', vieweId);
-
-    db.ref('session/').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            if (code == childSnapshot.key) {
-                db.ref('session/' + childSnapshot.key + '/' + vieweId).set({
-                    is_jumping: false,
-                    is_alive: true,
-                    is_touchingDown: false,
-                    score: 0,
-                });
-                window.open("../Game/index.html", "_self");
-            }
-        });
-    });
-}
-
+/**
+ * Il listener viene chiamato alla modifica dello stato dell'autenticazione.
+ * Serve per avere le informazioni di Firebase sugli utenti autenticati anche
+ * dopo che si sono spostati dalla pagina principale del'applicazione.
+ */
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         localStorage.setItem('guestId', null);
@@ -319,6 +344,9 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
+/**
+ * La funzione checkLoggedUser controlla se l'utente è autenticato e mostra alcune informazioni invisibili agli utenti guest.
+ */
 function checkLoggedUser() {
     document.getElementById('dino').style.fill = document.getElementById('color_input').value;
     if (localStorage.getItem('guestId') != null) {
@@ -326,6 +354,10 @@ function checkLoggedUser() {
     }
 }
 
+/**
+ * La funzione isTouchingDown legge se il dino dell'utente corrente sta toccando a terra o meno
+ * @returns is_touching down
+ */
 function getIsTouchingDown() {
 
     if (localStorage.getItem("guestId") == "null") {
