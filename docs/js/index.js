@@ -135,7 +135,7 @@ function registerNewUser() {
             const errorMessage = error.message;
             document.getElementById('singIn_error').innerHTML = error.message;
         });
-
+    console.log(firebase.auth().currentUser.uid);
     db.ref('user/' + firebase.auth().currentUser.uid).update({
         best_score: 0,
     })
@@ -309,6 +309,7 @@ firebase.auth().onAuthStateChanged((user) => {
         db.ref('user/').once('value', function(snapshot) {
             if (!snapshot.child(firebase.auth().currentUser.uid).exists()) {
                 db.ref('user/' + firebase.auth().currentUser.uid).set({
+                    best_score: 0,
                     dino_color: "0x0",
                     nickname: firebase.auth().currentUser.email.split("@")[0],
                 });
