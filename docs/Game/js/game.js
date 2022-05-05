@@ -745,6 +745,7 @@ function saveScore(score, nick) {
 
 /**
  * Il metodo backToHome carica la pagina iniziale di login (login.html).
+ * Inoltre elimina la sessione creata
  */
 function backToHome() {
 
