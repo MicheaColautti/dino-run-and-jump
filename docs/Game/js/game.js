@@ -91,7 +91,7 @@ var gameRef;
 var runGame = false;
 
 // Inizializzare costanti di gioco
-var NUM_DINI = -1;
+var NUM_DINI = 0;
 const NUM_GROUNDS = 3;
 const NUM_MOUNTAINS = 10;
 const NUM_CACTUS = 5;
@@ -120,9 +120,10 @@ var score;
 var cactusValidation;
 
 var diniNicknames = [];
-
+var childNum;
 var diniJumps = [];
 var diniColor = [];
+var checkFirst = false;
 //#endregion
 
 /**
@@ -130,24 +131,31 @@ var diniColor = [];
  * La funzione aggiunge elementi agli array nelle variabili globali, per aggiungere il nuovo dino e ricarica la scena di gioco.
  */
  db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
-    if (NUM_DINI < 10) {
-        NUM_DINI++;
-        var id = snapshot.key;
-        if (id.startsWith("guest_")) {
-            diniNicknames.push(snapshot.key);
-            diniColor.push(snapshot.val().dino_color);
-            uids.push(null);
-        } else if (id.length == 28) {
-            db.ref('user/' + snapshot.key).once("value", function(data) {
-                var uid = data.key;
-                uids.push(uid);
-                diniNicknames.push(data.val().nickname);
-                diniColor.push(data.val().dino_color);
-            });
+    db.ref('session/' + localStorage.getItem("sessionId") + "/").once('value', function(snapshot) {
+        childNum = snapshot.numChildren();
+    });
+    console.log(childNum);
+    if(checkFirst && childNum > 0){
+        if (NUM_DINI < 10) {
+            NUM_DINI++;
+            console.log("cisooo");
+            var id = snapshot.key;
+            if (id.startsWith("guest_")) {
+                diniNicknames.push(snapshot.key);
+                diniColor.push(snapshot.val().dino_color);
+                uids.push(null);
+            } else if (id.length == 28) {
+                db.ref('user/' + snapshot.key).once("value", function(data) {
+                    var uid = data.key;
+                    uids.push(uid);
+                    diniNicknames.push(data.val().nickname);
+                    diniColor.push(data.val().dino_color);
+                });
+            }
+            diniJumps.push(false);
+            gameRef.scene.restart();
         }
-        diniJumps.push(false);
-        gameRef.scene.restart();
-    }
+    }else{ checkFirst = true; }
 });
 
 
@@ -444,6 +452,8 @@ function createGame() {
     setAnimations();
     setDini();
     setColliderCactusDini();
+    console.log(NUM_DINI)
+
 }
 
 
