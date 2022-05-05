@@ -156,7 +156,7 @@ function loginUser() {
             document.getElementById("div_signin").style.display = "none";
             document.getElementById("btn_login").style.display = "none";
 
-            localStorage.setItem('guestId') == null;
+            localStorage.setItem('guestId', null);
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -278,7 +278,7 @@ function watchGame() {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        localStorage.setItem('guestId') == null;
+        localStorage.setItem('guestId', null);
         localStorage.setItem("userUid", firebase.auth().currentUser.uid);
         var path = window.location.pathname;
         path = path.split("/");
