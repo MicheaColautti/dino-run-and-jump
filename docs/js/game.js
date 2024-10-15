@@ -16,12 +16,12 @@ function getOS() {
 
 window.addEventListener("devicemotion", handleMotion, true);
 
-async function handleMotion(event) {
+
+function handleMotion(event) {
     var itd = getIsTouchingDown();
-    var acc = event.acceleration.z;
+    var acc = event.acceleration.y;
     if (acc > 10 && itd) {
         jump();
-        await new Promise(r => setTimeout(r, 10));
 
     }
 
