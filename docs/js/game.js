@@ -31,7 +31,6 @@ function detectOs() {
 function handleMotionIos(event) {
     var itd = getIsTouchingDown();
     var acc = event.acceleration.y;
-    alert(acc);
     if (acc > 10 && itd) {
         jump();
 
