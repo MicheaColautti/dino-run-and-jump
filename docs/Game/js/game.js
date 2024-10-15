@@ -599,7 +599,7 @@ function setScore() {
  */
 function updateDifficulty() {
     backgroundSpeed += 0.2 / NUM_DINI;
-    minimumDistance += 6 / NUM_DINI;
+    minimumDistance += 8 / NUM_DINI;
 }
 
 /**
