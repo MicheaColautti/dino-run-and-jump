@@ -32,6 +32,7 @@ function handleMotionIos(event) {
     var itd = getIsTouchingDown();
     var acc = event.acceleration.y;
     if (acc > 10 && itd) {
+        acc=10;
         jump();
 
     }
@@ -40,7 +41,6 @@ function handleMotionIos(event) {
 function handleMotionAndroid(event) {
     var itd = getIsTouchingDown();
     var acc = event.acceleration.z;
-    alert(acc);
     if (acc > 10 && itd) {
         jump();
 
