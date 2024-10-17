@@ -144,9 +144,9 @@ var checkFirst = false;
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                var dinoColor=getDinoColorNew(id);
+                var dinoColor= getDinoColorNew(id);
                 console.log("Eddi");
-                console.log("Color: "+dinoColor.toString()+" | ");
+                console.log("Color: "+dinoColor+" | ");
                 console.log("Ocane");
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
@@ -763,11 +763,13 @@ function backToHome() {
 /**
  * La funzione ritorna il colore del dino
  */
-function getDinoColorNew(id) {
-    return db.ref('user/' + id).once('value').then(function(snapshot) {
-        console.log(snapshot.val().dino_color);
-        color=snapshot.val().dino_color;
-        console.log("COlor: "+color)
+async function getDinoColorNew(id) {
+    try {
+        const snapshot = await db.ref('user/' + id).once('value');
+        const color = snapshot.val().dino_color;
         return color;
-    });
+    } catch (error) {
+        console.error("Error fetching dino color:", error);
+        return "0x000"; // or handle the error appropriately
+    }
 }
