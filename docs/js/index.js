@@ -69,7 +69,7 @@ function connectToGame() {
             });
         } else {
             id = firebase.auth().currentUser.uid;
-            let color=getDinoColor(id);
+            color=getDinoColor(id);
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (code == childSnapshot.key) {
