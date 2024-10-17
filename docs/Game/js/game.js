@@ -775,7 +775,7 @@ function backToHome() {
  * La funzione ritorna il colore del dino
  */
 function getDinoColorNew(id) {
-    if(id.length==28){
+    if(id.length!=28){
         return;
     }
     return db.ref('user/' + id).once('value').then(function(snapshot) {
