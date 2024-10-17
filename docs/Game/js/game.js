@@ -1,6 +1,8 @@
 var host = "" //"/dino-run-and-jump/Game";
 var game;
 
+
+import {getDinoColor} from "../../js/index";
 //configurazione firebase
 var firebaseConfig = {
     apiKey: "AIzaSyA4fyvc6p7bnP6TipjCpcc4V-dhysnRdx0",
@@ -143,15 +145,15 @@ var checkFirst = false;
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                color=getDinoColor(id);
+                var dinoColor=getDinoColor(id);
                 console.log("Eddi");
-                console.log("Color: "+color+" | ");
+                console.log("Color: "+dinoColor+" | ");
                 console.log("Ocane");
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
                     uids.push(uid);
                     diniNicknames.push(data.val().nickname);
-                    diniColor.push(getDinoColor(id));
+                    diniColor.push(dinoColor);
                 });
             }
             diniJumps.push(false);

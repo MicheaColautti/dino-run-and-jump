@@ -391,7 +391,7 @@ function getIsTouchingDown() {
 /**
  * La funzione ritorna il colore del dino
  */
-function getDinoColor(id) {
+export function getDinoColor(id) {
     return db.ref('user/' + id).once('value').then(function(snapshot) {
         var color = snapshot.val().dino_color;
         return color;
