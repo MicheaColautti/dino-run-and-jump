@@ -123,6 +123,7 @@ function jump() {
                                 is_jumping: true,
                                 score: childChildSnapshot.val().score,
                                 is_alive: childChildSnapshot.val().is_alive,
+                                dino_color:getDinoColor(childChildSnapshot.key),
                             });
                         }
                     } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
@@ -392,7 +393,6 @@ function getIsTouchingDown() {
  * La funzione ritorna il colore del dino
  */
 function getDinoColor(id) {
-
     return db.ref('user/' + id).once('value').then(function(snapshot) {
         var color = snapshot.val().dino_color;
         alert(color);
