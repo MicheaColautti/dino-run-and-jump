@@ -69,7 +69,6 @@ function connectToGame() {
             });
         } else {
             id = firebase.auth().currentUser.uid;
-            color=getDinoColor(id);
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (code == childSnapshot.key) {
@@ -78,7 +77,6 @@ function connectToGame() {
                             is_alive: true,
                             is_touchingDown: false,
                             score: 0,
-                            dino_color: color,
                         });
                         window.open("game.html", "_self");
                     }

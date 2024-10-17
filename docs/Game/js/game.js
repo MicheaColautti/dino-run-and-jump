@@ -147,7 +147,7 @@ var checkFirst = false;
                     var uid = data.key;
                     uids.push(uid);
                     diniNicknames.push(data.val().nickname);
-                    diniColor.push(data.val().dino_color);
+                    diniColor.push(getDinoColor(data.key));
                 });
             }
             diniJumps.push(false);
