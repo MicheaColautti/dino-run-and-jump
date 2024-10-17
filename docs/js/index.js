@@ -393,12 +393,9 @@ function getIsTouchingDown() {
  */
 function getDinoColor(id) {
 
-    var color;
-    db.ref('user/' + id + localStorage.getItem("guestId")).once('value', function(snapshot) {
-        color = snapshot.val().dino_color;
-
+    return db.ref('user/' + id).once('value').then(function(snapshot) {
+        var color = snapshot.val().dino_color;
+        alert(color);
+        return color;
     });
-    alert(color);
-
-    return color;
 }
