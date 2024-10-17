@@ -143,15 +143,30 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                db.ref('user/' + snapshot.key).once("value", function(data) {
-                    var uid = data.key;
-                    uids.push(uid);
-                    diniNicknames.push(data.val().nickname);
-                    diniColor.push(data.val().dino_color);
+                // Handle non-guest logic (asynchronous handling)
+                console.log("Non dovrei esser qui ma sono gai")
+                getDinoColorNew(id).then(function(color) {
+                    console.log("Dino color is: ", color); // Log color and proceed
+
+                    // Fetch user data and continue only after color is available
+                    db.ref('user/' + snapshot.key).once("value", function(data) {
+                        var uid = data.key;
+                        uids.push(uid);
+                        diniNicknames.push(data.val().nickname);
+                        diniColor.push(color);  // Now dinoColor is correctly set
+
+                        diniJumps.push(false);
+                        gameRef.scene.restart();
+
+                    });
+
+                }).catch(function(error) {
+                    console.error("Error fetching dino color: ", error); // Handle error
                 });
+
             }
-            diniJumps.push(false);
             gameRef.scene.restart();
+
         }
     }else{ checkFirst = true; }
 });
