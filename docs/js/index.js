@@ -69,6 +69,7 @@ function connectToGame() {
             });
         } else {
             id = firebase.auth().currentUser.uid;
+            let color=getDinoColor(id);
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (code == childSnapshot.key) {
@@ -77,6 +78,7 @@ function connectToGame() {
                             is_alive: true,
                             is_touchingDown: false,
                             score: 0,
+                            dino_color: color,
                         });
                         window.open("game.html", "_self");
                     }
@@ -383,4 +385,20 @@ function getIsTouchingDown() {
     }
 
     return isTouchingDown;
+}
+
+
+/**
+ * La funzione ritorna il colore del dino
+ */
+function getDinoColor(id) {
+
+    var color;
+    db.ref('user/' + id + localStorage.getItem("guestId")).once('value', function(snapshot) {
+        color = snapshot.val().dino_color;
+
+    });
+    alert(color);
+
+    return color;
 }
