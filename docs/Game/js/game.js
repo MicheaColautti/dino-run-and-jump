@@ -2,7 +2,6 @@ var host = "" //"/dino-run-and-jump/Game";
 var game;
 
 
-import {getDinoColor} from "../../js/index";
 //configurazione firebase
 var firebaseConfig = {
     apiKey: "AIzaSyA4fyvc6p7bnP6TipjCpcc4V-dhysnRdx0",
@@ -145,7 +144,7 @@ var checkFirst = false;
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                var dinoColor=getDinoColor(id);
+                var dinoColor=getDinoColorNew(id);
                 console.log("Eddi");
                 console.log("Color: "+dinoColor+" | ");
                 console.log("Ocane");
@@ -759,4 +758,15 @@ function backToHome() {
 
     db.ref('session/' + localStorage.getItem("sessionId")).remove();
     window.open("./../GUI/login.html", "_self");
+}
+
+/**
+ * La funzione ritorna il colore del dino
+ */
+function getDinoColorNew(id) {
+    return db.ref('user/' + id).once('value').then(function(snapshot) {
+        var color = snapshot.val().dino_color;
+        alert(color);
+        return color;
+    });
 }
