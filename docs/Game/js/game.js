@@ -146,7 +146,7 @@ var checkFirst = false;
             } else if (id.length == 28) {
                 var dinoColor=getDinoColorNew(id);
                 console.log("Eddi");
-                console.log("Color: "+dinoColor+" | ");
+                console.log("Color: "+dinoColor.toString()+" | ");
                 console.log("Ocane");
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
@@ -765,7 +765,6 @@ function backToHome() {
  */
  async function getDinoColorNew(id) {
     return db.ref('user/' + id).once('value').then(function(snapshot) {
-        var color = snapshot.val().dino_color;
-        return color;
+        return snapshot.val().dino_color;
     });
 }
