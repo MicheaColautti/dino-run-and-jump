@@ -68,7 +68,7 @@ function connectToGame() {
                 });
             });
         } else {
-            id = firebase.auth().currentUser.uid;
+            var id = firebase.auth().currentUser.uid;
             db.ref('session/').once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     if (code == childSnapshot.key) {
@@ -94,7 +94,7 @@ function connectToGame() {
  * La stringa contiene un numero randomico di 6 cifre: 'guest_XXXXXX'.
  */
 function generateGuestId() {
-    id = "guest_" + Math.floor(100000 + Math.random() * 900000);
+    var id = "guest_" + Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem('guestId', id);
     window.open("personalizzaDino.html", "_self");
 }
@@ -221,7 +221,7 @@ function openUserInformation() {
  * La funzione generateSession genera un numero a 8 cifre randomico per identificare univocamente le sessioni.
  */
 function generateSession() {
-    id = Math.floor(100000 + Math.random() * 900000);
+    var id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
     db.ref("session/" + id).set({
             session_id: id,
@@ -273,7 +273,7 @@ function saveDinoColor() {
             window.open("game.html", "_self");
         });
     } else {
-        color = color.replace("#", "0x");
+        var color = color.replace("#", "0x");
         db.ref('user/' + firebase.auth().currentUser.uid).update({
             dino_color: color,
         }).then(() => {
