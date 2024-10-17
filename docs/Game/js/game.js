@@ -765,6 +765,9 @@ function backToHome() {
  */
  async function getDinoColorNew(id) {
     return db.ref('user/' + id).once('value').then(function(snapshot) {
-        return snapshot.val().dino_color;
+        console.log(snapshot.val().dino_color);
+        color=snapshot.val().dino_color;
+        console.log("COlor: "+color)
+        return color;
     });
 }
