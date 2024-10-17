@@ -771,12 +771,3 @@ function backToHome() {
     window.open("./../GUI/login.html", "_self");
 }
 
-/**
- * La funzione ritorna il colore del dino
- */
-function getDinoColorNew(id) {
-    return db.ref('user/' + id).once('value').then(function(snapshot) {
-        var color = snapshot.val().dino_color;
-        return color; // This returns a promise that will resolve to the color
-    });
-}

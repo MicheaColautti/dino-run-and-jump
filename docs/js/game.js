@@ -13,15 +13,11 @@ function detectOs() {
 
     if (iosPlatforms.indexOf(platform) !== -1) {
         os = 'iOS';
-
         window.addEventListener("devicemotion", handleMotionIos, true);
 
     }else{
         os = 'Android';
-
         window.addEventListener("devicemotion", handleMotionAndroid, true);
-
-
     }
     document.getElementById("os").innerHTML = "Dispositivi IOS non supportati. <br>Usa il tasto Jump";
 }
@@ -32,7 +28,6 @@ function handleMotionIos(event) {
     var itd = getIsTouchingDown();
     var acc = event.acceleration.y;
     if (acc > 10 && itd) {
-        acc=10;
         jump();
     }
 }

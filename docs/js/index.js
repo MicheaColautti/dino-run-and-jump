@@ -106,7 +106,9 @@ let isJumping = false;
 const jumpCooldown = 1000; // 500 ms cooldown
 
 function jump() {
+    alert("epporco")
     if (isJumping) return; // Prevent the function from running if it's already in cooldown
+    alert("dio");
 
     isJumping = true; // Set the flag to true to prevent further jumps within the cooldown
 
