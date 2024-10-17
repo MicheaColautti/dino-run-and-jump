@@ -102,10 +102,14 @@ function generateGuestId() {
 
 //#region game.html
 
-/**
- * La funzione jump permette all'utente di far saltare il proprio dino modificando il valore di una variabile su Firebase.
- */
+let isJumping = false;
+const jumpCooldown = 200; // 500 ms cooldown
+
 function jump() {
+    if (isJumping) return; // Prevent the function from running if it's already in cooldown
+
+    isJumping = true; // Set the flag to true to prevent further jumps within the cooldown
+
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
         db.ref('session/').once('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
@@ -131,7 +135,13 @@ function jump() {
             });
         });
     });
+
+    // Reset the flag after the cooldown time
+    setTimeout(() => {
+        isJumping = false;
+    }, jumpCooldown);
 }
+
 
 //#endregion
 
@@ -373,25 +383,4 @@ function getIsTouchingDown() {
     }
 
     return isTouchingDown;
-}
-
-/**
- * La funzione isTouchingDown legge se il dino dell'utente corrente sta toccando a terra o meno
- * @returns is_touching down
- */
-function getIsJumping() {
-
-    if (localStorage.getItem("guestId") == "null") {
-        db.ref('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid).once('value', function(snapshot) {
-            isJumping = snapshot.val().is_jumping;
-
-        });
-    } else {
-        db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
-            isJumping = snapshot.val().is_jumping;
-
-        });
-    }
-
-    return isJumping;
 }
