@@ -30,11 +30,11 @@ function detectOs() {
 
 function handleMotionIos(event) {
     var itd = getIsTouchingDown();
+    var ij=getIsJumping();
     var acc = event.acceleration.y;
-    if (acc > 10 && itd) {
+    if (acc > 10 && itd && !ij) {
         acc=10;
         jump();
-
     }
 }
 

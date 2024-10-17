@@ -374,3 +374,24 @@ function getIsTouchingDown() {
 
     return isTouchingDown;
 }
+
+/**
+ * La funzione isTouchingDown legge se il dino dell'utente corrente sta toccando a terra o meno
+ * @returns isJumping down
+ */
+function getIsTouchingDown() {
+
+    if (localStorage.getItem("guestId") == "null") {
+        db.ref('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid).once('value', function(snapshot) {
+            isJumping = snapshot.val().is_jumping;
+
+        });
+    } else {
+        db.ref('session/' + localStorage.getItem("code") + "/" + localStorage.getItem("guestId")).once('value', function(snapshot) {
+            isJumping = snapshot.val().is_jumping;
+
+        });
+    }
+
+    return isJumping;
+}
