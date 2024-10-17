@@ -114,7 +114,6 @@ function jump() {
         db.ref('session/').once('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
                 childSnapshot.forEach(function(childChildSnapshot) {
-                    console.log("jumpOut");
                     if (localStorage.getItem('guestId') == "null") {
                         if (firebase.auth().currentUser.uid != null && childChildSnapshot.key == firebase.auth().currentUser.uid) {
                             db.ref('session/' + childSnapshot.key + '/' + firebase.auth().currentUser.uid).update({
@@ -163,7 +162,6 @@ function registerNewUser() {
             const errorMessage = error.message;
             document.getElementById('singIn_error').innerHTML = error.message;
         });
-    console.log(firebase.auth().currentUser.uid);
     db.ref('user/' + firebase.auth().currentUser.uid).update({
         best_score: 0,
     })

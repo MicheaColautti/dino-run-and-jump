@@ -144,9 +144,7 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
                 uids.push(null);
             } else if (id.length == 28) {
                 // Handle non-guest logic (asynchronous handling)
-                console.log("Non dovrei esser qui ma sono gai")
                 getDinoColorNew(id).then(function(color) {
-                    console.log("Dino color is: ", color); // Log color and proceed
 
                     if(color==null) {
                         color="0x000";
@@ -748,8 +746,7 @@ function saveMedal(medal, user) {
  * @param {*} user L'utente a cui salvare il punteggio su firebase
  */
 function saveScore(score, nick) {
-    console.log('user/' + uids[diniNicknames.indexOf(nick)]);
-    console.log(score);
+
     db.ref('user/' + uids[diniNicknames.indexOf(nick)]).once("value", function(data) {
         var old_score = data.val().best_score;
         if (score > old_score) {
