@@ -103,10 +103,11 @@ function generateGuestId() {
 //#region game.html
 
 let isJumping = false;
-const jumpCooldown = 1000; // 500 ms cooldown
+const jumpCooldown = 200; // 500 ms cooldown
 
 function jump() {
     if (isJumping) return; // Prevent the function from running if it's already in cooldown
+
     isJumping = true; // Set the flag to true to prevent further jumps within the cooldown
 
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
@@ -221,8 +222,8 @@ function generateSession() {
     id = Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem("sessionId", id);
     db.ref("session/" + id).set({
-            session_id: id,
-        })
+        session_id: id,
+    })
         .then(() => {
             window.open("../Game/index.html", "_self");
         });
@@ -383,4 +384,3 @@ function getIsTouchingDown() {
 
     return isTouchingDown;
 }
-
