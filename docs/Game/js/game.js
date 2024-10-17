@@ -144,7 +144,7 @@ var checkFirst = false;
                 uids.push(null);
             } else if (id.length == 28) {
                 alert("Diocane");
-                alert(data.key);
+                alert("Data key: "+data.key);
                 alert(getDinoColor(data.key));
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
