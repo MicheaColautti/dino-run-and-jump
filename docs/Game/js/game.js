@@ -144,7 +144,7 @@ var checkFirst = false;
                 uids.push(null);
             } else if (id.length == 28) {
                 alert("Data key: "+id);
-                alert(getDinoColor(id));
+                alert("COlor: "+getDinoColor(id));
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
                     uids.push(uid);
