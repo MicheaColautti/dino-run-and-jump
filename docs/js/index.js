@@ -103,7 +103,7 @@ function generateGuestId() {
 //#region game.html
 
 let isJumping = false;
-const jumpCooldown = 200; // 500 ms cooldown
+const jumpCooldown = 1000; // 500 ms cooldown
 
 function jump() {
     if (isJumping) return; // Prevent the function from running if it's already in cooldown
