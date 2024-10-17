@@ -148,6 +148,9 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
                 getDinoColorNew(id).then(function(color) {
                     console.log("Dino color is: ", color); // Log color and proceed
 
+                    if(color==null) {
+                        color="0x000";
+                    }
                     // Fetch user data and continue only after color is available
                     db.ref('user/' + snapshot.key).once("value", function(data) {
                         var uid = data.key;
@@ -766,4 +769,17 @@ function backToHome() {
 
     db.ref('session/' + localStorage.getItem("sessionId")).remove();
     window.open("./../GUI/login.html", "_self");
+}
+
+/**
+ * La funzione ritorna il colore del dino
+ */
+function getDinoColorNew(id) {
+    if(id.length==28){
+        return;
+    }
+    return db.ref('user/' + id).once('value').then(function(snapshot) {
+        var color = snapshot.val().dino_color;
+        return color; // This returns a promise that will resolve to the color
+    });
 }
