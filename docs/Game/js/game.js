@@ -131,47 +131,48 @@ var checkFirst = false;
  * Questo codice viene richiamato quando un nuovo giocatore si collega alla sessione.
  * La funzione aggiunge elementi agli array nelle variabili globali, per aggiungere il nuovo dino e ricarica la scena di gioco.
  */
- db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
+db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", function(snapshot) {
     db.ref('session/' + localStorage.getItem("sessionId") + "/").once('value', function(snapshot) {
         childNum = snapshot.numChildren();
     });
-    if(checkFirst && childNum > 0){
+
+    if (checkFirst && childNum > 0) {
         if (NUM_DINI < 10) {
             NUM_DINI++;
             var id = snapshot.key;
+
             if (id.startsWith("guest_")) {
+                // Handle guest logic
                 diniNicknames.push(snapshot.key);
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-
-                var dinoColor="";
+                // Handle non-guest logic (asynchronous handling)
                 getDinoColorNew(id).then(function(color) {
-                    console.log("Dino color is: ", color); // This logs the actual dino color
-                    dinoColor=color;
+                    console.log("Dino color is: ", color); // Log color and proceed
+
+                    // Fetch user data and continue only after color is available
+                    db.ref('user/' + snapshot.key).once("value", function(data) {
+                        var uid = data.key;
+                        uids.push(uid);
+                        diniNicknames.push(data.val().nickname);
+                        diniColor.push(color);  // Now dinoColor is correctly set
+
+                        // Any code that depends on the nickname and color can be added here
+                        diniJumps.push(false);
+                        gameRef.scene.restart();
+                    });
+
                 }).catch(function(error) {
-                    console.error("Error fetching dino color: ", error); // Error handling
-                });
-
-
-
-                console.log("Eddi");
-                console.log("Color: "+dinoColor+" | ");
-                console.log("Ocane");
-                db.ref('user/' + snapshot.key).once("value", function(data) {
-                    var uid = data.key;
-                    uids.push(uid);
-                    diniNicknames.push(data.val().nickname);
-                    diniColor.push(dinoColor);
+                    console.error("Error fetching dino color: ", error); // Handle error
                 });
             }
-            diniJumps.push(false);
-            gameRef.scene.restart();
         }
-    }else{
+    } else {
         checkFirst = true;
     }
 });
+
 
 
 /**
