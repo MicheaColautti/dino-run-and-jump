@@ -143,21 +143,19 @@ var checkFirst = false;
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                alert("Diocane");
-                alert("Data key: "+data.key);
-                alert(getDinoColor(data.key));
+                alert("Data key: "+id);
+                alert(getDinoColor(id));
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
                     uids.push(uid);
                     diniNicknames.push(data.val().nickname);
-                    diniColor.push(getDinoColor(data.key));
+                    diniColor.push(getDinoColor(id));
                 });
             }
             diniJumps.push(false);
             gameRef.scene.restart();
         }
     }else{
-        alert("mannaggiaLaMadonna");
         checkFirst = true;
     }
 });
