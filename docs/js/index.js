@@ -107,9 +107,7 @@ const jumpCooldown = 1000; // 500 ms cooldown
 
 function jump() {
     if (isJumping) return; // Prevent the function from running if it's already in cooldown
-    alert("EPporco")
     isJumping = true; // Set the flag to true to prevent further jumps within the cooldown
-    alert("dio");
 
     db.ref('session/' + localStorage.getItem('code')).once('value', function(snapshot) {
         db.ref('session/').once('value', function(snapshot) {
@@ -123,7 +121,6 @@ function jump() {
                                 score: childChildSnapshot.val().score,
                                 is_alive: childChildSnapshot.val().is_alive,
                             });
-                            alert("SALTO!");
                         }
                     } else if (localStorage.getItem('guestId') == childChildSnapshot.key) {
                         db.ref('session/' + childSnapshot.key + '/' + localStorage.getItem('guestId')).update({

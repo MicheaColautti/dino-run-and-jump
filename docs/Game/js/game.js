@@ -148,8 +148,8 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
                 uids.push(null);
             } else if (id.length == 28) {
                 // Handle non-guest logic (asynchronous handling)
-                getDinoColorNew(id).then(function(color) {
-                    console.log("Dino color is: ", color); // Log color and proceed
+                //getDinoColorNew(id).then(function(color) {
+                    //console.log("Dino color is: ", color); // Log color and proceed
 
                     // Fetch user data and continue only after color is available
                     db.ref('user/' + snapshot.key).once("value", function(data) {
@@ -163,9 +163,9 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
                         gameRef.scene.restart();
                     });
 
-                }).catch(function(error) {
-                    console.error("Error fetching dino color: ", error); // Handle error
-                });
+                //}).catch(function(error) {
+                //    console.error("Error fetching dino color: ", error); // Handle error
+                //});
             }
         }
     } else {
