@@ -134,40 +134,26 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     db.ref('session/' + localStorage.getItem("sessionId") + "/").once('value', function(snapshot) {
         childNum = snapshot.numChildren();
     });
-    if (checkFirst && childNum > 0) {
+    if(checkFirst && childNum > 0){
         if (NUM_DINI < 10) {
             NUM_DINI++;
             var id = snapshot.key;
             if (id.startsWith("guest_")) {
-                // Handle guest logic
                 diniNicknames.push(snapshot.key);
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                // Handle non-guest logic (asynchronous handling)
-                getDinoColorNew(id).then(function(color) {
-                    console.log("Dino color is: ", color); // Log color and proceed
-
-                    // Fetch user data and continue only after color is available
-                    db.ref('user/' + snapshot.key).once("value", function(data) {
-                        var uid = data.key;
-                        uids.push(uid);
-                        diniNicknames.push(data.val().nickname);
-                        diniColor.push(color);  // Now dinoColor is correctly set
-
-                        diniJumps.push(false);
-                        gameRef.scene.restart();
-
-                    });
-
-                }).catch(function(error) {
-                    console.error("Error fetching dino color: ", error); // Handle error
+                db.ref('user/' + snapshot.key).once("value", function(data) {
+                    var uid = data.key;
+                    uids.push(uid);
+                    diniNicknames.push(data.val().nickname);
+                    diniColor.push(data.val().dino_color);
                 });
             }
+            diniJumps.push(false);
+            gameRef.scene.restart();
         }
-    } else {
-        checkFirst = true;
-    }
+    }else{ checkFirst = true; }
 });
 
 
@@ -765,14 +751,4 @@ function backToHome() {
 
     db.ref('session/' + localStorage.getItem("sessionId")).remove();
     window.open("./../GUI/login.html", "_self");
-}
-
-/**
- * La funzione ritorna il colore del dino
- */
-function getDinoColorNew(id) {
-    return db.ref('user/' + id).once('value').then(function(snapshot) {
-        var color = snapshot.val().dino_color;
-        return color; // This returns a promise that will resolve to the color
-    });
 }
