@@ -762,9 +762,8 @@ function backToHome() {
  * La funzione ritorna il colore del dino
  */
  await function getDinoColorNew(id) {
+
      if(checkFirst) {
-
-
          return db.ref('user/' + id).once('value').then(function (snapshot) {
              console.log(snapshot.val().dino_color);
              color = snapshot.val().dino_color;
@@ -772,7 +771,7 @@ function backToHome() {
              return color;
          });
      }else {
-         checkFirst=false;
+         checkFirst=true;
          return ;
      }
 }
