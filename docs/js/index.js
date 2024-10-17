@@ -394,7 +394,6 @@ function getIsTouchingDown() {
 function getDinoColor(id) {
     return db.ref('user/' + id).once('value').then(function(snapshot) {
         var color = snapshot.val().dino_color;
-        alert(color);
         return color;
     });
 }
