@@ -1,7 +1,6 @@
 var host = "" //"/dino-run-and-jump/Game";
 var game;
 
-
 //configurazione firebase
 var firebaseConfig = {
     apiKey: "AIzaSyA4fyvc6p7bnP6TipjCpcc4V-dhysnRdx0",
@@ -15,12 +14,12 @@ var firebaseConfig = {
 };
 
 /**
- * La funzione setSettingsPhaser, imposta le funzioni principali di phaser e 
+ * La funzione setSettingsPhaser, imposta le funzioni principali di phaser e
  * imposta i metodi preload, create e update che saranno poi richiamati da phaser
  * stesso per far funzionare il gioco. Inoltre crea il gioco all'interno del div
  * con l'id "gameDiv".
  */
- function setSettingsPhaser() {
+function setSettingsPhaser() {
 
     var sceneLobby = {
         key: 'sceneLobby',
@@ -74,7 +73,7 @@ var firebaseConfig = {
     game = new Phaser.Game(config);
 }
 
-//#region dichiarazione costanti 
+//#region dichiarazione costanti
 
 // Inizializzare Firebase
 const app = firebase.initializeApp(firebaseConfig);
@@ -135,44 +134,27 @@ db.ref("session/" + localStorage.getItem("sessionId")).on("child_added", functio
     db.ref('session/' + localStorage.getItem("sessionId") + "/").once('value', function(snapshot) {
         childNum = snapshot.numChildren();
     });
-
-    if (checkFirst && childNum > 0) {
+    if(checkFirst && childNum > 0){
         if (NUM_DINI < 10) {
             NUM_DINI++;
             var id = snapshot.key;
-
             if (id.startsWith("guest_")) {
-                // Handle guest logic
                 diniNicknames.push(snapshot.key);
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                // Handle non-guest logic (asynchronous handling)
-                //getDinoColorNew(id).then(function(color) {
-                    //console.log("Dino color is: ", color); // Log color and proceed
-
-                    // Fetch user data and continue only after color is available
-                    db.ref('user/' + snapshot.key).once("value", function(data) {
-                        var uid = data.key;
-                        uids.push(uid);
-                        diniNicknames.push(data.val().nickname);
-                        diniColor.push(color);  // Now dinoColor is correctly set
-
-                        // Any code that depends on the nickname and color can be added here
-                        diniJumps.push(false);
-                        gameRef.scene.restart();
-                    });
-
-                //}).catch(function(error) {
-                //    console.error("Error fetching dino color: ", error); // Handle error
-                //});
+                db.ref('user/' + snapshot.key).once("value", function(data) {
+                    var uid = data.key;
+                    uids.push(uid);
+                    diniNicknames.push(data.val().nickname);
+                    diniColor.push(data.val().dino_color);
+                });
             }
+            diniJumps.push(false);
+            gameRef.scene.restart();
         }
-    } else {
-        checkFirst = true;
-    }
+    }else{ checkFirst = true; }
 });
-
 
 
 /**
@@ -215,7 +197,7 @@ function updateLobby() {
  * Il metodo createListeners crea 2 listeners che gestiscono la ricezione del salto connettendosi a firebase.
  * Un listener è utilizzato per gestire il salto dei guest, mentre l'altro per gestire il salto degli utenti loggati.
  */
- function createListeners() {
+function createListeners() {
     for (var i = 0; i < diniNicknames.length; i++) {
         if (diniNicknames[i].startsWith("guest_")) {
             db.ref("session/" + localStorage.getItem("sessionId") + "/" + diniNicknames[i]).on("child_changed", function(data) {
@@ -294,7 +276,7 @@ function setStartValues() {
 
 /**
  * Il metodo setColliderLines crea delle linee di sostegno per i dini.
- * Queste linee invisibili permettono ai dini di non cadere in fondo alla pagina, ma di seguire 
+ * Queste linee invisibili permettono ai dini di non cadere in fondo alla pagina, ma di seguire
  * la linea a loro assegnata in modo da rimanere nella giusta corsia.
  */
 function setColliderLines() {
@@ -469,7 +451,7 @@ function setColliderCactusDini() {
 function createGame() {
     document.getElementById('sessionId').innerHTML = localStorage.getItem("sessionId");
     gameRef = this;
-    
+
     setStartValues();
     setColliderLines();
     setGrounds();
@@ -595,7 +577,7 @@ function checkJump() {
 
 /**
  * Il metodo setScore imposta il punteggio per ogni dino, incrementandolo per ogni cactus superato.
- * Per evitare l'assegnazione dei punti dei cactus già precedentemente superati, si utilizza la matrice 
+ * Per evitare l'assegnazione dei punti dei cactus già precedentemente superati, si utilizza la matrice
  * cactusValidation.
  */
 function setScore() {
@@ -611,7 +593,7 @@ function setScore() {
 }
 
 /**
- * Il metodo setDifficulty incrementa la velocità di sfondo e la distaza minima tra i cactus in modo da 
+ * Il metodo setDifficulty incrementa la velocità di sfondo e la distaza minima tra i cactus in modo da
  * rendere il gioco più difficile.
  * La funzione viene richiamata ad ogni superamento di un cactus.
  */
@@ -638,7 +620,7 @@ function checkEndOfGame(game) {
 }
 
 /**
- * Questa funzione modifica il valore di firebase per ogni dino 'is_touchingDown' aggiornandolo controllando se 
+ * Questa funzione modifica il valore di firebase per ogni dino 'is_touchingDown' aggiornandolo controllando se
  * effettivamente il dino in questione sta collidendo verso il basso.
  */
 function setTouchingDown() {
@@ -769,14 +751,4 @@ function backToHome() {
 
     db.ref('session/' + localStorage.getItem("sessionId")).remove();
     window.open("./../GUI/login.html", "_self");
-}
-
-/**
- * La funzione ritorna il colore del dino
- */
-function getDinoColorNew(id) {
-    return db.ref('user/' + id).once('value').then(function(snapshot) {
-        var color = snapshot.val().dino_color;
-        return color; // This returns a promise that will resolve to the color
-    });
 }
