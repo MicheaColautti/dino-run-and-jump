@@ -77,7 +77,6 @@ function connectToGame() {
                             is_alive: true,
                             is_touchingDown: false,
                             score: 0,
-                            dino_color: getDinoColor(id),
                         });
                         window.open("game.html", "_self");
                     }
