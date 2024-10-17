@@ -377,9 +377,9 @@ function getIsTouchingDown() {
 
 /**
  * La funzione isTouchingDown legge se il dino dell'utente corrente sta toccando a terra o meno
- * @returns isJumping down
+ * @returns is_touching down
  */
-function getIsTouchingDown() {
+function getIsJumping() {
 
     if (localStorage.getItem("guestId") == "null") {
         db.ref('session/' + localStorage.getItem("code") + "/" + firebase.auth().currentUser.uid).once('value', function(snapshot) {
