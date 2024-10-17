@@ -143,8 +143,7 @@ var checkFirst = false;
                 diniColor.push(snapshot.val().dino_color);
                 uids.push(null);
             } else if (id.length == 28) {
-                alert("Data key: "+id);
-                alert("COlor: "+getDinoColor(id));
+                color=getDinoColor(id);
                 db.ref('user/' + snapshot.key).once("value", function(data) {
                     var uid = data.key;
                     uids.push(uid);
